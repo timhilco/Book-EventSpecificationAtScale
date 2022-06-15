@@ -1,0 +1,319 @@
+== Chapter 4  - Domain Event Example - Consumer Business Process Events ==
+
+This chapter discuss the following consumer related events:
+
+* Business Process State Change events
+* Business Domains Object data changes
+* Consumer Ux interactions events
+* Consumer Activities event
+
+All of these event would use the Event Header described in the prior chapter.
+
+=== Business Process State Change Event ===
+
+The purpose of this event type is capture events related to the processing of business events. These events are sometimes known as transaction and are used to manage the changes in business domain objects. Upon the completion of a business process, it will typically also create a Business Object Data Change event.
+
+It supports two types of business processes. The first is a long running transaction that has many states and has time gaps in between the actions of the business process. The second is a straight through or single task, where the action is completed in a single unit of work
+
+.Business Process examples:
+* Contribution Rate Change
+* Annual Enrollment
+* Defined Benefit Retirement
+* State changes includes:
+* Start
+* Complete
+* Valid
+* In Error
+
+
+=== Business Process State Change Header Specification ===
+
+*JSON Name: bpEventHeader*
+
+[horizontal]
+businessProcessReferenceId:: Describes the primary key or Business Process Reference Identifier of the business process person instance as described in platform(s). 
+businessProcessId::Describes the internal identifier of the business process. It is the template used to create the person specific instances of the business process. 
+rawBusinessProcessName:: Describes the pre-normalized Business Process Name as described in platform(s). This could be the client specific business process name or a normalized name across clients. It would be used primarily for reporting, filtering and aggregating
+businessProcessDescription::Describes the long more formal description of the business process. 
+businessProcessStatus::Business Process status.Valid Values:
+* Created
+* Valid
+* Invalid
+* Completed
+* Canceled
+businessProcessEffectiveDate:: Effective date of the business process
+businessProcessChangeTimestamp:: Timestamp of when the business process was changed. The timestamp must be in the ISO 8601 date format standard.
+
+.EventName Standards
+For the eventName, the standard will be the following fields separated by a colon (":") in camel case.
+
+* _tag_ which represents the business process name, hopefully normalized and 
+* _action_ which represents the business process action
+ 
+.Tag Definition
+The tag represents the business process name. It should be the normalized version of the business process name. 
+
+* Format
+ - Free format single alpha numeric value
+ - No formal specification is defined
+
+.Action Definition
+The action represents the types of actions that result from the change in status of the business process during the processing of the consumer's business process.
+
+* Action Component Valid Values
+ - Started
+ - Updated
+ - Completed
+ - Canceled
+
+.Body Definition Considerations
+The body section is named *body*. The *body* can be any valid JSON schema
+
+
+=== Business Object Data Change Event  ===
+
+The purpose of this event type is to capture the changes to key domain business objects.
+
+* Business Objects include:
+ - Person
+ - Person Defined Contribution
+ - Person Health Management
+ - Person Defined Benefit
+ - Person Document[TH1]
+* Data actions Include:
+ - Creation
+ - Updates
+ - Deletion
+ - Master Data Management Document Merge/Split
+
+==== Business Objects Data Change Event Specifications ====
+
+Business Objects Data Change Header
+.JSON Name: boEventHeader
+
+businessObjectResourceType:: Describes the primary domain data object type that was changed. Valid Values:
+* person
+* personDefinedContribution
+* personHealthManagement
+* personDefinedBenefit
+* personDefinedBenefitCalculation
+* personDocument
+Editor:Think about moving this to 'tag'. Need to determine in the Identifier is included in the tag
+businessObjectIdentfier:: Provides the primary domain data object key of the business object that was changed
+additionalBusinesObjectResource:: Provides any additional resource type and key to help further identify the component that changed. This is similar to the pathing (�/resource/{id} ) in a REST URL
+	additionalBusinessObjectResourceType:::: Additional resource type
+	additionalBusinessObjectResourceIdentifier:: Additional resource identifier or primary key
+dataChangeTimestamp:: Timestamp of the data change in the source platform. The timestamp must be in the RFC 3339/ISO 8601 date format standard. See Appendix for details.
+
+.EventName Standards
+For the eventName, the standard will be the following fields separated by a colon (":") in camel case.
+
+* _tag_ which represents the business object name and 
+* _action_ which represents the CRUD operation taken against the business object
+
+.Tag Definition
+The tag represents the business object name. 
+Editor Note: Should tag replace 'businessObjectResourceType' .
+
+* Format
+ - Free format single alpha numeric value
+ - No formal specification is defined
+
+.Action Definition
+The action defines the type of data maintenance (CRUD) action taken on the business object.
+Editor Note: action is replacing the dataAction field in prior versions.
+
+* Action Component Valid Values
+
+dataAction :: Describes the data change or CRUD action performed on business object.- Create, Update, Delete. Also includes an primary key changes and MDM document merging. 
+
+* Create
+* Update
+* Delete
+* MdmDocumentMerge
+* MdmDocumentSplit
+
+
+.Body Definition Considerations
+
+* The body section is named 'body'
+ ** body can be any valid JSON schema
+ ** Contains one predefined element 'extension'
+ ** Extension is a private area that can contain its own schema
+ ** The field is an map/array with:
+ *** Namespace as a key and,
+ *** Any valid JSON schema as its value
+
+.Data Fields Best Practices by Data Action
+
+* Update
+
+The recommendation for data fields to report is to provide only the fields that changed providing both old and new Best practice recommendations:
+
+* PII
+** Fields: Bank/Credit Account Numbers, 
+** Provide old/new unchanged from CustomerMaster; no masking required
+* Arrays
+** Provides Lowest Level Detail field, include all cascading keys  
+** Example: Contact -> streetAddress -> { AddrID ->  OldZipcode, newZipcode  }
+** Include all the fields at the same level as the changed field in entire array data object 
+** For fields in a high level/hierarchy, include all keys and simple primitive types (strings, numbers,etc ) at the same hierarchy  
+*  Do not include objects or arrays  in the higher levels  Do not include non-changing arrays at the same level
+
+* Create
+** Provide the entire New document
+** Alternate: Keys Only
+
+* Delete 
+** Only provide a delete event if the entire document is being deleted, not if one of the source systems deleted a person
+** In the body, provide the primary document key  (UniversalId or  Mongo _id ) and any IdMapping table
+** If the object/person is being delete in a given platform, but the person still exists in another platform, treat as an Update
+** Only delete when no more IdMappings exist in the document
+
+.Master Data Management Platforms/CustomerMaster
+** Merge
+** Treat as an MDM Merge Update event with two sections of data, one for survivor and one for deleted  
+** Both sections
+** Survivor _id & Deleted _id
+** Id Mapping for both survivor and deleted
+** Survivor document section contains the update record for the survivor document (see Update section)
+** Deleted document section 
+** Reason for merge
+** The Platform that caused the change to occur
+*** System Instance
+*** Merge Field Change (old, new)
+
+** Split -  No new events, just two new event being generated
+*** Web service call to deletePersonId service, which cleans up IdMapping and domain sections
+*** Generates a Normal Update event
+*** Web Service call refreshPersonForInternalId service, which causes a refresh through Ingest 
+*** Generates a Normal Update event 
+
+=== User Experience Action Event ===
+
+Events related to the behavioral actions taken by the participant in our user experience channels. Channel include web/Upoint, mobile, IVA/chat and other future user devices like Voice Assistants.
+
+The purpose of this event type is to capture the pure behavioral events related to the interactions of the users on our various channels - displaying pages, clicking button or links. These events are not the result of any business process or data change events. They are used for: 
+
+* Behavior actions for data reporting and analytics
+* Provide notifications to non-domain processes (document management, campaigns) to drive their underlying processes
+
+* Actions may include, but not limited to:
+** Button clicks
+** Link or action selections
+** Page or screen displays
+** Hover
+** IVA or chat intents
+
+User Experience Action Event Specifications
+
+.JSON Name: uxEventHeader
+
+channel:: Describes the channel (or UI application) where the event generated.
+userDevice:: Identifies the device used by end-user.
+deviceTimestamp:: Represents the timestamp on the device (May be different from the publisher timestamp). The timestamp must be in the RFC 3339/ISO 8601 date format standard. See Appendix for details.
+sessionId:: Represents the unique session of end user on our channels.
+sessionCreateTimestamp:: Session created time. The timestamp must be in the RFC 3339/ISO 8601 date format standard. See Appendix for details.
+applicationName:: User Experience application name 
+applicationVersion:: Version of the application
+
+.EventName Standards
+For the eventName, the standard will be the following fields separated by a colon (":") in camel case.
+
+* UxControlName
+* UserAction
+
+.Tag Definition
+In the Ux channels, there are an unbounded set of device actions a user can take: pressing buttons, displaying pages, starting process flows. In addition, they are an unbounded set of specific controls (buttons, etc) throughout the interface. For reporting and other activities, there is a need to capture that a specific control has been acted upon: pressing a specific button within a specific group of controls within a page within a business process flow. 
+
+To reduce the complexity in trying to capture all the level and types of components, we are going to encode all hierarchical information into a single label or tag. This tag along with the user action on this tag should reduce the complexity of the event structure and make it easier for the consuming tools to do their work.
+
+To make it more human readable, there will be an encoding standard to make it more human readable and make it easier to parse the tag if necessary. The tag values need to take into account all types of user interfaces and devices. We need to support new and emerging interfaces beyond web and mobile channels. The following sections discuss the naming approach.
+
+.Tag Component Valid Values
+
+*Channel
+
+** Web
+*** Flow - A user's perceived outcome process or unit of work 
+**** Denotes flow of interaction (pages) or conversation between user and system
+*** Page 
+*** Widget or Multiple Control Component
+*** Elemental Ux Control
+**** Button, includes clickable icons - Clickable
+**** Link - Clickable
+**** CheckBox - Selectable
+**** Text - Display, Hover, Table Element
+**** TextBox - Keyboard Actions -> Tabbing ,Enter pressed
+**** Bounded Lists -> Radio Buttons or checkboxes or DropDown Lists or Dials - Selectable
+** Mobile - TBD
+** Smart Assistant/Alexa
+** IVA/Chat
+** Other on Non-Channel - Treatment or Theme  Example xxxA/xxxB 
+
+.Format
+** Ordered sets of tuples separated by underscore '_'
+** The tuple is the following fields separated by dash '-'
+*** LogicalName determined by Ux Designer and Data Analyst 
+*** UxControl Valid Value in all caps
+** The order is from highest level (aFlow) to specific UX Control, (Button)
+
+    Example: <Flow_Name>-FLOW_<Page_Name>-PAGE or Retirement-FLOW_HubPage-PAGE
+
+.Action Definition
+The action defines the type of user actions taken by the user when interacting with the channel/device. Valid Values for userAction:
+
+* Displayed
+* Clicked
+* Entered
+
+.Body Definition Considerations
+* The body section is named *body*
+** *body* can be any valid JSON schema
+** Contains one predefined element *extension*
+*** Extension is a private area that can contain its own schema
+*** The field is an map/array with:
+*** Namespace as a key and,
+** Any valid JSON schema as its value
+* This can be any significant data or data of interest for reporting at the time of the UX Event
+
+=== Consumer Goal Event ===
+
+Events related to the action taken by the consumer in the context of reaching a personal goal. 
+
+A goal is non-transactional outcome the consumer is trying to attain. For example, the person wants to lose 20lbs as a health goal
+
+* Actions may include:
+** Started
+** Completed
+
+.Personal Goal Action Header
+Note: The Personal goal only requires the main header
+
+JSON Name: pgEventHeader
+
+.Tag Definition
+The tag represents the name of the personal goal in a machine readable format.
+
+* Format
+** Free format single alpha numeric value
+** No formal specification is defined
+
+.Action Definition
+The action defines the type of task actions taken against a personal goal.
+
+
+* Action Component Valid Values 
+ - Started
+ - Completed
+
+.Body Definition Considerations
+* The body section is named *body*
+* body  can be any valid JSON schema
+** Contains one predefined element *extension*
+** Extension is a private area that can contain its own schema
+*** The field is an map/array with:
+*** Namespace as a key and,
+*** Any valid JSON schema as its value
+** This can be any significant data or data of interest for reporting at the time of the UX Event
+

@@ -1,0 +1,314 @@
+== Chapter 3 Event Message Specifications ==
+
+=== Overview ===
+Key features of Event Message Specification are:
+
+* Provides Unique and Global Message Identifier
+* Provides important auditing data, date, time, as to when the message was created. Also can contain a history of where the logoical message has been processed
+* Is Independent, stand alone and self-contained; The message contains all the information a consumer might need
+* Provides simple headers and metadata to facilitate routing and filtering within the event processing network
+* Provides provenance for the message
+** _Where and When did the event happen_
+** _Who the source/processor is, both system of record and publishing platform_
+** _Who or What was the caused of the event_
+* Supports schema version control and message validation
+* Provides the ability to sore and find the key of the key business object or subject in a system of record
+** Related business object can be attached to the message
+* Provides correlation for cross event processing.
+* Provides the ability to submit test or synthetic event for testing
+
+=== Event Types ===
+The follow sections provide the specification for the types of event support by the architecture. (Note: Some event types are in the prototype stage)  +
+The event types are:
+
+Consumer::
+* Business Process State Change Event 
+* Business Object Data Change Event 
+* User Experience Action Event
+* Generic Goal Event 
+Runtime::
+* Platform Processing Event
+
+=== Event Message Overview ===
+
+The standard event message is a JSON document containing one main JSON object named *message*. 
+The *message* JSON object contains 3 child JSON objects: +
+
+* *header*: Common Message Header - Common across all messages, independent of event type and event
+* _Event Type Header_: Common header for specific event types: Name based on event type
+* *body*: Event Message Body - Free form body (i.e. schema would vary by event) for each event defined with the event type
+
+==== Common Message Header ====
+
+The Common Message Header provides the following key features:
+
+* Message Metadata
+** Message Identifer
+** Message typing
+* Event MetaData 
+** Name
+** Schema Definition 
+* Event Context
+** Event Context Metadata
+** Subject Type and Id
+** Related Resources
+* Audit History/Chain of Custody
+** Publishers
+** System of Record/Source Publisher
+
+* Every message type, events, commands or audit, will have a common standard message header
+* There will only be one format or schema for the common message header and the object is required
+* The name of the JSON object is *header*
+* It contains fields that describe the message at the highest levels and it identifies the source and type of the message
+** These fields determine the format and names of the fields that follow in the message object. 
+* Since this is JSON, routing or filtering consumers can use only the header to determine routing of message or if the consumer is interested in processing the message
+
+==== Event Type Header ====
+* It is a secondary header that contains the common elements for all messages of a given event type
+* Each event type will have its own header name and structure. Examples:
+** uxEventHeader - for Ux events
+** bpEventHeader - for business process events
+* The messageNamespace field in the header will indicate which event type header is in the message
+* There will be a structured format/schema for each event type
+* For an organization, the goal is a small bounded list of event types
+** There can be an unlimited number of event definitions within a type
+** The goal is to have as much standardization in the headers as much as possible.
+** The variations are meant for the body JSOn object.
+
+==== Event Message Body ====
+* Contains the fields that are specific to a given event definition within an event type
+** The system will have a large unbounded set of events. The body represents the specific fields for a given event type
+* The eventBodyNamespace in the Event Type Header will describe the schema for the fields in the body
+* The name of the JSON object is *body*
+* Each body should have it's own schema that can be placed in a schema repository and retrieved by the bodyNamespace field.
+** The schema can then be used for validation and code generation.
+
+=== Internal Event JSON Structure ===
+In order to keep the processing of a message simple and easy to produce and consume, the event message has a very flexible structure and is basically an unstructured document. 
+The goal is to have a schema for the header, each event type header and every event data (i.e body) itself. 
+We would like to have a schema dictionary which has a JSON or AVRO schema as it values and it's keyed by some name. The hierarchy is as follows:
+
+* There is only one header schema (key name: header)
+* To determine the <eventTypeheader> name, the header.messageNamespace field contains the name of the event type
+* To determine the body schema name, the header.eventBodyNamespace field determine the name for the body schema
+
+[NOTE]
+====
+The internal event structure looks as follows:
+
+{"message" : +
+	"header" : {   ...  }, +
+	"_eventTypeHeader_" : { ... }, +
+	"body"  : { ... }
+}
+
+.Samples
+
+{"message" :
+	"header" : {  
+		"messageNamespace": "com.hilco.messages/uxEvent",
+        "eventName" : "PageABC:clicked",
+                        ...  },
+	"uxEventHeader" : { 
+       ... },
+	"body"  : { ... }
+}
+
+{"message" :
+	"header" : {  
+    	"messageNamespace": "com.hilco.messages/bpEvent",
+       	"eventName" : "ContributionRateChange:Completed"
+                        ...  },
+	"bpEventHeader" :  { 
+       ... },
+	"body"  : { ... }
+}
+====
+==== Common Message Header Field Specification ====
+
+.Schema Fields Table
+[width= 80%, options=header]
+|================================
+| Field Name | Atributes
+| messageId | String; Required
+| messageType | String; Required
+| messageNamespace  | String; Required 
+| messageVersion | String; Required 
+| messageTopic | String 
+| eventName | String 
+| eventBodyNamespace | String 
+| contextTag | String; Required 
+| action | String; Required 
+| messageTimestamp | String; Required 
+| businessDomain | String; Required 
+| correlationId | String; Required 
+| correlationIdType | String; Required 
+| globalBusinessObjectIdentifier | String 
+| publisherId | String; Required 
+| publisherApplicationName | String; Required
+| publisherApplicationInstanceId | String 
+| publishingPlatformsHistory | Object; Array; Required 
+| - publisherId | String; Required 
+| - publisherApplicationName | String; Required 
+| - publisherApplicationInstanceId | String 
+| - messageId | String; Required; Required
+| - messageTopic | String; Required
+| - eventName | String; Required
+| - messageTimestamp | String; Required
+| - sequenceNumber | String
+| businessObjectSystemOfRecord  | Object; Array; Optional
+| - systemOfRecordSystemId | String; Required
+| - systemOfRecordApplicationName | String; Required
+| - systemOfRecordApplicationInstanceId | String
+| - systemOfRecordDatabaseSchema | String
+| - platformInternalId | String; Required
+| - platformExternalId | String
+| correlatedResources | Object; Array; Optional
+| - correlatedResourceType | String
+| - correlatedResourceIdentifier | String
+| - correlatedResourceState | String
+| - correlatedResourceDescrption | String
+| isSyntheticEvent | String
+|================================
+
+.Schema Field Definitions
+[horizontal]
+messageId:: Globally Unique (UUID) Identifier of message.
+
+messageType:: Describes the type of message. 
+Valid Values:
+* Event
+* Command
+* Audit
+
+messageNamespace:: Namespace is used to distinguish between the different types of messages (events or commands), source (internal vs external), and schema versions to avoid collision and help in processing the messages. 
+They also identify the type of Event Header contained in the full message.
+The namespace can be used as an external endpoint to provide the schema and other machine-readable information for the event type and the latest major version. 
+Used to provide message definition and validation. 
+Valid Values:
+* com.hilco.messages/events/uxEvent
+* com.hilco.messages/events/businessProcessEvent
+* com.hilco.messages/events/dataChangeEvent
+* com.hilco.messages/events/goalEvent
+* com.hilco.messages/events/platformProcessingEvent
+
+messageVersion:: Conveys the version number (major.minor) of the message, and describes the structure of the overall message at hand. 
+Valid values managed by governance 
+* Example: 1.1
+
+messageTopic:: Logical name to describe the type of event. Note: this is not the physical topic name (i.e kafka topic) of the messaging system.
+Sample Valid Values:
+* BusinessProcess
+* DomainDataChange
+* UserExperience
+* Goal
+* PlatformProcess
+
+eventName:: Provides a standard name of the actual event that occured in the publishing system. 
+It will be treated as a label/code and used for filtering, routing, general analytics and simple processing of events in the ecosystem. 
+It should be a combination of the business object or process name and action taken on that entity. 
+There are specific naming conventions used to determine the value of the field. 
+It is a field that will require governance approval.
+
+eventBodyNamespace:: Describes the specific schema and version of the *body* field in the message. 
+The body structure and metadata details are understood based on this name. 
+This field is optional and only be set if there is a structure or schema for the body. 
+If there is not body, then this field should not be sent.
+
+contextTag:: Machine readable generic label for the event type. 
+The purpose of the contextTag is to provide a label that encoded some additional context for the event. 
+It is highly structured, follows a specific format and provides valid values to allow programs and applications, like analytics, to easily consume the values. 
+See event type for more details on the values. 
+To reduce the complexity in trying to capture all the levels and details of components that produced the event, the recommendation is to useencode all contextual or hierarchical information into a single label or tag. 
+This tag along with the *action* and *on this tag should reduce the complexity of the event structure and make it easier for the consuming tools to do their work without having to get into the details of the body structure
+To make it more human readable, there will be an encoding standard in place to mke it easier to read and make it easier to parse the tag if necessary.
+
+action:: Represents the actual logical action or happening based on the event type. 
+See event type for more details on the valid values. 
+For events,the action should be described in the past tense and the name should be initial caps.
+For commands, the action should be present tense with initial cap.
+The organization should have a bounded set of actions and try to minimize the number.
+
+messageTimestamp:: Describes the date and time at which the actual event was generated by publishing systems. 
+To be provided by producer component and should not be derived by message publishing framework(s) or component(s) 
+The timestamp must be in the RFC 3339/ISO 8601 date format standard. 
+See Appendix for details.
+
+businessDomain:: Describes the business domain under which the event/command was generated.
+Sample Valid Values in HR/Benefits:
+* Person
+* Worker
+* PersonWorker
+* Health
+* DefinedContribution
+* DefinedBenefit
+* Operations
+* N/A (for domains that do not match up to an organization service domains.
+
+correlationId:: Describes the globally unique identifier (UUID) typically generated within the publishing application. This is used to correlate multiple messages across a logical process. The messageId is unique for the individual message, but the correleationId can be repeated across multiple messages
+
+correlationIdType:: Describes the type of correlation identifier.  
+Valid Values:
+* SessionId - for participant Ux actions and sessions
+* BatchId - for batch processing jobs. This is the actual instance id of a job type.
+* PublisherCorrelationId - for publisher specific correction type (Typically used if the above two does not apply)
+
+globalBusinessObjectIdentifier:: Describes the global identity of the business object being acted upon. In the HR/Benefits domain, an example would be the person.
+
+publisherId:: Identifies the publishing company entity of the message.
+
+publisherApplicationName:: Describes the name of the publisher application platform or service. 
+
+publisherApplicationInstanceId:: Describes the specific instance of the publisher application or service.
+
+publishingPlatformsHistory:: This is the historic details and providence of the message, the audit trail for the message.
+It is an array, describing the internal platforms that have been processing a given message from the edge platforms to any internal consumer applications. 
+If the consumee message is being augmented (i.e new information is being added) is is important that the consumer/publisher or program add its own auditing informtion to the history. It has similar fields to the overall message (see above).
+
+publisherId:::: Identifies the publishing company entity of the message. 
+
+publisherApplicationName:::: Describes the name of the publisher application platform or service
+
+publisherApplicationInstanceId:::: Describes the specific instance of the publisher application or service.
+
+messageId:::: Describes the messageId for the given prior message instance. See above for field details
+
+messageTopic:::: Describes the messageTopic for the given prior message instance. See above for field details
+	
+eventName:::: Describes the eventName for the given prior message instance. See above for field details
+	
+messageTimestamp:::: Describes the messageTimestamp for the given prior message instance. See above for field details
+
+sequenceNumber:::: The sequence should be from earliest to latest in chronological order. 
+The publisher should only append to the array If the array is provided as input from a message, then the new publisher should increase the sequence number and append the consumed/input header data to the array. 
+If this is the originating or edge processor, then the sequence number should be set to one (1), not zero
+
+businessObjectSystemOfRecord:: System of Record containing details related to finding the related business object. 
+
+systemOfRecordSystemId:::: Identifies the system of record company entity of the message. Sometimes referred to as the partner ID. 
+
+systemOfRecordApplicationName:::: Describes the name of the publisher application platform or service.
+
+systemOfRecordApplicationInstanceId::::  Describes the specific instance of the system of record containing the person
+
+systemOfRecordDatabaseSchema:::: Describes the database schema instance of the system of record containing the business object
+
+platformInternalId:::: Describes the internal identity of the business object  within the platform. Only provided if the publishing platform is a source system of record and not a pure publisher application
+
+platformExternalId:::: Describes the external identity of the business object within the platform. Only provided if the publishing platform is a source system of record and not a pure publisher application
+
+correlatedResources:: Describes a list of the related resources alos being being accessed during the processing creating the event. 
+These are key _bounded contexts_ associated with the primary business entity during processing. 
+
+correlatedResourceType :::: Describes the type of the related resource. 
+	
+correlatedResourceIdentifier:::: Identifies the primary key of related resource. This can be the external or internal unique identifier of the resource.
+
+correlatedResourceState:::: Identifies the state or status of related resource at the time the event occurred.
+
+correlatedResourceDescrption:::: Description of related resource at the time the event occurred.
+
+isSyntheticEvent::: Is this a synthetic or fake event? If true, assumes this is an event that should be processed under special circumstance, meaning don't change state or issue commands. Used for testing/monitoring in production by sending in fake events
+
+Potential Extensions:
+_dataContentType_ - This will be helpful if the body is not JSON. The current best practice is that all body payloads, should be JSON. The values would follow HTTP mime types

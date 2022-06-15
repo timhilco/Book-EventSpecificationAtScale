@@ -1,0 +1,46 @@
+//:stylesheet: ./resources/default-theme.yml
+:doctype: book
+= Event Governance At Scale: A Practical Guide To Effective Event Message Design 
+Author: Timothy S. Hilgenberg <timhilco@gmail.com>
+:toc:
+
+[colophon]
+= Colophon
+
+*NOTE: This book is an early draft of this manuscript*
+
+Working Draft V0.9.03 June 2022
+
+Copyright 2022. All rights Reserved 
+
+include::./chapters/Preface.adoc[]
+
+// Question -> Why is Event Driven Architecture critical to tomorrow's application?
+include::./chapters/Chapter_1.adoc[]
+
+// Question -> What are the types of message in Event Driven Architecture?
+include::./chapters/Chapter_2.adoc[]
+
+// Question -> What are the Event Message Specification?
+include::./chapters/Chapter_3.adoc[]
+
+// Question -> Domain Event Example - Consumer Business Process Events
+include::./chapters/Chapter_4.adoc[]
+
+// Question -> System Event Example - Runtime Operations Events 
+include::./chapters/Chapter_5.adoc[]
+
+// Question -> What are the Command Message Specification?
+include::./chapters/Chapter_6.adoc[]
+
+// Question -> Domain Command Example - XXX Command
+include::./chapters/Chapter_7.adoc[]
+
+// Question -> What are the Audit Message Specification?
+include::./chapters/Chapter_8.adoc[]
+
+// Question -> Domain Audit Example - XXX Audit
+include::./chapters/Chapter_9.adoc[]
+
+// Question -> 
+include::./chapters/Appendix.adoc[]

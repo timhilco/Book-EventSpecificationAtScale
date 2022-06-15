@@ -1,0 +1,40 @@
+== Chapter 6 Command Message Specifications ==
+
+=== Overview ===
+Key features of Command Message Specification are:
+
+
+=== Command Types ===
+The follow sections provide the specification for the types of commands support by the architecture. (Note: Some command types are in the prototype stage)  +
+The command types are:
+
+=== Command Message Overview ===
+
+The standard messageevent message is a JSON document containing one JSON object named *message*. 
+The *message* object contains 3 chiild JSON objects: 
+
+* Common Message Header - Common across all messages, independent of command type and event
+* Command Type Header - Common header for specific command types 
+* Command Message Body - Free form body for each command defined with the command type
+
+
+=== Internal Command JSON Structure ===
+To keep it simple and easy to produce and consume, the event message has a very flexible structure and is basically an unstructured document. 
+The goal is to have a schema for the header, each event type header and every event data (i.e body) itself. 
+We would like to have a schema dictionary which has a JSON or AVRO schema as it values and it's keyed by some name. The hierarchy is as follows:
+
+* There is only one header schema (key name: header)
+* To determine the <eventTypeheader> name, the header.messageNamespace field contains the name of the event type
+* To determine the body schema name, the header.eventBodyNamespace field determine the name for the body schema
+
+[NOTE]
+====
+The internal event structure looks as follows:
+
+{"message" : +
+	"header" : {   ...  }, +
+	"_eventTypeHeader_" : { ... }, +
+	"body"  : { ... }
+}
+
+====

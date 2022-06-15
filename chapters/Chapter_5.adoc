@@ -1,0 +1,97 @@
+== Chapter 5 - System Event Example - Runtime Operations Events ==
+
+Events occurring during the running of the application on a specific platform or system resource (server, data base, etc). Focused mostly on system resource issues. Debug events would also fall into this category
+
+Platform Processing Event  - Events related to the action of completing a discreet process or unit of work and providing the resource computation of that unit of work. 
+
+These events reflect the fact that (1) the process occurred, which is used for counting instances of the process (2) the time stamps of then it occurred, which is used for elapse time and windows of time, (3) additional resource usage, which is used for more detailed resource consumption analytics and (4) any additional status and metadata related to the process of the unit of work. They event can be used for both operational and application event where counting, and resource utilization reporting is of interest to the business
+
+* Platform processing units of work being metered include:  
+** Docker Containers  -> Service API calls
+** Enterprise CI/CD Build pipeline -> API Service builds
+
+System Resource Manager Event (Under consideration) - Events related to the actions of managing a system resource manager.  This includes the overall operations of the resource manager and the system administrator actions to administer the resource manager.
+
+A resource manager has the following characteristics. Example of a resource manager is a server, JVM, Web Server, Docker container, data base manager and queue manager.
+* The platform contains important application data  
+* The resource is shared by multiple applications
+* The resource is managed centrally by an system operations staff, who is responsible for the installation, upgrade and overall operations of the resource
+* Privileged access authority is required to perform system administration functions
+
+Resource manager operational event actions include:  
+* Start
+* Stop
+* Abort
+* Restart
+
+System Administrator event actions include:
+* Logon
+* Password change
+* Commands (?)
+* Group Functions (?)
+
+Potential Future Operational Events
+* Runtime System Error Events - Runtime Events because of hardware or software issues
+* Code Deployment Events - DevOps Events because of program/business logic development. Include both code and configuration
+* Client Deployment Events - Events related to the deployment of client assets, in particular provision migrations.
+** Might also include client level processing runtime errors
+
+.Operations Platform Process Event
+Event Header
+See the above header section for definition of the event message header
+
+.Platform Process Event Header
+JSON Name: oppEventHeader
+
+Note: Mandatory fields are highlighted in bold.
+
+platformProcessStartTimestamp:: Timestamp of when the resource consumption started. The timestamp must be in the RFC 3339/ISO 8601 date format standard. See Appendix for details.
+platformProcessEndTimestamp:: Timestamp of when the resource consumption ended. The timestamp must be in the RFC 3339/ISO 8601 date format standard. See Appendix for details.
+platformProcessElapsedTime:: Elapse time in milliseconds
+platformProcessEffectiveDate:: Effective Date of process
+platformProcessStatus:: Process status. Valid Values:
+* Aborted
+* Completed
+* Canceled
+
+.Potential Platform Process Header Fields
+* API/Program call Request and Response size
+* Memory size at event publication
+** Heap sizes , etc
+* CPU utilization for process
+* Thread count at event publication
+
+.EventName Standards
+For the eventName, the standard will be the following fields separated by a colon (':') in camel case.
+
+* PlatformProcess
+* Action
+
+.Tag Definition
+
+* Format
+** Ordered sets of tuples separated by underscore '_'
+
+.Action Definition
+The action defines the type of action or state changes of the process.
+
+.Action Component Valid Values
+
+Action Valid Values
+processAction
+* Started
+* Completed
+* StateChanged
+
+.Body Definition Considerations
+
+* The body section is named 'body' 
+** 'body' can be any valid JSON schema
+** Contains one predefined element 'extension'
+*** Extension is a private area that can contain its own schema
+*** The field is an map/array with:
+*** Namespace as a key and,
+*** Any valid JSON schema as its value
+* This can be any significant data or data of interest for reporting at the time of the process state change.
+
+Other Operational Events

@@ -1,0 +1,71 @@
+== Chapter 1 ==
+
+=== Why is Event Driven Architecture critical to tomorrow's applications? ===
+
+Today's web based architetures use HTTP and REST API to communicate with back end systems.
+Since this is the primary interaction model, it is a synchonous based Request-Reply paridgm
+This is driving this user experience, where the user presses a button or link and then waits for a response. 
+As more application are calling multiple service in a single request, this is causing longer wait times to respond back to the user. 
+Ux Designers feel strongly that an immediate response is the best user intreaction model.
+
+However, the are many application models in practice today that do not fit this model. 
+People may not think of it in this way, but email and text are really disconnected (asynchonous) interaction models. 
+The user makes a request or submission and then can perform other actions, while they wait for a notification that their request was completed (e.g. waiting for an email response).
+If the asynchronous request is fast enought, the user does not know the difference. 
+So there is precedence for user interface design using an asynchorous model. 
+
+This also has a major impact on the computing resources required for the application.
+Instead of having to provision threads for maximum requests, that may sit idle, one can have fewer workers in the background continuously managing the work. An event driven architecture following an asynchonous approach is alwway a more efficent use of computing resources
+
+[IMPORTANT]
+====
+_The key to designing these type of applications is establishment of a set of event design standards and governances within the organization, along using asynchronous messaging technologies (IBM MQ, Kafka, RabbitMQ)_
+
+The purpose of this document is to provide a set of event specifications that can work at the scale of a large organization.
+====
+
+Asynchronous technologies have been around for a very log time. 
+The IBM mainframe environment had MQ middleware that allowed inter-machine communication and intra-platform integration (primarlity distributed platform). 
+There are even more modern technologies, like Kafka and RabbitMQ. 
+In prior application designs and even today, these technologies were used for inter-platform communication and more balanced resource allocation and management. 
+There were mostly used for underlying application interaction, but not used in an interface design. 
+
+So, why are interface designers, not using a disconnected paraidgm like email or text? 
+These types of interactions are very hard to design for. 
+There are some situations, where the user expects an immediate response. 
+It is hard in an asynchronous event driven model to simulate a synchoronous response to the user
+It requires a very low latency interaction approach, which was hard to do with older technologies. 
+It was just easier to design a synchonous model when all the interactions were within the company computing ecossytem and there wasn't available technologies other than HTTP to provide the user response.
+
+_What is different in today's environment?_
+
+* More and more of the domain services are being provided by external parties who are outside of the control of the organization and the central application. 
+This leads to more interactions and increases user experience.wait time as the services are executed in a sequential manner.
+
+* More modern messaging technologies are available to application architects to lower time timelatency. 
+There is also more practical real life exprience in Event Driven Architecture for architect and designeres to leverage
+
+* User are becoming more comfortable with a disconnected interaction model, where they submit a request, work on a differentn task and then act on the response they get after the fact. Techniques, like deep linking from the response to the specific page within the application are becoming more prevalent. 
+
+As with any other scaled integration strategy, the key to success is standards and event design needs to follow this strategy.
+
+=== Why are event design standards critical for organizational success? ===
+
+As the organization's application portfolio continues to grow, so does it's integration requirements between these application.
+In some case, it is very difficult to create tightly integrated soutions.
+In addition, users are expecting their objectives to move faster and having their the entire processs completed in a single session. 
+Multiple application are interested in the same events leading to reducing complexity using publish-subscibe approaches versus point to point. 
+More intgrationss, reduced complexity and low latency integration is leading to more and more use of event driven architecture.
+
+The design of Events can come in all shapes and sizes. 
+They can be as low level as a single data element changing to an entire business process completing.
+With the move to more domain oriented organizational structures, independent automomous groups will be designing events.
+This will cause a profilerent number of events being created by an organization. 
+Without organizational design standards and guidelines, it will lead to chaos losing all the benefits of integration.
+
+Event design standards are ctricial to the success of an Event Drvien Architecture as the strategy is scaled up within the organization.
+It isn't enough to commit to using events as a key integration standards, the organization needs governance in the design of event. 
+To support friction-less governance, the organization needs comprehensive design guidelines to support the event designers and give rubrics to the governance groups on how to judge the quality of the design.
+
+
+

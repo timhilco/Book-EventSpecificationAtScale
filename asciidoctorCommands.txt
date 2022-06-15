@@ -1,0 +1,2 @@
+sciidoctor-pdf EventGovernanceAtScale_v1.adoc
+asciidoctor-pdf -a pdf-themesdir=resources -a pdf-theme=basic EventGovernanceAtSca

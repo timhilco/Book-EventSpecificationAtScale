@@ -1,0 +1,29 @@
+[preface]
+== Preface ==
+
+This document defines a standard for asynchronous messaging for any company's Event Architecture. 
+It is a programming language-agnostic interface description for asynchronous message processing. 
+It is also intended to be message platform-agnostic. 
+All messages published by any producer must conform to these standards. 
+The specification also provides consumer of the messages with the detailed information they need to properly understand, consume and process these messages.
+
+=== What's in the Book? ===
+
+Chapter 1 - Why is Event Driven Architecture critical to tomorrow's application?
+
+Chapter 2 - What are the types of message in Event Driven Architecture?
+
+Chapter 3 - What are the Event Message Specification?
+
+Chapter 4 - Domain Event Example - Consumer Busioness Process Events
+
+Chapter 5 - System Event Example - Runtime Operations Events 
+
+Chapter 6 - What are the Command Message Specification?
+
+Chapter 7 - Domain Command Example 
+
+Chapter 8 - What are the Audit Message Specification?
+
+Chapter 9 - Domain Audit Example 
+
