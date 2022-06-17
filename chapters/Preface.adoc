@@ -15,7 +15,7 @@ Chapter 2 - What are the types of message in Event Driven Architecture?
 
 Chapter 3 - What are the Event Message Specification?
 
-Chapter 4 - Domain Event Example - Consumer Busioness Process Events
+Chapter 4 - Domain Event Example - Consumer Business Events
 
 Chapter 5 - System Event Example - Runtime Operations Events 
 

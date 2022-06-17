@@ -17,10 +17,9 @@ So there is precedence for user interface design using an asynchorous model.
 This also has a major impact on the computing resources required for the application.
 Instead of having to provision threads for maximum requests, that may sit idle, one can have fewer workers in the background continuously managing the work. An event driven architecture following an asynchonous approach is alwway a more efficent use of computing resources
 
-[IMPORTANT]
 ====
-_The key to designing these type of applications is establishment of a set of event design standards and governances within the organization, along using asynchronous messaging technologies (IBM MQ, Kafka, RabbitMQ)_
-
+[IMPORTANT]
+_The key to designing these type of applications is establishment of a set of event design standards and governances within the organization, along using asynchronous messaging technologies (IBM MQ, Kafka, RabbitMQ)_ +
 The purpose of this document is to provide a set of event specifications that can work at the scale of a large organization.
 ====
 

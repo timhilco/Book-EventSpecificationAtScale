@@ -1,3 +1,5 @@
-Event Specification At Scale
-Author: Timothy Hilgenberg
-Initial Manuscript
+# Event Specification At Scale
+
+## Author: Timothy Hilgenberg
+
+*Initial Manuscript*
