@@ -11,19 +11,16 @@ The specification also provides consumer of the messages with the detailed infor
 
 Chapter 1 - Why is Event Driven Architecture critical to tomorrow's application?
 
-Chapter 2 - What are the types of message in Event Driven Architecture?
+Chapter 2 - What are the types of messages in Event Driven Architecture?
 
 Chapter 3 - What are the Event Message Specification?
 
-Chapter 4 - Domain Event Example - Consumer Business Events
+Chapter 4 - Domain Event Type Examples - Consumer Business Events
 
-Chapter 5 - System Event Example - Runtime Operations Events 
+Chapter 5 - System Event Type Examples - Runtime Operations Events 
 
 Chapter 6 - What are the Command Message Specification?
 
-Chapter 7 - Domain Command Example 
+Chapter 7 - Domain Command Type Examples 
 
-Chapter 8 - What are the Audit Message Specification?
-
-Chapter 9 - Domain Audit Example 
 

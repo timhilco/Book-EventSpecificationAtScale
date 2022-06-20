@@ -1,21 +1,53 @@
 == Chapter 3 Event Message Specifications ==
 
 === Overview ===
-Key features of Event Message Specification are:
+The purpose of this chapter is to define the overall design specificiation for events. 
+The event definitions are JSON based and the chapter will provide an inventory of suggested fields, their attributes and their definitions.
+It forms a foundations for the definitions of organization's event design standards. 
+The chapter will provide suggestions for various event types, header and body definitions and detailed field specifications.
 
-* Provides Unique and Global Message Identifier
-* Provides important auditing data, date, time, as to when the message was created. Also can contain a history of where the logoical message has been processed
-* Is Independent, stand alone and self-contained; The message contains all the information a consumer might need
-* Provides simple headers and metadata to facilitate routing and filtering within the event processing network
-* Provides provenance for the message
-** _Where and When did the event happen_
-** _Who the source/processor is, both system of record and publishing platform_
-** _Who or What was the caused of the event_
-* Supports schema version control and message validation
-* Provides the ability to sore and find the key of the key business object or subject in a system of record
-** Related business object can be attached to the message
-* Provides correlation for cross event processing.
-* Provides the ability to submit test or synthetic event for testing
+The key features of an Event Message Specification are:
+
+.Provides a Unique and Global Message Identifier
+Each message needs to have a unique and global identifer. 
+In addition, it contains important auditing data, date, time, as to when the message was created.
+This is important for any storage of the message in a data base and for logging and auditing purposes. 
+
+.Provides provenance for the message, which includes a history of where the logoical message has been processed
+* _Where and When did the event happen_
+* _Who the source/processor is, both system of record and publishing platform_
+* _Who or What was the caused of the event_
+
+.Strives to be as independent, stand alone and self-contained as possibe.
+The message should contain all the information a consumer might need.
+This should avoid complex and time consuming look ups for any consumer requiring additional context to process the message.
+
+.Provides simple headers and metadata to facilitate routing and filtering within the event processing network
+In any complex environment, there will be a need to simply route the message to one or more consumers. 
+The goal of the lead header is to provide a set of standards to allow for simple tooling and consistency.
+This is more for effcient use of the networking infrastructure than domain processing of the event.
+
+.Supports schema version control and message validation
+Event are not stagnent.
+They will continuely evolve, which makes version control a first class element within the message.
+Events in general are immutable, so changing them is basically impossible.
+so, message validation is extremely important in publishing and processing.
+The use of namespaces for event type headers and body allow for the validation of a message.
+It also allows for the easy storage of the specifications in a dictionary or directory.
+
+.Provides the ability to store and find the key of the key business object or subject in a system of record
+In general, every event should be associated with a key independent domain business entity 
+(For HR/Payroll, this would be a person)
+The message should store the name, type and primary key of the business object.
+This would faciliate the retrieval of the domain object if needed.
+In addition to the primary business object, there can also be related business objects that were part of the context when the event was published. 
+The specifications allows for this information to be part of the event. 
+It too, can be used to retrieve the data about this business entity.
+If helpful, it can provided correlation for cross event processing.
+
+.Provides the ability to submit test or synthetic event for testing
+Sometimes during testing, it is helpful not to perform the action the consumer wants to take based on the event it recieves.
+This field allows the consumer to identify this and not take any additional action, like calling a update API or updating a data base.
 
 === Event Types ===
 The follow sections provide the specification for the types of event support by the architecture. (Note: Some event types are in the prototype stage)  +
@@ -178,8 +210,6 @@ messageId:: Globally Unique (UUID) Identifier of message.
 messageType:: Describes the type of message. 
 Valid Values:
 * Event
-* Command
-* Audit
 
 messageNamespace:: Namespace is used to distinguish between the different types of messages (events or commands), source (internal vs external), and schema versions to avoid collision and help in processing the messages. 
 They also identify the type of Event Header contained in the full message.

@@ -7,9 +7,14 @@ Author: Timothy S. Hilgenberg <timhilco@gmail.com>
 [colophon]
 = Colophon
 
-*NOTE: This book is an early draft of this manuscript*
+====
+[NOTE] 
+This book is an early draft of this manuscript 
 
-Working Draft V0.9.03 June 2022
+*All comments welcome*
+====
+
+Early Working Draft V0.9.03 June 2022
 
 Copyright 2022. All rights Reserved 
 
@@ -35,12 +40,6 @@ include::./chapters/Chapter_6.adoc[]
 
 // Question -> Domain Command Example - XXX Command
 include::./chapters/Chapter_7.adoc[]
-
-// Question -> What are the Audit Message Specification?
-include::./chapters/Chapter_8.adoc[]
-
-// Question -> Domain Audit Example - XXX Audit
-include::./chapters/Chapter_9.adoc[]
 
 // Question -> 
 include::./chapters/Appendix.adoc[]

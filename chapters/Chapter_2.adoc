@@ -1,13 +1,12 @@
-== Chapter 2 - Message Types ==
+== Chapter 2 - Message Definitions ==
 
 === Overview ===
 
-This chapter provide the key definitions related to the messages supported within the ecosystem. 
+This chapter provide the key definitions related to the messages that could be supported within the organization's messaging ecosystem. 
 It will :
 
-* define the types of message and some of the guiding principles about them. 
-* describe the message formats available for both internal and secure external usage. 
-
+* define the types of messages and some of the guiding principles used to identify and name them. 
+* describe the potential fields ds and formats for the message type, whihc can be processed for both internal and secure external usage. 
 
 === Messages ===
 
@@ -20,12 +19,15 @@ As a component of the event architecture, there are 3 types of asynchronous mess
 An Event is a message which informs various listeners about something which has happened in the past. It is sent by a producer which doesn't know and doesn;t care about the consumers of the event. 
 This type of Messages promotes highly decoupled systems using pub/sub architectures.  
 
+====
+[IMPORTANT]
 *An Event is an immutable record of a single event at a moment in time.*
+====
 
 ==== Commands ====
 Commands trigger something which should happen in the future. It's typically a one-to-one connection between a producer (who sends the command) and a consumer (who takes and executes the command) and, few times, the order of commands is also of utmost importance. Commands are usually performed by actors outside the current system. However, commands can also be rejected, requiring new error handling patterns.
 
-The difference in thinking between an event and a command is an event-X has occurred, rather than command-Y which should be executed.
+The difference in thinking between an event and a command is an event-X has occurred, rather than command-Y which should be executed as a request.
 
 ==== Audit (Proposed) ====
 An Audit message is an adhoc publishing of a domain business objects state. 
@@ -51,6 +53,15 @@ Thus, can also be used to seed new consumers with domain data.
 * Never includes a response
 * Sometimes could be the result of a business process (i.e.  completed enrollment) or command (i.e. Change medical plan election)
 
+Applications are like islands. 
+However as applications become more specialize, business process are requiring more integration to provide some specific service of the overall process experience.
+Inter application processing is becomeing more and more important.
+Although it is not common practice, every application should consider publishing events as part of it's overall design and implementation. 
+Today, it is a bit of an afterthought.
+Events and Commands should be first class elements of the application.
+Even if there is no requirement for this in the present for an application, it will be in the future. 
+Every quality application domain engine should provide API for request-reply processing and publish events for any downstream application.
+A good event design will ancipate what events might be of interest and publish them.
 === Command - Represents a request to perform an important action task ===
 * Webster Definition: _to direct authoritatively_
 * Other Definitions

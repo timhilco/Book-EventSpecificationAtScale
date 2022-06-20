@@ -1,0 +1,14 @@
+extends: default
+page:
+  layout: portrait
+  margin: [0.75in, 1in, 0.75in, 1in]
+  size: Letter
+footer:
+  height: $base-line-height-length * 2.5
+  line-height: 1
+  recto:
+    right:
+      content: '{page-number}'
+  verso:
+    left:
+      content: $footer-recto-right-content 
