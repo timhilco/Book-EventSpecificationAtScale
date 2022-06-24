@@ -41,7 +41,7 @@ The command message is a JSON document containing one JSON object named “messa
 
 
 
-=== Internal Command JSON Structure ===
+=== Command JSON Structure ===
 To keep it simple and easy to produce and consume, the command message has a very flexible structure and is basically an unstructured document. The goal is to have a schema for the header and every command data (i.e body) itself. We would like to have a schema dictionary which has a JSON or AVRO schema as it values and it’s keyed by some name. The hierarchy is as follows:
 
 •	There is only one header schema (key name: header)

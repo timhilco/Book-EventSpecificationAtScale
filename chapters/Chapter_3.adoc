@@ -15,7 +15,7 @@ This is important for any storage of the message in a data base and for logging 
 
 .Provides provenance for the message, which includes a history of where the logoical message has been processed
 * _Where and When did the event happen_
-* _Who the source/processor is, both system of record and publishing platform_
+* _Who the source/publisher is, both system of record and publishing platform_
 * _Who or What was the caused of the event_
 
 .Strives to be as independent, stand alone and self-contained as possibe.
@@ -74,48 +74,61 @@ The *message* JSON object contains 3 child JSON objects: +
 
 The Common Message Header provides the following key features:
 
-* Message Metadata
-** Message Identifer
-** Message typing
-* Event MetaData 
-** Name
-** Schema Definition 
-* Event Context
+.Message Metadata
+The Message Metadata contains key information about the message, a unique, global message identifier, the type of message, creation timestamp, orginal publisher and history of consumer processors.
+This information is common to all events and commands
+
+.Event MetaData 
+The Event Metadata contains key information about the event. 
+This includes the type of event and the namespace of the type to support automated access to the schema definition of the event type and body of the event.
+
+.Event Context
+The event context are fields related to when the event was piublished.
+It includes a context label or tag, along with the action (past tense) that occured at the time of the event. 
+This support any routing of the event to other consumers and key analytics processing.
+In general, events are processed against business domain objects.
+The event context provides fields for the retrieval of the main subject business entites and any additional related resources involved at the time of publication.
 ** Event Context Metadata
 ** Subject Type and Id
 ** Related Resources
-* Audit History/Chain of Custody
-** Publishers
-** System of Record/Source Publisher
 
-* Every message type, events, commands or audit, will have a common standard message header
-* There will only be one format or schema for the common message header and the object is required
-* The name of the JSON object is *header*
-* It contains fields that describe the message at the highest levels and it identifies the source and type of the message
-** These fields determine the format and names of the fields that follow in the message object. 
-* Since this is JSON, routing or filtering consumers can use only the header to determine routing of message or if the consumer is interested in processing the message
+.Audit History/Chain of Custody
+To support debugging and auditing, the message contains information around who was the orgininal publisher of the message, a history of processors that have touched the message.
+In addition, it documents the System of Record for the key subject of the message.
+
+.Common Header Details
+Every message type, events, commands or audit, will have a common standard message header.
+There will only be one format or schema for the common message header and the object is required.
+*The name of the JSON object is *header*.
+It contains fields that describe the message at the highest levels and it identifies the source and type of the message. These fields determine the format and names of the fields that follow in the message object. 
+Since this is JSON, routing or filtering consumers can use only the header to determine routing of message or if the consumer is interested in processing the message. This provides a high degree of standization, which leads to excellent tooling.
 
 ==== Event Type Header ====
-* It is a secondary header that contains the common elements for all messages of a given event type
-* Each event type will have its own header name and structure. Examples:
-** uxEventHeader - for Ux events
-** bpEventHeader - for business process events
-* The messageNamespace field in the header will indicate which event type header is in the message
-* There will be a structured format/schema for each event type
-* For an organization, the goal is a small bounded list of event types
-** There can be an unlimited number of event definitions within a type
-** The goal is to have as much standardization in the headers as much as possible.
-** The variations are meant for the body JSOn object.
+The Event Type Header is a second level header that contains the common elements for all messages of a given event type.
+Each event type will have its own header name and structure. Examples:
+* uxEventHeader - for Ux events
+* bpEventHeader - for business process events
+
+The messageNamespace field in the header will indicate which event type header is in the message.
+There will be a structured format/schema for each event type
+For an organization, the goal is a small bounded list of event types.
+There can be an unlimited number of event definitions within a type.
+The goal is to have as much standardization in the headers as possible.
+The variations are meant for the *body* JSON object.
 
 ==== Event Message Body ====
-* Contains the fields that are specific to a given event definition within an event type
-** The system will have a large unbounded set of events. The body represents the specific fields for a given event type
-* The eventBodyNamespace in the Event Type Header will describe the schema for the fields in the body
-* The name of the JSON object is *body*
-* Each body should have it's own schema that can be placed in a schema repository and retrieved by the bodyNamespace field.
-** The schema can then be used for validation and code generation.
+The Event Message Body contains the actual data about the event. 
+These are fields that are specific to a given event definition within an event type.
+The goal is to make the event as self-describing as possible. 
+Trying to avoid additional data retrievals to process the message.
+Since most applications have a large unbounded set of events, the body represents the specific fields for a given event type. 
+The above headers are intended to be standard, but the body is where the specific fields for that event are stored.
+Each body should have it's own schema that can be placed in a schema repository and retrieved by the bodyNamespace field.
+The schema can then be used for validation and code generation.
+The eventBodyNamespace in the Event Type Header will describe the schema for the fields in the body.
+The name of the JSON object is *body*
 
-=== Internal Event JSON Structure ===
+=== Event JSON Structure ===
 In order to keep the processing of a message simple and easy to produce and consume, the event message has a very flexible structure and is basically an unstructured document. 
 The goal is to have a schema for the header, each event type header and every event data (i.e body) itself. 
 We would like to have a schema dictionary which has a JSON or AVRO schema as it values and it's keyed by some name. The hierarchy is as follows:
@@ -124,9 +137,9 @@ We would like to have a schema dictionary which has a JSON or AVRO schema as it 
 * To determine the <eventTypeheader> name, the header.messageNamespace field contains the name of the event type
 * To determine the body schema name, the header.eventBodyNamespace field determine the name for the body schema
 
-[NOTE]
 ====
-The internal event structure looks as follows:
+[NOTE]
+The event structure looks as follows:
 
 {"message" : +
 	"header" : {   ...  }, +
@@ -156,6 +169,7 @@ The internal event structure looks as follows:
 	"body"  : { ... }
 }
 ====
+
 ==== Common Message Header Field Specification ====
 
 .Schema Fields Table
@@ -175,7 +189,8 @@ The internal event structure looks as follows:
 | businessDomain | String; Required 
 | correlationId | String; Required 
 | correlationIdType | String; Required 
-| globalBusinessObjectIdentifier | String 
+//| globalBusinessObjectIdentifier | String 
+|subject | String 
 | publisherId | String; Required 
 | publisherApplicationName | String; Required
 | publisherApplicationInstanceId | String 
@@ -188,7 +203,8 @@ The internal event structure looks as follows:
 | - eventName | String; Required
 | - messageTimestamp | String; Required
 | - sequenceNumber | String
-| businessObjectSystemOfRecord  | Object; Array; Optional
+//| businessObjectSystemOfRecord  | Object; Array; Optional
+| subjectSystemOfRecord  | Object; Array; Optional
 | - systemOfRecordSystemId | String; Required
 | - systemOfRecordApplicationName | String; Required
 | - systemOfRecordApplicationInstanceId | String
@@ -275,15 +291,19 @@ Sample Valid Values in HR/Benefits:
 * Operations
 * N/A (for domains that do not match up to an organization service domains.
 
-correlationId:: Describes the globally unique identifier (UUID) typically generated within the publishing application. This is used to correlate multiple messages across a logical process. The messageId is unique for the individual message, but the correleationId can be repeated across multiple messages
+correlationId:: Describes the globally unique identifier (UUID) typically generated within the publishing application. This is used to correlate multiple messages across a logical process. 
+The messageId is unique for the individual message, but the correleationId can be repeated across multiple messages
 
 correlationIdType:: Describes the type of correlation identifier.  
 Valid Values:
 * SessionId - for participant Ux actions and sessions
 * BatchId - for batch processing jobs. This is the actual instance id of a job type.
 * PublisherCorrelationId - for publisher specific correction type (Typically used if the above two does not apply)
-
-globalBusinessObjectIdentifier:: Describes the global identity of the business object being acted upon. In the HR/Benefits domain, an example would be the person.
+/
+/globalBusinessObjectIdentifier:: Describes the global identity of the business object being acted upon. In the HR/Benefits domain, an example would be the person.
+// Collaborate with CloudEvents
+subject:: Describes the global identity of the subject being acted upon. The 'subject' is typcially a key buisness domain object.
+In the HR/Benefits domain, an example would be the person.
 
 publisherId:: Identifies the publishing company entity of the message.
 
@@ -313,7 +333,7 @@ sequenceNumber:::: The sequence should be from earliest to latest in chronologic
 The publisher should only append to the array If the array is provided as input from a message, then the new publisher should increase the sequence number and append the consumed/input header data to the array. 
 If this is the originating or edge processor, then the sequence number should be set to one (1), not zero
 
-businessObjectSystemOfRecord:: System of Record containing details related to finding the related business object. 
+subjectSystemOfRecord:: System of Record containing details related to finding the related subject or domain business object. 
 
 systemOfRecordSystemId:::: Identifies the system of record company entity of the message. Sometimes referred to as the partner ID. 
 

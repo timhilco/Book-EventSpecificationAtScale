@@ -1,4 +1,4 @@
-== Chapter 4  - Domain Event Example - Consumer Business Events ==
+== Chapter 4  - Domain Event Examples - Consumer Business Events ==
 
 This chapter discuss the following consumer related events:
 
@@ -11,13 +11,15 @@ All of these event would use the Event Header described in the prior chapter.
 
 === Business Process State Change Event ===
 
-The purpose of this event type is capture events related to the processing of business events. 
-These events are sometimes known as transaction and are used to manage the changes in business domain objects. 
-Upon the completion of a business process, it will typically also create a Business Object Data Change event.
+The purpose of this event type is capture events related to the processing of business process events. 
+These events are sometimes known as worklfow or business transaction and are used to manage the changes in business domain objects. 
+Upon the completion of a business process, the process will update a business object. which will typically also create a Business Object Data Change event.
 
-It supports two types of business processes. 
-The first is a long running transaction that has many states and has time gaps in between the actions of the business process. 
-The second is a straight through or single task, where the action is completed in a single unit of work
+Event can be gnerated from two types of business processes. 
+
+1) A _long running state machine based_ process that has many wait states and has time gaps in between the actions of the business process. 
+
+2) A _straight through_ process or single task, where there are no waits in the process and the action is completed in a single unit of work. Typically, it is all or nothing from a commit standpoint.
 
 .Business Process examples:
 * Contribution Rate Change
@@ -29,7 +31,7 @@ The second is a straight through or single task, where the action is completed i
 * Valid
 * In Error
 
-=== Business Process State Change Event Type Header Specifications ===
+==== Business Process State Change Event Type Header Specifications ====
 
 ====
 [IMPORTANT]
@@ -83,6 +85,7 @@ The action represents the types of actions that result from the change in status
 .Body Definition Considerations
 The body section is named *body*. The *body* can be any valid JSON schema
 
+<<<
 
 === Business Object Data Change Event  ===
 
@@ -102,13 +105,12 @@ The purpose of this event type is to capture the changes to key domain business 
 
 ==== Business Objects Data Change Event Type Header Specifications ====
 
-Business Objects Data Change Header
-
 ====
 [IMPORTANT]
 *JSON Name for _Event Type Header_: boEventHeader*
 ====
 
+[horizontal]
 businessObjectResourceType:: Describes the primary domain data object type that was changed. Valid Values:
 * person
 * personDefinedContribution
@@ -123,7 +125,7 @@ businessObjectIdentfier:: Provides the primary domain data object key of the bus
 additionalBusinesObjectResource:: Provides any additional resource type and key to help further identify the component that changed. 
 This is similar to the pathing (../resource/{id} ) in a REST URL
 
-additionalBusinessObjectResourceType:::: Additional resource type
+additionalBusinessObjectResourceType:: Additional resource type
 
 additionalBusinessObjectResourceIdentifier:: Additional resource identifier or primary key
 
@@ -215,6 +217,8 @@ The recommendation for data fields to report is to provide only the fields that 
 *** Web Service call refreshPersonForInternalId service, which causes a refresh through Ingest 
 *** Generates a Normal Update event 
 
+<<<
+
 === User Experience Action Event ===
 
 Events related to the behavioral actions taken by the participant in our user experience channels. 
@@ -242,6 +246,7 @@ They are used for:
 *JSON Name for _Event Type Header_: uxEventHeader*
 ====
 
+[horizontal]
 channel:: Describes the channel (or UI application) where the event generated.
 
 userDevice:: Identifies the device used by end-user.
@@ -324,6 +329,8 @@ Valid Values for userAction:
 ** Any valid JSON schema as its value
 * This can be any significant data or data of interest for reporting at the time of the UX Event
 
+<<<
+
 === Consumer Goal Event ===
 
 Events related to the action taken by the consumer in the context of reaching a personal goal. 
@@ -336,11 +343,11 @@ For example, the person wants to lose 20lbs as a health goal
 ** Completed
 
 
-=== Consumer Goal Event Type Header Specification ===
+==== Consumer Goal Event Type Header Specification ====
 
 ====
 [IMPORTANT]
-The Personal goal only requires the main header
+The Personal goal only requires the main header +
 *JSON Name for _Event Type Header_: pgEventHeader*
 ====
 

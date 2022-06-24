@@ -8,15 +8,15 @@ It will :
 * define the types of messages and some of the guiding principles used to identify and name them. 
 * describe the potential fields ds and formats for the message type, whihc can be processed for both internal and secure external usage. 
 
-=== Messages ===
-
-A general-purpose data structure with no special intent. In the integration world, these are typically just streamed between the systems for logging, searching, and for other operational and regulatory reasons.
 
 === Message Types ===
+A message is a general-purpose data structure with no special intent. 
+In the integration world, these are typically just streamed between the systems for logging, searching, and for other operational and regulatory reasons.
 As a component of the event architecture, there are 3 types of asynchronous messages:
 
-==== Events ====
-An Event is a message which informs various listeners about something which has happened in the past. It is sent by a producer which doesn't know and doesn;t care about the consumers of the event. 
+.Events
+An Event is a message which informs various listeners about something which has happened in the past. 
+It is sent by a producer which doesn't know and doesn;t care about the consumers of the event. 
 This type of Messages promotes highly decoupled systems using pub/sub architectures.  
 
 ====
@@ -24,34 +24,57 @@ This type of Messages promotes highly decoupled systems using pub/sub architectu
 *An Event is an immutable record of a single event at a moment in time.*
 ====
 
-==== Commands ====
-Commands trigger something which should happen in the future. It's typically a one-to-one connection between a producer (who sends the command) and a consumer (who takes and executes the command) and, few times, the order of commands is also of utmost importance. Commands are usually performed by actors outside the current system. However, commands can also be rejected, requiring new error handling patterns.
+.Commands
+Commands trigger something which should happen in the future. 
+It's typically a one-to-one connection between a producer (who sends the command) and a consumer (who takes and executes the command) and, few times, the order of commands is also of utmost importance. 
+Commands are usually performed by actors outside the current system. 
+However, commands can also be rejected, requiring new error handling patterns.
 
 The difference in thinking between an event and a command is an event-X has occurred, rather than command-Y which should be executed as a request.
 
-==== Audit (Proposed) ====
+====
+[IMPORTANT]
+*A Command is a ....*
+====
+
+.Audit (Proposed)
 An Audit message is an adhoc publishing of a domain business objects state. 
 There is no true triggering action, either from a business process or straight data change. 
 It would typically be triggered in batch fashion with a query predicate. 
-There will be situations where there are failures in the pipeline, which might lead to data inconsistencies with systems of record. Since some of the business objects are very stable and don't change often, the audit message is used to get to eventual data consistency. 
+There will be situations where there are failures in the pipeline, which might lead to data inconsistencies with systems of record. 
+Since some of the business objects are very stable and don't change often, the audit message is used to get to eventual data consistency. 
 A full business object for a bounded context can be published on a periodic basis and then any consumer caches can be updated. 
 Thus, can also be used to seed new consumers with domain data.
 
-=== Event - Something of interest that has happened in the past ===
-* Represents something that has happened
-** Has a defined timepoint
-* Events are both a historical fact and a notification; 
-** Notification - a call for action, this is considered a stateless event 
-** A state transfer - pushing data wherever it is needed, known as an Event-Carried State Transfer
-* Events are immutable
-* Name should indicate a past tense action - past-participle verb
-* Should be action oriented
-* Definition:
-** result of some outcome
-** Collins: a happening or occurrence, esp. when important
-** Can't be rejected, but can be ignored; no expectation of any future action
-* Never includes a response
-* Sometimes could be the result of a business process (i.e.  completed enrollment) or command (i.e. Change medical plan election)
+<<<
+=== Event ===
+
+====
+[NOTE]
+.*Something of interest that has happened in the past*
+====
+
+An *Event* Represents something that has happened and the context at that time.
+It has a defined timepoint.
+
+.Definition:
+* Result of some outcome
+* Collins: a happening or occurrence, esp. when important
+
+Event names should indicate a past tense action - past-participle verb and should be action oriented
+Events are both a historical fact and a notification to other interested parties:
+* Notification - a call for action, this is considered a stateless event 
+* A state transfer - pushing data wherever it is needed, known as an Event-Carried State Transfer
+
+Events never produce a response object when published.
+They could be the result of a business process (i.e.  completed enrollment) or command (i.e. Change medical plan election)
+They can't be rejected, but can be ignored. 
+There is no expectation of any future action
+
+====
+[IMPORTANT]
+Events are immutable
+====
 
 Applications are like islands. 
 However as applications become more specialize, business process are requiring more integration to provide some specific service of the overall process experience.
@@ -62,22 +85,38 @@ Events and Commands should be first class elements of the application.
 Even if there is no requirement for this in the present for an application, it will be in the future. 
 Every quality application domain engine should provide API for request-reply processing and publish events for any downstream application.
 A good event design will ancipate what events might be of interest and publish them.
-=== Command - Represents a request to perform an important action task ===
-* Webster Definition: _to direct authoritatively_
-* Other Definitions
-** Represents an intent to perform some sort of action
-* The action has not yet happened
-** HasExample: Change medical plan election
-* Named with an imperative Verb
-** Can't be rejected, but can be ignored'The action has not yet happened
-** Example: Change medical plan election
-* Has an explicit expectation that something (a state change or side effect) will happen in the future
-* Can be rejected
-* Typically, a one-way request or fire message with no response
-** However, this can be used in situations where an async request/reply is desired
-** Not to be confused with a synchronous Request/reply like REST API
-Message provides a call back
-* Can generate one of more events as part of its processing
 
-=== Audit - Represents the current state of a business object - Published on specific schedule - ** Proposed ** ===
-* To be defined
+<<<
+
+=== Command ===
+
+====
+[NOTE]
+*Represents a request to perform an important action task*
+====
+
+.Definitions
+* Webster Definition: _to direct authoritatively_
+* Represents an intent to perform some sort of action
+
+The requested action has not yet happened. 
+Example: Change medical plan election
+The commands should be named with an imperative verb
+It has an explicit expectation that something (a state change or side effect) will happen in the future
+Typically, a one-way request or fire message with no response and can be rejected.
+However, this can be used in situations where an async request/reply is desired.
+It is not to be confused with a synchronous Request/reply like REST API.
+The message can  provide a call back information, which can be used in an asynchonous conversation with another consumer.
+
+
+<<<
+=== Audit - *Proposed* ===
+
+Represents the current state of a business object - Published on specific schedule 
+
+====
+[NOTE]
+*To be defined*
+====
+
+

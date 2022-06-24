@@ -9,7 +9,7 @@ Author: Timothy S. Hilgenberg <timhilco@gmail.com>
 
 ====
 [NOTE] 
-This book is an early draft of this manuscript 
+This book is a very early draft of this manuscript 
 
 *All comments welcome*
 ====
