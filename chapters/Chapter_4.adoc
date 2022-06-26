@@ -21,11 +21,14 @@ Event can be gnerated from two types of business processes.
 
 2) A _straight through_ process or single task, where there are no waits in the process and the action is completed in a single unit of work. Typically, it is all or nothing from a commit standpoint.
 
-.Business Process examples:
+Business Process examples:
+
 * Contribution Rate Change
 * Annual Enrollment
 * Defined Benefit Retirement
-* State changes includes:
+
+State changes includes:
+
 * Start
 * Complete
 * Valid
@@ -40,7 +43,8 @@ Event can be gnerated from two types of business processes.
 
 [horizontal]
 businessProcessReferenceId:: Describes the primary key or Business Process Reference Identifier of the business process person instance as described in platform(s). 
-businessProcessId::Describes the internal identifier of the business process. It is the template used to create the person specific instances of the business process. 
+
+businessProcessId:: Describes the internal identifier of the business process. It is the template used to create the person specific instances of the business process. 
 
 rawBusinessProcessName:: Describes the pre-normalized Business Process Name as described in platform(s). 
 This could be the client specific business process name or a normalized name across clients. 
@@ -69,18 +73,20 @@ For the eventName, the standard will be the following fields separated by a colo
 .Tag Definition
 The tag represents the business process name. It should be the normalized version of the business process name. 
 
-* Format
- - Free format single alpha numeric value
- - No formal specification is defined
+Format:
+
+* Free format single alpha numeric value
+* Free format double alphaNo formal specification is defined
 
 .Action Definition
 The action represents the types of actions that result from the change in status of the business process during the processing of the consumer's business process.
 
-* Action Component Valid Values
- - Started
- - Updated
- - Completed
- - Canceled
+Action Component Valid Values:
+
+ * Started
+ * Updated
+ * Completed
+ * Canceled
 
 .Body Definition Considerations
 The body section is named *body*. The *body* can be any valid JSON schema
@@ -91,17 +97,19 @@ The body section is named *body*. The *body* can be any valid JSON schema
 
 The purpose of this event type is to capture the changes to key domain business objects.
 
-* Business Objects include:
- - Person
- - Person Defined Contribution
- - Person Health Management
- - Person Defined Benefit
- - Person Document[TH1]
-* Data actions Include:
- - Creation
- - Updates
- - Deletion
- - Master Data Management Document Merge/Split
+Business Objects include:
+
+* Person
+* Person 401k Benefits
+* Person Medical Benefits
+* Person Document
+
+Data actions include:
+
+ * Creation
+ * Updates
+ * Deletion
+ * Master Data Management Document Merge/Split
 
 ==== Business Objects Data Change Event Type Header Specifications ====
 
@@ -118,6 +126,7 @@ businessObjectResourceType:: Describes the primary domain data object type that 
 * personDefinedBenefit
 * personDefinedBenefitCalculation
 * personDocument
+
 Editor:Think about moving this to 'tag'. Need to determine in the Identifier is included in the tag
 
 businessObjectIdentfier:: Provides the primary domain data object key of the business object that was changed.
@@ -127,9 +136,10 @@ This is similar to the pathing (../resource/{id} ) in a REST URL
 
 additionalBusinessObjectResourceType:: Additional resource type
 
-additionalBusinessObjectResourceIdentifier:: Additional resource identifier or primary key
+additionalBusinessObjectResourceId:: Additional resource identifier or primary key
 
-dataChangeTimestamp:: Timestamp of the data change in the source platform. The timestamp must be in the RFC 3339/ISO 8601 date format standard. 
+dataChangeTimestamp:: Timestamp of the data change in the source platform. 
+The timestamp must be in the RFC 3339/ISO 8601 date format standard. 
 See Appendix for details.
 
 .EventName Standards
@@ -142,9 +152,9 @@ For the eventName, the standard will be the following fields separated by a colo
 The tag represents the business object name. 
 Editor Note: Should tag replace 'businessObjectResourceType' .
 
-* Format
- - Free format single alpha numeric value
- - No formal specification is defined
+Format:
+* Free format single alpha numeric value
+* No formal specification is defined
 
 .Action Definition
 The action defines the type of data maintenance (CRUD) action taken on the business object.
@@ -153,7 +163,7 @@ Editor Note: action is replacing the dataAction field in prior versions.
 * Action Component Valid Values
 
 dataAction :: Describes the data change or CRUD action performed on business object.- Create, Update, Delete. 
-Also includes an primary key changes and MDM document merging. 
+Also includes an primary key changes and Master Data Management (MDM) document merging. 
 
 * Create
 * Update
@@ -165,7 +175,7 @@ Also includes an primary key changes and MDM document merging.
 .Body Definition Considerations
 
 * The body section is named 'body'
- ** body can be any valid JSON schema
+ ** *body* can be any valid JSON schema
  ** Contains one predefined element 'extension'
  ** Extension is a private area that can contain its own schema
  ** The field is an map/array with:
@@ -174,7 +184,8 @@ Also includes an primary key changes and MDM document merging.
 
 .Data Fields Best Practices by Data Action
 
-* Update
+[horizontal]
+Update::
 
 The recommendation for data fields to report is to provide only the fields that changed providing both old and new Best practice recommendations:
 
@@ -188,18 +199,20 @@ The recommendation for data fields to report is to provide only the fields that 
 ** For fields in a high level/hierarchy, include all keys and simple primitive types (strings, numbers,etc ) at the same hierarchy  
 *  Do not include objects or arrays  in the higher levels  Do not include non-changing arrays at the same level
 
-* Create
-** Provide the entire New document
-** Alternate: Keys Only
+Create::
+Provide the entire New document. 
+The alternate is too only provide foreign keys, which can be used to retrieve data from a data base. 
 
-* Delete 
-** Only provide a delete event if the entire document is being deleted, not if one of the source systems deleted a person
-** In the body, provide the primary document key  (UniversalId or  Mongo _id ) and any IdMapping table
-** If the object/person is being delete in a given platform, but the person still exists in another platform, treat as an Update
-** Only delete when no more IdMappings exist in the document
+Delete:: 
+Only provide a delete event if the entire document is being deleted, not if one of the source systems deleted a person.
+In the body, provide the primary document key  (UniversalId or  Mongo _id ) and any IdMapping table
+If the object/person is being delete in a given platform, but the person still exists in another platform, treat as an Update.
+Only delete when no more IdMappings exist in the document
 
 .Master Data Management Platforms/CustomerMaster
-** Merge
+
+[horizontal]
+Merge::
 ** Treat as an MDM Merge Update event with two sections of data, one for survivor and one for deleted  
 ** Both sections
 ** Survivor _id & Deleted _id
@@ -211,11 +224,12 @@ The recommendation for data fields to report is to provide only the fields that 
 *** System Instance
 *** Merge Field Change (old, new)
 
-** Split -  No new events, just two new event being generated
-*** Web service call to deletePersonId service, which cleans up IdMapping and domain sections
-*** Generates a Normal Update event
-*** Web Service call refreshPersonForInternalId service, which causes a refresh through Ingest 
-*** Generates a Normal Update event 
+Split:: No new events, just two new event being generated
+Web service call to deletePersonId service, which cleans up IdMapping and domain sections.
+Generates a Normal Update event.
+Web Service call refreshPersonForInternalId service, which causes a refresh through .
+
+Ingest:: Generates a Normal Update event 
 
 <<<
 
@@ -232,12 +246,13 @@ They are used for:
 * Behavior actions for data reporting and analytics
 * Provide notifications to non-domain processes (document management, campaigns) to drive their underlying processes
 
-* Actions may include, but not limited to:
-** Button clicks
-** Link or action selections
-** Page or screen displays
-** Hover
-** IVA or chat intents
+Actions may include, but not limited to:
+
+* Button clicks
+* Link or action selections
+* Page or screen displays
+* Hover
+* IVA or chat intents
 
 ==== User Experience Action Event Type Header Specifications ====
 
@@ -283,33 +298,34 @@ We need to support new and emerging interfaces beyond web and mobile channels. T
 
 .Tag Component Valid Values
 
-* Channel
+[horizontal]
 
-** Web
-*** Flow - A user's perceived outcome process or unit of work 
-**** Denotes flow of interaction (pages) or conversation between user and system
-*** Page 
-*** Widget or Multiple Control Component
-*** Elemental Ux Control
-**** Button, includes clickable icons - Clickable
-**** Link - Clickable
-**** CheckBox - Selectable
-**** Text - Display, Hover, Table Element
-**** TextBox - Keyboard Actions -> Tabbing ,Enter pressed
-**** Bounded Lists -> Radio Buttons or checkboxes or DropDown Lists or Dials - Selectable
-** Mobile - TBD
-** Smart Assistant/Alexa
-** IVA/Chat
-** Other on Non-Channel - Treatment or Theme  Example xxxA/xxxB 
+Web Channel::
+* Flow - A user's perceived outcome process or unit of work; Denotes flow of interaction (pages) or conversation between user and system
+** Page 
+** Widget or Multiple Control Component
+* Elemental Ux Control
+** Button, includes clickable icons - Clickable
+** Link - Clickable
+** CheckBox - Selectable
+** Text - Display, Hover, Table Element
+** TextBox - Keyboard Actions -> Tabbing ,Enter pressed
+** Bounded Lists -> Radio Buttons or checkboxes or DropDown Lists or Dials - Selectable
+
+Mobile:: TBD
+
+Smart Assistant/AlexaIVA/Chat:: TBD
+
+Other on Non-Channel:: Treatment or Theme  Example xxxA/xxxB 
 
 .Format
-** Ordered sets of tuples separated by underscore '_'
-** The tuple is the following fields separated by dash '-'
-*** LogicalName determined by Ux Designer and Data Analyst 
-*** UxControl Valid Value in all caps
-** The order is from highest level (aFlow) to specific UX Control, (Button)
+* Ordered sets of tuples separated by underscore '_'
+* The tuple is the following fields separated by dash '-'
+** LogicalName determined by Ux Designer and Data Analyst 
+** UxControl Valid Value in all caps
+* The order is from highest level (aFlow) to specific UX Control, (Button)
 
-    Example: <Flow_Name>-FLOW_<Page_Name>-PAGE or Retirement-FLOW_HubPage-PAGE
+Example: <Flow_Name>-FLOW_<Page_Name>-PAGE or Retirement-FLOW_HubPage-PAGE
 
 .Action Definition
 The action defines the type of user actions taken by the user when interacting with the channel/device. 
@@ -338,9 +354,9 @@ Events related to the action taken by the consumer in the context of reaching a 
 A goal is non-transactional outcome the consumer is trying to attain. 
 For example, the person wants to lose 20lbs as a health goal
 
-* Actions may include:
-** Started
-** Completed
+Actions may include:
+* Started
+* Completed
 
 
 ==== Consumer Goal Event Type Header Specification ====
@@ -354,17 +370,16 @@ The Personal goal only requires the main header +
 .Tag Definition
 The tag represents the name of the personal goal in a machine readable format.
 
-* Format
-** Free format single alpha numeric value
-** No formal specification is defined
+Format:
+* Free format single alpha numeric value
+* No formal specification is defined
 
 .Action Definition
 The action defines the type of task actions taken against a personal goal.
 
-
-* Action Component Valid Values 
- - Started
- - Completed
+Action Component Valid Values :
+* Started
+* Completed
 
 .Body Definition Considerations
 * The body section is named *body*

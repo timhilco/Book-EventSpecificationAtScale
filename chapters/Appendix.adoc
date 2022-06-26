@@ -1,12 +1,11 @@
 [appendix]
-== Appendix ==
 
 === CloudEvents Comparision ===
 
-id -> messageId
-source -> eventName and Namespace
-specVersion -> messageVersion
-dataContentType -> JSON only
-dataSchema -> messageNamespace, eventNamespace (body)
-subject -> Subject/Business Object
-time -> messageTimestamp
+id -> messageId +
+source -> eventName and Namespace +
+specVersion -> messageVersion +
+dataContentType -> JSON only +
+dataSchema -> messageNamespace, eventNamespace (body) +
+subject -> Subject/Business Object +
+time -> messageTimestamp +

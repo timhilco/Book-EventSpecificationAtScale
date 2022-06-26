@@ -50,7 +50,7 @@ Sometimes during testing, it is helpful not to perform the action the consumer w
 This field allows the consumer to identify this and not take any additional action, like calling a update API or updating a data base.
 
 === Event Types ===
-The follow sections provide the specification for the types of event support by the architecture. (Note: Some event types are in the prototype stage)  +
+The follow sections provide the specification for the types of event support by the architecture.   +
 The event types are:
 
 Consumer::
@@ -88,9 +88,6 @@ It includes a context label or tag, along with the action (past tense) that occu
 This support any routing of the event to other consumers and key analytics processing.
 In general, events are processed against business domain objects.
 The event context provides fields for the retrieval of the main subject business entites and any additional related resources involved at the time of publication.
-** Event Context Metadata
-** Subject Type and Id
-** Related Resources
 
 .Audit History/Chain of Custody
 To support debugging and auditing, the message contains information around who was the orgininal publisher of the message, a history of processors that have touched the message.
@@ -299,10 +296,10 @@ Valid Values:
 * SessionId - for participant Ux actions and sessions
 * BatchId - for batch processing jobs. This is the actual instance id of a job type.
 * PublisherCorrelationId - for publisher specific correction type (Typically used if the above two does not apply)
-/
-/globalBusinessObjectIdentifier:: Describes the global identity of the business object being acted upon. In the HR/Benefits domain, an example would be the person.
+
+//globalBusinessObjectIdentifier:: Describes the global identity of the business object being acted upon. In the //HR/Benefits domain, an example would be the person.
 // Collaborate with CloudEvents
-subject:: Describes the global identity of the subject being acted upon. The 'subject' is typcially a key buisness domain object.
+subjectIdentifer:: Describes the global identity of the subject being acted upon. The 'subject' is typcially a key buisness domain object.
 In the HR/Benefits domain, an example would be the person.
 
 publisherId:: Identifies the publishing company entity of the message.
@@ -360,5 +357,6 @@ correlatedResourceDescrption:::: Description of related resource at the time the
 
 isSyntheticEvent::: Is this a synthetic or fake event? If true, assumes this is an event that should be processed under special circumstance, meaning don't change state or issue commands. Used for testing/monitoring in production by sending in fake events
 
-Potential Extensions:
-_dataContentType_ - This will be helpful if the body is not JSON. The current best practice is that all body payloads, should be JSON. The values would follow HTTP mime types
+.Potential Extensions
+[horizontal]
+_dataContentType_:: This will be helpful if the body is not JSON. The current best practice is that all body payloads, should be JSON. The values would follow HTTP mime types

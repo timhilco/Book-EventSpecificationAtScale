@@ -34,7 +34,7 @@ The difference in thinking between an event and a command is an event-X has occu
 
 ====
 [IMPORTANT]
-*A Command is a ....*
+*A Command is a request to retrieve some data or perform some action*
 ====
 
 .Audit (Proposed)
@@ -51,7 +51,7 @@ Thus, can also be used to seed new consumers with domain data.
 
 ====
 [NOTE]
-.*Something of interest that has happened in the past*
+*Something of interest that has happened in the past*
 ====
 
 An *Event* Represents something that has happened and the context at that time.
@@ -99,10 +99,10 @@ A good event design will ancipate what events might be of interest and publish t
 * Webster Definition: _to direct authoritatively_
 * Represents an intent to perform some sort of action
 
-The requested action has not yet happened. 
-Example: Change medical plan election
-The commands should be named with an imperative verb
-It has an explicit expectation that something (a state change or side effect) will happen in the future
+The requested action of the command has not yet happened. 
+(e.g. Change medical plan election)
+The commands should be named with an imperative verb.
+It has an explicit expectation that something (a state change or side effect) will happen in the future.
 Typically, a one-way request or fire message with no response and can be rejected.
 However, this can be used in situations where an async request/reply is desired.
 It is not to be confused with a synchronous Request/reply like REST API.
@@ -110,7 +110,7 @@ The message can  provide a call back information, which can be used in an asynch
 
 
 <<<
-=== Audit - *Proposed* ===
+=== Audit (Proposed) ===
 
 Represents the current state of a business object - Published on specific schedule 
 

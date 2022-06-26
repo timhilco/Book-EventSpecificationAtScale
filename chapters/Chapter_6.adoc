@@ -17,8 +17,7 @@ Key features of Command Message Specification are:
 === Command Types ===
 The follow sections provide the specification for the types of commands support by the architecture. (Note: Some command types are in the prototype stage)  +
 The command types are:
-		
-Here are some potential types, but not yet confirmed:
+
 *	Business Process Data Change Request
 *	Business Object Data Change Request
 *	Communication Composition/Delivery
