@@ -1,14 +1,36 @@
+hilco:
+  version: '0.9.3'
 extends: default
 page:
   layout: portrait
   margin: [0.75in, 1in, 0.75in, 1in]
   size: Letter
+header:
+  height: $base-line-height-length * 2.5
+  line-height: 1
+  recto:
+    left:
+      content: DRAFT
+  verso:
+    right:
+      content: $header-recto-left-content 
 footer:
   height: $base-line-height-length * 2.5
   line-height: 1
   recto:
+    columns: "<25%,=62%,>13%"
     right:
       content: '{page-number}'
+    left:
+      content: DRAFT - Version  $hilco-version
+    center:
+      content: |
+          Copyright (c) 2022 
+          All Rights Reserved.
   verso:
     left:
       content: $footer-recto-right-content 
+    center:
+      content: $footer-recto-center-content 
+    right:
+      content: $footer-recto-left-content 
