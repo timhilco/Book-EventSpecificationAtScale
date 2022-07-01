@@ -8,11 +8,11 @@ Events related to the action of completing a discreet process or unit of work an
 
 These events reflect the fact that: 
 
-* the application isprocess occurred, which is used for counting instances of the process 
+* the application process occurred, which is used for counting instances of the process 
 
 * the time stamps of then it occurred, which is used for elapse time and windows of time, 
 
-* the time stamp of theadditional resource usage, which is used for more detailed resource consumption analytics and 
+* the time stamp of the additional resource usage, which is used for more detailed resource consumption analytics and 
 
 * any additional status and metadata related to the process of the unit of work. They event can be used for both operational and application event where counting, and resource utilization reporting is of interest to the business
 
@@ -57,7 +57,7 @@ Might also include client level processing runtime errors
 
 See the above header section for definition of the event message header
 
-==== Platform Process Event Headr
+==== Platform Process Event Header
 
 ====
 [NOTE]

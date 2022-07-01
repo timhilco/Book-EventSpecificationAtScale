@@ -6,7 +6,7 @@ This chapter provide the key definitions related to the messages that could be s
 It will :
 
 * define the types of messages and some of the guiding principles used to identify and name them. 
-* describe the potential fields ds and formats for the message type, whihc can be processed for both internal and secure external usage. 
+* describe the potential fields ds and formats for the message type, which can be processed for both internal and secure external usage. 
 
 
 === Message Types ===
@@ -16,7 +16,7 @@ As a component of the event architecture, there are 3 types of asynchronous mess
 
 .Events
 An Event is a message which informs various listeners about something which has happened in the past. 
-It is sent by a producer which doesn't know and doesn;t care about the consumers of the event. 
+It is sent by a producer which doesn't know and doesn't care about the consumers of the event. 
 This type of Messages promotes highly decoupled systems using pub/sub architectures.  
 
 ====
@@ -55,7 +55,7 @@ Thus, can also be used to seed new consumers with domain data.
 ====
 
 An *Event* Represents something that has happened and the context at that time.
-It has a defined timepoint.
+It has a defined point in time.
 
 .Definition:
 * Result of some outcome
@@ -78,13 +78,13 @@ Events are immutable
 
 Applications are like islands. 
 However as applications become more specialize, business process are requiring more integration to provide some specific service of the overall process experience.
-Inter application processing is becomeing more and more important.
+Inter application processing is becoming more and more important.
 Although it is not common practice, every application should consider publishing events as part of it's overall design and implementation. 
 Today, it is a bit of an afterthought.
 Events and Commands should be first class elements of the application.
 Even if there is no requirement for this in the present for an application, it will be in the future. 
 Every quality application domain engine should provide API for request-reply processing and publish events for any downstream application.
-A good event design will ancipate what events might be of interest and publish them.
+A good event design will anticipate what events might be of interest and publish them.
 
 <<<
 
@@ -106,7 +106,7 @@ It has an explicit expectation that something (a state change or side effect) wi
 Typically, a one-way request or fire message with no response and can be rejected.
 However, this can be used in situations where an async request/reply is desired.
 It is not to be confused with a synchronous Request/reply like REST API.
-The message can  provide a call back information, which can be used in an asynchonous conversation with another consumer.
+The message can  provide a call back information, which can be used in an asynchronous conversation with another consumer.
 
 
 <<<

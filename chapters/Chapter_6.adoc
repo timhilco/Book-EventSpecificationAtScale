@@ -70,7 +70,7 @@ The internal event structure looks as follows:
 .Schema Fields Table
 [width= 80%, options=header]
 |================================
-| Field Name | Atributes
+| Field Name | Attributes
 | messageId | String; Required
 | messageType | String; Required
 | messageNamespace  | String; Required 
@@ -108,7 +108,7 @@ The internal event structure looks as follows:
 | - correlatedResourceType | String
 | - correlatedResourceIdentifier | String
 | - correlatedResourceState | String
-| - correlatedResourceDescrption | String
+| - correlatedResourceDescription | String
 | isSyntheticEvent | String
 |================================
 
@@ -193,7 +193,7 @@ Valid Values:
 
 correlationId:: Describes the globally unique identifier (UUID) typically generated within the publishing application. 
 This is used to correlate multiple messages across a logical process. 
-The messageId is unique for the individual message, but the correleationId can be repeated across multiple messages.
+The messageId is unique for the individual message, but the correlationId can be repeated across multiple messages.
 
 correlationIdType::	Describes the type of correlation identifier.  
 Valid Values:
@@ -203,7 +203,7 @@ Valid Values:
 
 agentId:: Identifies logged-in agent acting on the participants behalf
 
-globalPersonIdentifier:: Describes the global identity of the participant within hhilco, in particular the UDP platform. 
+globalPersonIdentifier:: Describes the global identity of the participant within hilco, in particular the UDP platform. 
 Required if source platform of record Ids are not present and the command is related to a participant.
 Note: sometimes this is referred to as the universalId.
 
@@ -249,7 +249,7 @@ The publisher should only append to the array if the array is provided as input 
 If this is the originating or edge processor, then the sequence number should be set to one (1), not zero
 
 personIdentificationSystemOfRecord:: System of Record containing details related to finding a person. 
-Required if globalPersonIdentifer is not present and the command is participant related.  
+Required if globalPersonIdentifier is not present and the command is participant related.  
 
 systemOfRecordSystemId:::: Identifies the system of record company entity of the message. 
 Sometimes referred to as the partner ID. For internal publishers, it will be ‘hilco’. 
@@ -277,7 +277,7 @@ Valid Values:
 *	PersonActivity
 *	Document
 *	Plan
-*	TbaTranaction
+*	TbaTransaction
 *	Fund
 *	Account
 *	Address
@@ -288,7 +288,7 @@ relatedResourceIdentifier:::: Identifies the primary key of related resource. Th
 
 relatedResourceState:::: Identifies the state or status of related resource at the time the command occurred.
 
-relatedResourceDescrption:::: Description of related resource at the time the command occurred.
+relatedResourceDescription:::: Description of related resource at the time the command occurred.
 
 isSyntheticCommand:: Is this a synthetic or fake command? 
 If true, assumes this is an command that should be processed under special circumstance, meaning don’t change state or issue commands. Used for testing/monitoring in production by sending in fake commands

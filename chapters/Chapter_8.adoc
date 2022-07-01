@@ -10,8 +10,8 @@ The Audit types are:
 
 === Audit Message Overview ===
 
-The standard messageevent message is a JSON document containing one JSON object named *message*. 
-The *message* object contains 3 chiild JSON objects: 
+The standard event message is a JSON document containing one JSON object named *message*. 
+The *message* object contains 3 child JSON objects: 
 
 * Common Message Header - Common across all messages, independent of Audit type and event
 * Audit Type Header - Common header for specific Audit types 

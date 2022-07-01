@@ -12,10 +12,10 @@ All of these event would use the Event Header described in the prior chapter.
 === Business Process State Change Event ===
 
 The purpose of this event type is capture events related to the processing of business process events. 
-These events are sometimes known as worklfow or business transaction and are used to manage the changes in business domain objects. 
+These events are sometimes known as workflow or business transaction and are used to manage the changes in business domain objects. 
 Upon the completion of a business process, the process will update a business object. which will typically also create a Business Object Data Change event.
 
-Event can be gnerated from two types of business processes. 
+Event can be generated from two types of business processes. 
 
 1) A _long running state machine based_ process that has many wait states and has time gaps in between the actions of the business process. 
 
@@ -129,10 +129,10 @@ businessObjectResourceType:: Describes the primary domain data object type that 
 
 Editor:Think about moving this to 'tag'. Need to determine in the Identifier is included in the tag
 
-businessObjectIdentfier:: Provides the primary domain data object key of the business object that was changed.
+businessObjectIdentifier:: Provides the primary domain data object key of the business object that was changed.
 
-additionalBusinesObjectResource:: Provides any additional resource type and key to help further identify the component that changed. 
-This is similar to the pathing (../resource/{id} ) in a REST URL
+additionalBusinessObjectResource:: Provides any additional resource type and key to help further identify the component that changed. 
+This is similar to the path (../resource/{id} ) in a REST URL
 
 additionalBusinessObjectResourceType:: Additional resource type
 
@@ -236,7 +236,7 @@ Ingest:: Generates a Normal Update event
 === User Experience Action Event ===
 
 Events related to the behavioral actions taken by the participant in our user experience channels. 
-Channel include web/Upoint, mobile, IVA/chat and other future user devices like Voice Assistants.
+Channel include web, mobile, IVA/chat and other future user devices like Voice Assistants.
 
 The purpose of this event type is to capture the pure behavioral events related to the interactions of the users in the  channels - displaying pages, clicking button or links. 
 These events are not the result of any business process or data change events. 

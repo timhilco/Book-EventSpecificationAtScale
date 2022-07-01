@@ -3,9 +3,9 @@
 ## Author: Timothy Hilgenberg
 **Email: timhilco@gmail.com**
 
-**Early Working Draft V0.9.03 June 2022**
+**Early Working Draft V0.9.4 June 2022**
 
-Copyright 2022. All rights Reserved 
+Copyright(c) 2022. All rights Reserved 
 
 *Comments are welcome*
 

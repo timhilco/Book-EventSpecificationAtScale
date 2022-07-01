@@ -1,6 +1,6 @@
 [appendix]
 
-=== CloudEvents Comparision ===
+=== CloudEvents Comparison ===
 
 id -> messageId +
 source -> eventName and Namespace +
