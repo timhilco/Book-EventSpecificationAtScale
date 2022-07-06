@@ -1,7 +1,10 @@
 //:stylesheet: ./resources/default-theme.yml
 :doctype: book
 = Event Governance At Scale: A Practical Guide To Effective Event Message Design 
-:draft-version: 0.9.4
+// Custom Variables
+:draft-version: 0.9.5
+:blank: {empty}+
+//
 :icons: font
 Author: Timothy S. Hilgenberg <timhilco@gmail.com>
 :toc:
@@ -12,6 +15,9 @@ Author: Timothy S. Hilgenberg <timhilco@gmail.com>
 ====
 [NOTE] 
 This book is a very early draft of this manuscript 
+
+This book is being written in AsciiDoc using Visual Studio Code.  
+I'm just learning this tool, so I apologize in advance for any bad formatting issues with early versions of the book.
 
 Hilco is a mythical company
 

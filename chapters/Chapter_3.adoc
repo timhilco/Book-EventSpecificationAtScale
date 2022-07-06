@@ -32,7 +32,7 @@ Event are not stagnant.
 They will continually evolve, which makes version control a first class element within the message.
 Events in general are immutable, so changing them is basically impossible.
 so, message validation is extremely important in publishing and processing.
-The use of namespaces for event type headers and body allow for the validation of a message.
+The use of DataSchemas for event type headers and body allow for the validation of a message.
 It also allows for the easy storage of the specifications in a dictionary or directory.
 
 .Provides the ability to store and find the key of the key business object or subject in a system of record
@@ -48,6 +48,9 @@ If helpful, it can provided correlation for cross event processing.
 .Provides the ability to submit test or synthetic event for testing
 Sometimes during testing, it is helpful not to perform the action the consumer wants to take based on the event it receives.
 This field allows the consumer to identify this and not take any additional action, like calling a update API or updating a data base.
+
+.Contains metadata about the event which helps in stream processing 
+This information helps to route the request to the proper stream route and to facilitate proper processing of the event by a component within the stream topology.
 
 === Event Types ===
 The follow sections provide the specification for the types of event support by the architecture.   +
@@ -70,6 +73,8 @@ The *message* JSON object contains 3 child JSON objects: +
 * _Event Type Header_: Common header for specific event types: Name based on event type
 * *body*: Event Message Body - Free form body (i.e. schema would vary by event) for each event defined with the event type
 
+The two headers contain the metadata about the event, the _context_ of the event. T
+he body contains the actual data related to the event. 
 ==== Common Message Header ====
 
 The Common Message Header provides the following key features:
@@ -80,7 +85,7 @@ This information is common to all events and commands
 
 .Event MetaData 
 The Event Metadata contains key information about the event. 
-This includes the type of event and the namespace of the type to support automated access to the schema definition of the event type and body of the event.
+This includes the type of event and the DataSchema of the type to support automated access to the schema definition of the event type and body of the event.
 
 .Event Context
 The event context are fields related to when the event was published.
@@ -106,7 +111,7 @@ Each event type will have its own header name and structure. Examples:
 * uxEventHeader - for Ux events
 * bpEventHeader - for business process events
 
-The messageNamespace field in the header will indicate which event type header is in the message.
+The messageDataSchema field in the header will indicate which event type header is in the message.
 There will be a structured format/schema for each event type
 For an organization, the goal is a small bounded list of event types.
 There can be an unlimited number of event definitions within a type.
@@ -120,9 +125,9 @@ The goal is to make the event as self-describing as possible.
 Trying to avoid additional data retrievals to process the message.
 Since most applications have a large unbounded set of events, the body represents the specific fields for a given event type. 
 The above headers are intended to be standard, but the body is where the specific fields for that event are stored.
-Each body should have it's own schema that can be placed in a schema repository and retrieved by the bodyNamespace field.
+Each body should have it's own schema that can be placed in a schema repository and retrieved by the bodyDataSchema field.
 The schema can then be used for validation and code generation.
-The eventBodyNamespace in the Event Type Header will describe the schema for the fields in the body.
+The eventBodyDataSchema in the Event Type Header will describe the schema for the fields in the body.
 The name of the JSON object is *body*
 
 === Event JSON Structure ===
@@ -131,8 +136,8 @@ The goal is to have a schema for the header, each event type header and every ev
 We would like to have a schema dictionary which has a JSON or AVRO schema as it values and it's keyed by some name. The hierarchy is as follows:
 
 * There is only one header schema (key name: header)
-* To determine the <eventTypeheader> name, the header.messageNamespace field contains the name of the event type
-* To determine the body schema name, the header.eventBodyNamespace field determine the name for the body schema
+* To determine the <eventTypeheader> name, the header.messageDataSchema field contains the name of the event type
+* To determine the body schema name, the header.eventBodyDataSchema field determine the name for the body schema
 
 ====
 [NOTE]
@@ -148,7 +153,7 @@ The event structure looks as follows:
 
 {"message" :
 	"header" : {  
-		"messageNamespace": "com.hilco.messages/uxEvent",
+		"messageDataSchema": "com.hilco.messages/uxEvent",
         "eventName" : "PageABC:clicked",
                         ...  },
 	"uxEventHeader" : { 
@@ -158,7 +163,7 @@ The event structure looks as follows:
 
 {"message" :
 	"header" : {  
-    	"messageNamespace": "com.hilco.messages/bpEvent",
+    	"messageDataSchema": "com.hilco.messages/bpEvent",
        	"eventName" : "ContributionRateChange:Completed"
                         ...  },
 	"bpEventHeader" :  { 
@@ -175,11 +180,11 @@ The event structure looks as follows:
 | Field Name | Attributes
 | messageId | String; Required
 | messageType | String; Required
-| messageNamespace  | String; Required 
+| messageDataSchema  | URI (String); Required 
 | messageVersion | String; Required 
 | messageTopic | String 
 | eventName | String 
-| eventBodyNamespace | String 
+| eventBodyDataSchema | URI (String) 
 | contextTag | String; Required 
 | action | String; Required 
 | messageTimestamp | String; Required 
@@ -218,15 +223,17 @@ The event structure looks as follows:
 
 .Schema Field Definitions
 [horizontal]
-messageId:: Globally Unique (UUID) Identifier of message.
+messageId:: Globally Unique Identifier of message. 
+The messageId is expected to be unique from a global perspective, so it is recommended to use some form of a GUID or UUID for this value.
+It is not recommended that this value have any additional sematic value or meaning beyond uniqueness.
 
 messageType:: Describes the type of message. 
 Valid Values:
 * Event
 
-messageNamespace:: Namespace is used to distinguish between the different types of messages (events or commands), source (internal vs external), and schema versions to avoid collision and help in processing the messages. 
+messageDataSchema:: messageDataSchema is used to distinguish between the different types of messages (events or commands), source (internal vs external), and schema versions to avoid collision and help in processing the messages. 
 They also identify the type of Event Header contained in the full message.
-The namespace can be used as an external endpoint to provide the schema and other machine-readable information for the event type and the latest major version. 
+The dataSchema can be used as an external endpoint to provide the schema and other machine-readable information for the event type and the latest major version. 
 Used to provide message definition and validation. 
 Valid Values:
 * com.hilco.messages/events/uxEvent
@@ -253,7 +260,7 @@ It should be a combination of the business object or process name and action tak
 There are specific naming conventions used to determine the value of the field. 
 It is a field that will require governance approval.
 
-eventBodyNamespace:: Describes the specific schema and version of the *body* field in the message. 
+eventBodyDataSchema:: Describes the specific schema and version of the *body* field in the message. 
 The body structure and metadata details are understood based on this name. 
 This field is optional and only be set if there is a structure or schema for the body. 
 If there is not body, then this field should not be sent.

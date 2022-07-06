@@ -57,9 +57,13 @@ Thus, can also be used to seed new consumers with domain data.
 An *Event* Represents something that has happened and the context at that time.
 It has a defined point in time.
 
-.Definition:
+.Definitions:
 * Result of some outcome
 * Collins: a happening or occurrence, esp. when important
+// Add Footnote for CloudEvents.io
+* CloudEvent Concepts
+** An event includes context and data about an occurrence. Each occurrence is uniquely identified by the data of the event.
+** Events represent facts and therefore do not include a destination, whereas messages convey intent, transporting data from a source to a given destination.
 
 Event names should indicate a past tense action - past-participle verb and should be action oriented
 Events are both a historical fact and a notification to other interested parties:

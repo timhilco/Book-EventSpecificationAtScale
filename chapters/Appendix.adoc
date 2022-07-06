@@ -1,6 +1,9 @@
-[appendix]
+[bibliography]
+== References
+ * [[[cloudEvents]]] CloudEvents; CNCF Serverless Working Group _https://cloudevents.io_
 
-=== CloudEvents Comparison ===
+[appendix]
+== CloudEvents Data Attributes Comparison 
 
 id -> messageId +
 source -> eventName and Namespace +

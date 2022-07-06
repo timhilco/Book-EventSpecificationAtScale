@@ -1,15 +1,28 @@
 [preface]
 == Preface ==
 
-This document defines a standard for asynchronous messaging for any company's Event Architecture. 
-It is a programming language-agnostic interface description for asynchronous message processing. 
-It is also intended to be message platform-agnostic. 
-All messages published by any producer must conform to these standards. 
+This book defines a standard for asynchronous messaging for any company's Event Driven Architecture. 
+It is a language agnostic interface description for asynchronous message processing. 
+The specification is also intended to be message platform agnostic and does not specify how events can be delivered through various industry standard protocols (e.g. HTTP, AMQP, MQTT, SMTP), open-source protocols (e.g. Kafka, NATS), or platform/vendor specific protocols.
+CloudEvents.io discusses these aspects of event processing in much better detail.
+Although there are other serialization formats (binary, XML), the specification focuses on using JSON as it's primary format.
+The goal within an organization is to have all messages published by any internal producer conform to these standards. 
 The specification also provides consumer of the messages with the detailed information they need to properly understand, consume and process these messages.
+
+=== CloudEvents.io Compatibility ===
+In general, this specification has the same philosophy as the CloudEvents specification.
+It can be considered a supplement to the CloudEvents specification, extending it to support large enterprise organization Event Driven Architectures.
+As stated above, it does not address the various protocols to deliver and process the message, but extending the semantics to support scale. (i.e number of event definitions within an organization)
+Most of these attributes would be considered _extensions_ in the CloudEvents specification and placed in that category.
+_(Ed. This statement needs to be validated by the group)_
+
+Also, the CloudEvents specification focuses on Events, where as this specification also includes Commands and Audit type messages.
+
+See Appendix for more details on the mapping of the CloudEvents core attributes to this specification.
 
 === What's in the Book? ===
 
-Chapter 1 - Why is Event Driven Architecture critical to tomorrow's application?
+Chapter 1 - Why is Event Driven Architecture critical to tomorrow's applications?
 
 Chapter 2 - What are the types of messages in Event Driven Architecture?
 
