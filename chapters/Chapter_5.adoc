@@ -1,20 +1,21 @@
 == Chapter 5 - System Event Example - Runtime Operations Events ==
 
-Events occurring during the running of the application on a specific platform or system resource (server, data base, etc). 
-Focused mostly on system resource issues. Debug events would also fall into this category
+Runtime Operation Events are events that are occurring during the running of the application on a specific platform or system resource (server, data base, etc). 
+They are focused mostly on system resource issues. 
+Debug events would also fall into this category
 
 === Platform Processing Event  ===
-Events related to the action of completing a discreet process or unit of work and providing the resource computation of that unit of work. 
+These are events related to the action of completing a discreet process or unit of work and providing the resource computation of that unit of work. 
 
 These events reflect the fact that: 
 
 * the application process occurred, which is used for counting instances of the process 
 
-* the time stamps of then it occurred, which is used for elapse time and windows of time, 
+* the time stamps of when it occurred, which is used for elapse time and windows of time, 
 
-* the time stamp of the additional resource usage, which is used for more detailed resource consumption analytics and 
+* the timestamp of the additional resource usage, which is used for more detailed resource consumption analytics and 
 
-* any additional status and metadata related to the process of the unit of work. They event can be used for both operational and application event where counting, and resource utilization reporting is of interest to the business
+* any additional status and metadata related to the process of the unit of work. The event can be used for both operational and application events where counting, and resource utilization reporting is of interest to the business.
 
 Platform processing units of work being metered include:  
 
@@ -22,11 +23,13 @@ Platform processing units of work being metered include:
 * Enterprise CI/CD Build pipeline -> API Service builds
 
 === System Resource Manager Event ===
-** Under consideration ** +
 
-Events related to the actions of managing a system resource manager.  This includes the overall operations of the resource manager and the system administrator actions to administer the resource manager.
+*Under consideration*
 
-A resource manager has the following characteristics. Example of a resource manager is a server, JVM, Web Server, Docker container, data base manager and queue manager.
+These are events related to the actions of managing a system resource manager.  This includes the overall operations of the resource manager and the system administrator actions to administer the resource manager.
+
+A resource manager has the following characteristics: (Examples of a resource manager: a server(Hardware with OS), JVM, Web Server, Docker container, data base manager and queue manager/message broker)
+
 * The platform contains important application data  
 * The resource is shared by multiple applications
 * The resource is managed centrally by an system operations staff, who is responsible for the installation, upgrade and overall operations of the resource
@@ -34,15 +37,15 @@ A resource manager has the following characteristics. Example of a resource mana
 
 Resource manager operational event actions include:  
 
-* Start
-* Stop
-* Abort
-* Restart
+* Started
+* Stopped
+* Aborted
+* Restarted
 
 System Administrator event actions include:
 
 * Logon
-* Password change
+* Password changed
 * Commands (?)
 * Group Functions (?)
 
@@ -53,9 +56,6 @@ System Administrator event actions include:
 Might also include client level processing runtime errors
 
 === Operations Platform Process Event ===
-.Event Header
-
-See the above header section for definition of the event message header
 
 ==== Platform Process Event Header
 
@@ -63,13 +63,27 @@ See the above header section for definition of the event message header
 [NOTE]
 JSON Name: oppEventHeader
 ====
+.Header Attributes
 
+.Schema Fields Table
+[width= 80%, options=header]
+|================================
+| Field Name | Attributes
+| platformProcessStartTimestamp | Timestamp; Required
+| platformProcessEndTimestamp | Timestamp; Required
+| platformProcessElapsedTime | Float; Optional
+| platformProcessEffectiveDate | Date; Optional
+| platformProcessStatus | String; Optional
+|================================
+
+.Schema Field Definitions
 [horizontal]
 platformProcessStartTimestamp:: Timestamp of when the resource consumption started. The timestamp must be in the RFC 3339/ISO 8601 date format standard. See Appendix for details.
 platformProcessEndTimestamp:: Timestamp of when the resource consumption ended. The timestamp must be in the RFC 3339/ISO 8601 date format standard. See Appendix for details.
 platformProcessElapsedTime:: Elapse time in milliseconds
 platformProcessEffectiveDate:: Effective Date of process
-platformProcessStatus:: Process status. Valid Values:
+platformProcessStatus:: Process status. +
+Sample Values:
 * Aborted
 * Completed
 * Canceled
@@ -97,7 +111,7 @@ The action defines the type of action or state changes of the process.
 
 .Action Component Valid Values
 
-Process Action Valid Values:
+Process Action Sample Values:
 
 * Started
 * Completed
@@ -106,12 +120,10 @@ Process Action Valid Values:
 .Body Definition Considerations
 
 * The body section is named 'body' 
-* 'body' can be any valid JSON schema
+** 'body' can be any valid JSON schema
 * Contains one predefined element 'extension'
 ** Extension is a private area that can contain its own schema
 ** The field is an map/array with:
-** Namespace as a key and,
-** Any valid JSON schema as its value
+*** Namespace as a key and,
+*** Any valid JSON schema as its value
  This can be any significant data or data of interest for reporting at the time of the process state change.
-
-Other Operational Events

@@ -1,12 +1,12 @@
 //:stylesheet: ./resources/default-theme.yml
 :doctype: book
-= Event Governance At Scale: A Practical Guide To Effective Event Message Design 
+= Event Governance At Scale: A Practical Guide To Effective Message Design 
+Timothy S. Hilgenberg <timhilco@gmail.com>
 // Custom Variables
 :draft-version: 0.9.5
 :hardbreaks: 
 //
 :icons: font
-Author: Timothy S. Hilgenberg <timhilco@gmail.com>
 :toc:
 
 [colophon]
