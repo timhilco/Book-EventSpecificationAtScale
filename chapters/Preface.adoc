@@ -30,6 +30,8 @@ Chapter 3 - What are the Event Message Specification?
 
 Chapter 4 - Domain Event Type Examples - Consumer Business Events
 
+Note: The following chapters are still in an outline state.
+
 Chapter 5 - System Event Type Examples - Runtime Operations Events 
 
 Chapter 6 - What are the Command Message Specification?

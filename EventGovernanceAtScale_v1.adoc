@@ -3,7 +3,7 @@
 = Event Governance At Scale: A Practical Guide To Effective Event Message Design 
 // Custom Variables
 :draft-version: 0.9.5
-:blank: {empty}+
+:hardbreaks: 
 //
 :icons: font
 Author: Timothy S. Hilgenberg <timhilco@gmail.com>

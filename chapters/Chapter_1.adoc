@@ -100,5 +100,5 @@ Event design standards are critical to the success of an Event Driven Architectu
 It isn't enough to commit to using events as a key integration strategy, the organization needs standards and governance in the design of events. 
 To support friction-less and over-reaching governance, the organization needs comprehensive design guidelines to support the event designers and give rubrics to the governance groups on how to judge the quality of the design.
 
-// Discuss interoperability as a key reason for standards
+Having common event standards are key to creating programming language libraries and tooling. The creation of these artifacts will lead to faster development times, increased quality and improve interoperability across application platforms.
 
