@@ -1,65 +1,56 @@
 == Chapter 6 Command Message Specifications ==
 
 === Overview ===
-Key features of Command Message Specification are:
 
-*	Provides Unique Message Identifier
-*	Provides auditing data, date, time, as to when the message was created
-*	Is Independent and self-contained
-*	Provides simple headers and metadata to facilitate routing and filtering within the message processing network
-*	Provides information on the requestor and callback action to the requestor for the message
-*	Supports schema version control and message validation
-*	Provide the ability to find a person in a system of record
-**	Relates business object can be attached to the message
-**	Message can provide a provider’s client Id and any customer service agent data
-*	Provides the ability to submit test or synthetic command for testing
+====
+[IMPORTANT]
+*The Command message is very similar to the Event message.
+The difference is that the event is published after the fact, whereas a command is a present request to take action.*
+====
+The Command message shares many of the same key features as events (See Event section for more details):
+
+* Provides a Unique and Global Message Identifier
+* Strives to be as independent, stand alone and self-contained as much as possible.
+* Provides simple headers and metadata to facilitate routing and filtering within the event processing network
+* Supports schema version control and message validation
+* Provides the ability to store and find the key of the key business object or subject in a system of record - Need to think more on this
+* Provides the ability to submit test or synthetic event for testing
+* Contains metadata about the event which helps in stream processing 
+
+The additional key features are:
+
+ * Contains Requestor metadata which can be used in callback situations
+
 
 === Command Types ===
-The follow sections provide the specification for the types of commands support by the architecture. (Note: Some command types are in the prototype stage)  +
+
+_More work needs to be done in this area_
+
 The command types are:
 
-*	Business Process Data Change Request
+*	Business Process State Change Request
 *	Business Object Data Change Request
 *	Communication Composition/Delivery
 
 === Command Message Overview ===
-The command message is a JSON document containing one JSON object named “message”. The message object contains 2 JSON documents: a header and a free form body for each command.
-
-*	Message Header
-**	Every message type, events or commands, will have a common standard header
-**	There will only be one format or schema for the header and the object is required
-**	The name of the JSON object is “header”
-**	It contains fields that describe the message at the highest levels and it identifies the source and type of the message
-*	These fields determine the format and names of the fields that follow in the message object 
-**	Since this is JSON, routing or filtering consumers can use only the header to determine routing of message or if the consumer is interested in processing the message
-*	Message Body
-**	Contains the fields that are specific to a given instance of an command type
-***	The system will have a large unbounded set of commands. The body represents the specific fields for a given command
-**	The commandBodyNamespace in the Command Type Header will describe the schema for the fields in the body
-**	The name of the JSON object is “body”
-
-
+The command message is a JSON document containing one JSON object named “message”. 
+It follow the same general pattern as the event's Common Message Header, as there are some common fields that are common to all message types.
+Some fields are added to support commands and other are removed because they relate specifically to events.
 
 === Command JSON Structure ===
-To keep it simple and easy to produce and consume, the command message has a very flexible structure and is basically an unstructured document. The goal is to have a schema for the header and every command data (i.e body) itself. We would like to have a schema dictionary which has a JSON or AVRO schema as it values and it’s keyed by some name. The hierarchy is as follows:
+Like events, the command message has a very flexible structure and is basically an unstructured document. The goal is to have a schema for the header and every command data (i.e body) itself. We would like to have a schema dictionary which has a JSON or AVRO schema as it values and it’s keyed by some name. The hierarchy is as follows:
 
-•	There is only one header schema (key name: header)
-•	To determine the body schema name, the header.commandBodyNamespace field determine the name for the body schema
+* There is only one header schema (key name: header)
+* To determine the body schema name, the header.commandBodyDataSchema field determine the name for the body schema
 
-The internal command structure looks as follows:
-
-{“message” :
-	“header” : {   …  },
-	“body”  : { … }
-}
-
+T
 [NOTE]
 ====
-The internal event structure looks as follows:
+The internal command structure looks as follows:
 
 {"message" : +
 	"header" : {   ...  }, +
-	"_eventTypeHeader_" : { ... }, +
+	"_commandTypeHeader_" : { ... }, +
 	"body"  : { ... }
 }
 
@@ -73,43 +64,45 @@ The internal event structure looks as follows:
 | Field Name | Attributes
 | messageId | String; Required
 | messageType | String; Required
-| messageNamespace  | String; Required 
+| messageDataSchema  | String; Required 
 | messageVersion | String; Required 
 | messageTopic | String 
-| eventName | String 
-| eventBodyNamespace | String 
+| commandName | String 
+| commandBodyDataSchema | String 
 | contextTag | String; Required 
-| action | String; Required 
+| action/request | String; Required - Should this be request
+| tagObjectId | String; Optional
 | messageTimestamp | String; Required 
+| correlationId | String; Required - Relevant to Command?
+| correlationIdType | String; Required - Relevant to Command?
+| messageCriticality | String
+| messageExpiry | String
 | businessDomain | String; Required 
-| correlationId | String; Required 
-| correlationIdType | String; Required 
-| globalBusinessObjectIdentifier | String 
-| publisherId | String; Required 
-| publisherApplicationName | String; Required
-| publisherApplicationInstanceId | String 
-| publishingPlatformsHistory | Object; Array; Required 
-| - publisherId | String; Required 
-| - publisherApplicationName | String; Required 
-| - publisherApplicationInstanceId | String 
+| requestorId | String; Required 
+| requestorApplicationName | String; Required
+| requestorApplicationInstanceId | String 
+| requestingPlatformsHistory | Object; Array; Required - Relevant to Command?
+| - requestorId | String; Required 
+| - requestorApplicationName | String; Required 
+| - requestorApplicationInstanceId | String 
 | - messageId | String; Required; Required
 | - messageTopic | String; Required
-| - eventName | String; Required
+| - commandName | String; Required
 | - messageTimestamp | String; Required
 | - sequenceNumber | String
-| businessObjectSystemOfRecord  | Object; Array; Optional
+| businessObjectSystemOfRecord  | Object; Array; Optional - Relevant to Command?
 | - systemOfRecordSystemId | String; Required
 | - systemOfRecordApplicationName | String; Required
 | - systemOfRecordApplicationInstanceId | String
 | - systemOfRecordDatabaseSchema | String
 | - platformInternalId | String; Required
 | - platformExternalId | String
-| correlatedResources | Object; Array; Optional
+| correlatedResources | Object; Array; Optional - Relevant to Command?
 | - correlatedResourceType | String
 | - correlatedResourceIdentifier | String
 | - correlatedResourceState | String
 | - correlatedResourceDescription | String
-| isSyntheticEvent | String
+| isSyntheticCommand| String
 |================================
 
 .Schema Field Definitions
@@ -117,71 +110,65 @@ The internal event structure looks as follows:
 
 messageId::	Global and Unique (UUID) Identifier of message.
 
-messageType:: Describes the type of message. 
+messageType:: Describes the type of message. +
 Valid Values:
 *	Command
 
-messageNamespace:: Namespace is used to distinguish between different types of messages (events vs commands), source (internal vs external), and schema versions to avoid collision and help in processing the messages. 
-The namespace can be used as an external endpoint to provide the schema and other machine-readable information for the event type and the latest major version. Used to provide message definition and validation
-Valid Values:
+messageDataSchema:: messageDataSchema is used to distinguish between different types of messages (events vs commands), source (internal vs external), and schema versions to avoid collision and help in processing the messages. 
+The messageDataSchema can be used as an external endpoint to provide the schema and other machine-readable information for the command type and the latest major version. Used to provide message definition and validation. +
+Sample Values:
 *	com.hilco.messages/commands/aCommand
 
-messageVersion:: DescribesConveys the version number (major.minor) of the message, and describes the structure of the overall message at hand. Valid values managed by governance 
+messageVersion:: Conveys the version number (major.minor) of the message, and describes the structure of the overall message at hand. +
+Valid values managed by governance. 
 * Example: 1.1
 
-messageTopic::	String	Logical name to describe the type of event. Note: this is not the physical topic name (i.e kafka topic) of the messaging system.
-Sample Valid Values:
-*	BusinessProcess
-*	DomainDataChange
-*	UserExperience
-*	Goal
-*	PlatformProcess
+messageTopic::	String	Logical name to describe the type of command. Note: this is not the physical topic name (i.e kafka topic) of the messaging system. +
 
-For commands, this is an optional field. For events, it is required
-
-messageSubTopic:: Logical name to describe a second level categorization of event 
-
-commandName:: Provides a standard name of the actual command that happened based on a user’s behavior action. 
+commandName:: Provides a standard name of the actual command that happened based on a user’s behavior action on the Ux channel or sensor.
 It will be treated as a label/code and used for filtering, routing, general analytics and simple processing of commands in the ecosystem. 
 It should be a combination of the business process name and action taken on that process. 
 There are specific naming conventions used to determine the value of the field. 
-It is a field that will require governance approval.
+It is a field that would require governance approval.
 
-commandBodyNamespace:: Describes the specific schema and version of the body field structure of the command. 
+commandBodyDataSchema:: Describes the specific schema and version of the body field structure of the command. 
 The body structure and metadata details are understood based on this combination. 
 This field is optional and only be set if there is a structure or schema for the body. 
 If there is not body, then this field should not be sent.
 
-tag:: Machine readable generic label for the command type. Its purpose is to provide a label that encoded some additional context for the command. 
-It is highly structured, follows a specific format and provides valid values to allow program and applications, like analytics, to easily consume the values. See command type for more details on the values. 
-
+tag:: Machine readable generic label for the command type. 
+Its purpose is to provide a label that encodes some additional context for the command. 
+It is highly structured, follows a specific format and provides valid values to allow program and applications, like analytics, to easily consume the values. +
+See command type for more details on the values. +
 To reduce the complexity in trying to capture all the level and types of components, we are going to encode all contextual or hierarchical information into a single label or tag. 
-This tag along with the user action on this tag should reduce the complexity of the command structure and make it easier for the consuming tools to do their work without having to get into the details of the body structure
-
+This tag along with the user action on this tag should reduce the complexity of the command structure and make it easier for the consuming tools to do their work without having to get into the details of the body structure. +
 To make it more human readable, there will be an encoding standard to make it more human readable and make it easier to parse the tag if necessary.
 
-action:: Represents the action being requested by the consumer on. See command type for more details on the valid values. For commands, the action should be described in the present tense and the name should be initial caps.
+action/request:: Represents the action being requested by the consumer on. See command type for more details on the valid values. For commands, the action should be described in the present tense and the name should be initial caps.
 
 tagObjectId:: Used to provide a separate identifier for the object of the tag. If the tag represents a general category and there are instances of that category that contain a key /identifier, this field can be used to provide the identifier. 
 The recommended best practice is to put the identifier in the tag itself. 
 This field, along with the generic tag value, provides an alternate to that approach
 
-messageTimestamp:: Describes the date and time at which the actual command was generated by publishing systems. To be provided by producer component and should not be derived by message publishing framework(s) or component(s).
+messageTimestamp:: Describes the date and time at which the actual command was generated by requesting systems. To be provided by producer component and should not be derived by message requesting framework(s) or component(s).
 The timestamp must be in the RFC 3339/ISO 8601 date format standard. 
 See Appendix for details.
 
-messageCriticality:: Valid Values:
+messageCriticality:: Provides a way for the requestor to indicate a priority for handling of the message. 
+The processor of the command is not required to honor this field. +
+Valid Values:
+
 *	High
 *	Medium
 *	Low
 
 messageExpiry::		Number in seconds	
 Used to determine if the message is still valid to process. 
-The determination of whether this message should still be processed is set against the messageTimestamp. 
-If the current time is past the messageTimestamp plus this value, then the message should be ignored
+This helps in the determination of whether this message should still be processed and is set against the messageTimestamp. 
+If the current time is past the messageTimestamp plus this value, then the message should be ignored.
 
-businessDomain:: Describes the business domain under which the event/command was generated.
-Valid Values:
+businessDomain:: Describes the business domain under which the event/command was generated. +
+Sample Values:
 *	Person
 *	Worker
 *	PersonWorker
@@ -191,7 +178,8 @@ Valid Values:
 *	Operations
 *	N/A (for domains that do not match up to our organization service domains.
 
-correlationId:: Describes the globally unique identifier (UUID) typically generated within the publishing application. 
+//// 
+correlationId:: Describes the globally unique identifier (UUID) typically generated within the requesting application. 
 This is used to correlate multiple messages across a logical process. 
 The messageId is unique for the individual message, but the correlationId can be repeated across multiple messages.
 
@@ -199,35 +187,28 @@ correlationIdType::	Describes the type of correlation identifier.
 Valid Values:
 *	SessionId - for participant actions and sessions
 *	BatchId - for batch processing jobs. This is the actual instance id of a job type.
-*	PublisherCorrelationId - for publisher specific correction type (Typically used if the above two does not apply)
+*	RequestorCorrelationId - for requestor specific correction type (Typically used if the above two does not apply)
+//// 
 
-agentId:: Identifies logged-in agent acting on the participants behalf
-
-globalPersonIdentifier:: Describes the global identity of the participant within hilco, in particular the UDP platform. 
-Required if source platform of record Ids are not present and the command is related to a participant.
-Note: sometimes this is referred to as the universalId.
-
-requestorId:: Identifies the publishing company entity of the message. 
-
-requestorApplicationName:: Describes the name of the requestor application platform or service. See Appendix for list of publishing applications.
-See Appendix for list of recordkeeping systems
+requestorApplicationName:: Describes the name of the requesting application platform or service. 
 
 requestorApplicationInstanceId:: Describes the specific instance of the requestor application or service.
-messageHistory:: Publishing Applications history and details. This is the history and providence of the message. 
+//// 
+messageHistory:: Requesting Applications history and details. This is the history and providence of the message. 
 It is the array, describing the platforms that have been processing a given message from the edge platforms to any internal consumer applications. 
 This includes command processing or transformation applications and systems of record. 
 It provides an audit trail of the message thought it’s lifecycle 
 
-publisherId:::: Identifies the publishing company entity of the message. Sometimes referred to as the partner ID. For internal requestors, it will be ‘hilco’. For partners in the Partner Network, it will be a partner identifier.
+requestorId:::: Identifies the requesting company entity of the message. Sometimes referred to as the partner ID. For internal requestors, it will be ‘hilco’. For partners in the Partner Network, it will be a partner identifier.
 
-publisherApplicationName:::: Describes the name of the requestor application platform or service. See Appendix for list of publishing applications.
+requestorApplicationName:::: Describes the name of the requestor application platform or service. See Appendix for list of requesting applications.
 See Appendix for list of recordkeeping systems
 
-publisherApplicationInstanceId:::: Describes the specific instance of the requestor application or service.
+requestorApplicationInstanceId:::: Describes the specific instance of the requestor application or service.
 
 messageId:::: Describes the messageId for the given prior message instance. See above for field details
 
-messageType:::: Describes the type of message. 
+messageType:::: Describes the type of message. +
 Valid Values:
 * Event
 * Command
@@ -241,85 +222,76 @@ See above for field details
 commandName:::: Describes the commandName for the given prior message instance. 
 See above for field details
 
-messageTimestamp:::: Describes the messageTimestamp for the given prior message instance. 
+messageTimestamp:::: Describes the messageTimestamp for the given prior message instance. +
 See above for field details
 
 sequenceNumber:::: The sequence should be from earliest to latest in chronological order. 
-The publisher should only append to the array if the array is provided as input from a message, then the new publisher should increase the sequence number and append the consumed/input header data to the array. 
+The requestor should only append to the array if the array is provided as input from a message, then the new requestor should increase the sequence number and append the consumed/input header data to the array. 
 If this is the originating or edge processor, then the sequence number should be set to one (1), not zero
 
 personIdentificationSystemOfRecord:: System of Record containing details related to finding a person. 
 Required if globalPersonIdentifier is not present and the command is participant related.  
 
 systemOfRecordSystemId:::: Identifies the system of record company entity of the message. 
-Sometimes referred to as the partner ID. For internal publishers, it will be ‘hilco’. 
+Sometimes referred to as the partner ID. For internal requestors, it will be ‘hilco’. 
 For partners in the Partner Network, it will be a partner identifier.
 
-systemOfRecordApplicationName:::: Describes the name of the publisher application platform or service. This section should contain the best system for person related data.  
-If that system is not available, then the publishing application should provide the best platform available.
+systemOfRecordApplicationName:::: Describes the name of the requestor application platform or service. This section should contain the best system for person related data.  
+If that system is not available, then the requesting application should provide the best platform available.
 
 systemOfRecordApplicationInstanceId:::: Describes the specific instance of the system of record containing the person
 
 systemOfRecordDatabaseSchema:::: Describes the database schema instance of the system of record containing the person
 
-platformInternalId::::	Describes the internal identity of the participant within the platform. Only provided if the publishing platform is a source system of record and not a pure publisher application
+platformInternalId::::	Describes the internal identity of the participant within the platform. Only provided if the requesting platform is a source system of record and not a pure requestor application
 
-platformExternalId::::	Describes the external identity of the participant within the platform. Only provided if the publishing platform is a source system of record and not a pure publisher application
+platformExternalId::::	Describes the external identity of the participant within the platform. Only provided if the requesting platform is a source system of record and not a pure requestor application
 
 platformRoleType:::: TBA use only. If TBA is the source platform, a valid role type can be provided.
 
-platformClientId:::: Describes the client Id in the publishing platform. This is a platform specific ClientID. The normalized ClientId is above
+platformClientId:::: Describes the client Id in the requesting platform. This is a platform specific ClientID. The normalized ClientId is above
 
 relatedResources::::	Describes a list of the related resources. These are key “bounded contexts’ associated with the primary business entity. This can be 'campaign' or 'business process' or some other resource related to the action performed by the end user.
 
 relatedResourceType:::: Describes the type of the related resource. 
-Valid Values:
-*	PersonActivity
-*	Document
-*	Plan
-*	TbaTransaction
-*	Fund
-*	Account
-*	Address
-*	PersonDefinedBenefitCalculation
-*	Campaign & PersonCampaign
 
 relatedResourceIdentifier:::: Identifies the primary key of related resource. This can be the external or internal unique identifier of the resource.
 
 relatedResourceState:::: Identifies the state or status of related resource at the time the command occurred.
 
 relatedResourceDescription:::: Description of related resource at the time the command occurred.
-
+//// 
 isSyntheticCommand:: Is this a synthetic or fake command? 
 If true, assumes this is an command that should be processed under special circumstance, meaning don’t change state or issue commands. Used for testing/monitoring in production by sending in fake commands
 
 
 .Potential Future Command Fields
-
-
-consumerCallbackInstructions:: HEADER <how to execute the callback>. This could be:
+[horizontal]
+consumerCallbackInstructions:: HEADER field on how to execute the callback. +
+This could be:
 *	An Id of a function or policy to execute
 *	Actual source code that can be interpreted and executed (DSL, Lambda
 
-consumerCallbackInputs:: <inputs unique to this callback logic> Array of name value pairs
+consumerCallbackInputs:: Inputs unique to this callback logic. This would be an array of name value pairs
 
-consumerCallbackScript:: <Actual scripting code/logic to execute which may update a database or call a rest service, etc…>
+consumerCallbackScript:: Actual scripting code/logic to execute which may update a database or call a rest service, etc…
 
 consumerCallbackCredentials::	This could be:
 *	Token based -> Short lived token and Expiration Date
 *	Functional UserID/Password -> for internal use only
 *	SAML like approach
 
-consumerCallbackErrorInstructions::	HEADER	<how to execute the callback>. This could be:
+consumerCallbackErrorInstructions::	HEADER	field on how to execute the callback if there are errors. This could be: 
+
 * An Id of a function or policy to execute
 
-Actual source code that can be interpreted and executed (DSL, Lambda
+* Actual source code that can be interpreted and executed (DSL, Lambda
 
-consumerCallbackErrorInputs::	<inputs unique to this callback logic> Array of name value pairs
+consumerCallbackErrorInputs:: Inputs unique to the error callback logic. Array of name value pairs
 
-consumerCallbackErrorScript::	<Actual scripting code/logic to execute which may update a database or call a rest service, etc…>
+consumerCallbackErrorScript:: Actual scripting code/logic for errors to execute which may update a database or call a rest service, etc…
 
-queryParameters:: BODY GET parameters command input
+queryParameters:: BODY field - This would be GET parameters command input if the callback is a REST API
 
-requestBody:: BODY PUT/POST parameters command input
+requestBody:: BODY field - This would be PUT/POST parameters command input if the callback is a REST API
 			

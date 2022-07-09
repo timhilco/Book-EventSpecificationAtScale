@@ -216,21 +216,21 @@ _Ed: Need to align these names with the CloudEvent name. Need to consider shorti
 | messageType | String; Required
 | messageDataSchema  | URI (String); Required 
 | messageVersion | String; Required 
-| messageTopic | String 
-| eventName | String 
+| messageTopic | String ; Optional
+| eventName | String ; Optional
 | eventBodyDataSchema | URI (String) 
 | contextTag | String; Required 
 | action | String; Required 
 | messageTimestamp | String; Required 
 | businessDomain | String; Required 
-| correlationId | String; Required 
-| correlationIdType | String; Required 
+| correlationId | String; Optional 
+| correlationIdType | String; Optional 
 //| globalBusinessObjectIdentifier | String 
-|subject | String 
+| subject | String; Required
 | publisherId | String; Required 
 | publisherApplicationName | String; Required
 | publisherApplicationInstanceId | String 
-| publishingPlatformsHistory | Object; Array; Required 
+| publishingPlatformsHistory | Object; Array; Optional 
 | - publisherId | String; Required 
 | - publisherApplicationName | String; Required 
 | - publisherApplicationInstanceId | String 

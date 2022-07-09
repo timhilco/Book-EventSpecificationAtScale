@@ -10,22 +10,22 @@ The Audit types are:
 
 === Audit Message Overview ===
 
-The standard event message is a JSON document containing one JSON object named *message*. 
+The standard audit message is a JSON document containing one JSON object named *message*. 
 The *message* object contains 3 child JSON objects: 
 
-* Common Message Header - Common across all messages, independent of Audit type and event
+* Common Message Header - Common across all messages, independent of Audit type and audit
 * Audit Type Header - Common header for specific Audit types 
 * Audit Message Body - Free form body for each Audit defined with the Audit type
 
 
 === Internal Audit JSON Structure ===
-To keep it simple and easy to produce and consume, the event message has a very flexible structure and is basically an unstructured document. 
-The goal is to have a schema for the header, each event type header and every event data (i.e body) itself. 
+To keep it simple and easy to produce and consume, the audit message has a very flexible structure and is basically an unstructured document. 
+The goal is to have a schema for the header, each audit type header and every audit data (i.e body) itself. 
 We would like to have a schema dictionary which has a JSON or AVRO schema as it values and it's keyed by some name. The hierarchy is as follows:
 
 * There is only one header schema (key name: header)
-* To determine the <eventTypeheader> name, the header.messageNamespace field contains the name of the event type
-* To determine the body schema name, the header.eventBodyNamespace field determine the name for the body schema
+* To determine the <auditTypeheader> name, the header.messageNamespace field contains the name of the audit type
+* To determine the body schema name, the header.auditBodyNamespace field determine the name for the body schema
 
 [NOTE]
 ====
@@ -33,7 +33,7 @@ The internal audit structure looks as follows:
 
 {"message" : +
 	"header" : {   ...  }, +
-	"_eventTypeHeader_" : { ... }, +
+	"_auditTypeHeader_" : { ... }, +
 	"body"  : { ... }
 }
 
