@@ -32,7 +32,7 @@ Today, the primary interaction model for web based architectures to communicate 
 This interaction paradigm  is called *Synchronous Request-Reply*, where the client is _waiting_ for a response from the service.
 This is driving the overall user experience, where the user presses a button or link and then waits for a response. 
 As more mobile applications are calling multiple backend services in a single request, this is causing longer wait times for the user as it takes time for all the requests to respond.
-Ux Designers feel strongly that an synchronous response is the best user interaction model.
+Ux Designers feel strongly that a synchronous response is the best user interaction model.
 
 However, there are many application interaction models in practice today that do not fit this model. 
 People may not think of it in this way, but email and text are really disconnected (asynchronous) interaction models. 
@@ -51,7 +51,7 @@ It was just easier to design a synchronous model when all the interactions were 
 _Event Driven Architectures are key to providing a rich satisfying user experience as applications become more complicated and more and mores services are being provided by outside providers_ 
 
 A synchronous model also has a major impact on the computing resources required to support the application.
-Instead of having to provision servers for maximum requests, that may sit idle, one can have fewer workers in the background continuously managing the work. An event driven architecture following an asynchronous approach is always a more efficient use of computing resources than a asynchronous approach.
+Before the adoption of serverless computing models, often it was required to have provision servers for maximum requests, that may sit idle, one can have fewer workers in the background continuously managing the work. However, in a serverless model, while the number of workers will scale based on incoming load, there is still a concern about cold-start times for each worker. An event driven architecture following an asynchronous approach is typically a more efficient use of computing resources than a synchronous approach.
 
 _Event Driven Architectures are key to a more efficient use of computer resources.
 This is even more important is a cloud based environment where the pricing is based on actual detail usage._
@@ -70,13 +70,13 @@ The purpose of this document is to provide a set of event specifications that ca
 
 _What is different in today's environment?_
 
-* Sophisticated application are leveraging more domain services that are being provided by parties who are outside of the control of the organization and the central application. 
-This leads to more interactions and increases user experience wait time as the services are executed in a sequential manner.
+* Sophisticated applications are leveraging more domain (or managed) services that are being provided by parties who are outside of the control of the organization and the central application. 
+This leads to more interactions and increases user experience wait time when the services are executed in a sequential manner.
 
-* There are more modern messaging technologies are available to application architects to lower time time latency. 
+* There are more modern messaging technologies are available to application architects to lower time latency. 
 There is also more practical real life experience in Event Driven Architecture for architects and designers to leverage
 
-* User are becoming more comfortable with a disconnected interaction model, where they submit a request, work on a different task and then act on the response they get after the fact. Techniques, like deep linking from the response, to the specific page within the application are becoming more prevalent. 
+* Users are becoming more comfortable with a disconnected interaction model, where they submit a request, work on a different task and then act on the response they get after the fact. Techniques, like deep linking from the response, to the specific page within the application are becoming more prevalent. 
 
 * Real time analytics being processed by AI and Machine Learning are becoming value tools for decision making within an organization. Events are an important technique in making it successful.
 
