@@ -117,7 +117,7 @@ Valid Values:
 messageDataSchema:: messageDataSchema is used to distinguish between different types of messages (events vs commands), source (internal vs external), and schema versions to avoid collision and help in processing the messages. 
 The messageDataSchema can be used as an external endpoint to provide the schema and other machine-readable information for the command type and the latest major version. Used to provide message definition and validation. +
 Sample Values:
-*	com.hilco.messages/commands/aCommand
+*	com.hilcoTech.messages/commands/aCommand
 
 messageVersion:: Conveys the version number (major.minor) of the message, and describes the structure of the overall message at hand. +
 Valid values managed by governance. 

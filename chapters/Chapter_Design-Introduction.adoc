@@ -102,3 +102,20 @@ To support friction-less and over-reaching governance, the organization needs co
 
 Having common event standards are key to creating programming language libraries and tooling. The creation of these artifacts will lead to faster development times, increased quality and improve interoperability across application platforms.
 
+=== Why do standards and governance matter? ===
+
+*Interoperability* 
+
+.How do standards and governance support interoperability and tooling?
+
+//Doug Davis
+//Just some nits.
+//
+//However, I think it would be good to add a definition of things like "event standards" and "governance" in this context because those can mean different things to different people. 
+//For example, exactly what should be standardized when you say 'event standards'? Do you mean common attributes? Common event formats? Common ways of defining the attribute values?
+//
+//A more concrete set of examples of the pain-points would help too. 
+//What's stated about there possibly being chaos is true in general, but what specifically will it look like? 
+//And how will it impact things? What will it impact? 
+//Runtime performance? 
+//More dev work?

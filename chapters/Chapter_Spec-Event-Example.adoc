@@ -1,6 +1,9 @@
 == Chapter 4  - Domain Event Examples - Consumer Business Events ==
 
-To help get a better understanding of the specification, this chapter provides some real life examples. These examples are taken from the author's experience in developing HR/Benefits Administration system. These examples should also apply to any consumer based application. The following real life consumer related events are discussed:
+Each domain or industry has their own event types.
+To help get a better understanding of the general specification, this chapter provides some real life examples. These examples are taken from the author's experience in developing HR/Benefits Administration system. 
+These examples should also apply to any consumer based application. 
+The following real life consumer related events are discussed:
 
 * Business Process State Changes
 * Business Domain Object Data changes
@@ -272,6 +275,8 @@ Ingest:: Generates a Normal Update event
 <<<
 
 === User Experience Action Event ===
+
+_Ed: Ad some content around: In Ux Events, state that UX logs are really events and should be treated as them. In particulat trying ot log business action. It also works for debugging and tracing log entries._
 
 The Ux Action events are intended to capture the actual keyboard/mouse events performed by the user
  - displaying pages, clicking button or links, entering text. 

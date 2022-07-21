@@ -38,7 +38,7 @@ The difference in thinking between an event and a command is an event-X has occu
 *A Command is a request to retrieve some data or perform some action*
 ====
 
-.Audit (Proposed)
+.Audit
 An Audit message is an adhoc publishing of a domain business objects state. 
 There is no true triggering action, either from a business process or straight data change. 
 It would typically be triggered in batch fashion with a query predicate. 
@@ -118,7 +118,7 @@ The message can provide a call back information, which can be used in an asynchr
 
 
 <<<
-=== Audit (Proposed) ===
+=== Audit ===
 
 Represents the current state of a business object - Published on specific schedule 
 

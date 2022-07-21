@@ -3,8 +3,9 @@
  * [[[cloudEvents]]] CloudEvents; CNCF Serverless Working Group _https://cloudevents.io_
 
 [appendix]
-== CloudEvents Data Attributes Comparison 
+== CloudEvents Data Attributes Comparison versus Common Event Message Header ==
 
+.Common Elements (CloudEvent -> Event Specification)
 id -> messageId +
 source -> eventName and Namespace +
 specVersion -> messageVersion +
@@ -12,3 +13,73 @@ dataContentType -> JSON only +
 dataSchema -> messageNamespace, eventNamespace (body) +
 subject -> Subject/Business Object +
 time -> messageTimestamp +
+
+.In CloudEvents but not Event Specification
+a
+a
+
+.in Event Specification but not cloudEvents
+a
+a
+
+[appendix]
+== Business Process Definition ==
+
+This book uses the term "business process" frequently and there is even a Event Type to support this entity. There are many term used for this type of concept: Workflow, Activity, Transaction,even Event. This appendix provides the authors definition of a *Business Process*.
+
+A *business process* is series of steps/actions/tasks described it a graph like flow (think flow chart) that accomplishes a specific domain related objective. 
+Examples are the entire enrollment process through carrier notification, the entire dependent verification flow from request to final verification. 
+In each of these cases, there is a clear domain objective the users is attempting to complete. This may be done in a short duration single transaction (i.e., committed unit of work) or a longer running flow over time (days or weeks) with time pauses throughout. +
+ 
+Some of the aspects of a business process are:
+ 
+*	There is some event or trigger that initiates the business process (sometimes is called a workflow)
+**	This can be a user action/notification (i.e. Birth of a child) or time based (Starting enrollment on a specific date; opening an enrollment window)
+*	They contain a series of steps, events that trigger action logic.
+**	There is a “business process template”, that defines the starting trigger, steps or the logic involved in the process and the definition of what is consider “finished”. For examples, the steps of an annual enrollment are defined here. Then:
+**	The individual instances are created from that template. Tim’s annual enrollment, John’s annual enrollment…
+**	They can form a flow graph with sequential steps, if with branches and loops
+**	Each step is a discreet piece of logic sticking to the “Single Responsibility” pattern. Examples are updating coverage, sending an email, etc)
+**	Multiple steps can be combined into a committable “unit of work” or executed as a single action
+**	Each step needs to define:
+***	Event that triggers the work if the process is in a paused state
+***	The logic to perform one the event is identified
+***	What to do if the event is not received (Timeout Policy)
+***	What to do if a compensation action, moving backward in the flow, is needed
+*	A well-defined business process has clear outcome that determines when the business process is completed. If the definition of the process causes it to stay pending for a long period of time, it’s probably not well defined
+*	The process does not have to be all automated and there could be some manual processes outside the process that move the process along, For EOI, the process might be waiting for that to come in, but the actual act of process the EOI is outside the process.
+ 
+
+Example: New Hire Benefits Enrollment:
+ 
+When a client enters a new employee into their HR system that employee will be create in the benefits enrollment system in near real time so that the employee can log in and access the new hire enrollment instantly. 
+And once the enrollment is complete the elections will be sent to the carriers in real time as well. 
+At this point, an employee could just go to the drug store across the street and get their prescription filled because Rx provider would have their benefit information available already.
+ 
+The business process is *New Hire Enrollment*.
+ 
+The trigger is benefits administration system getting a Request for New Hire Enrollment via an API call from the employer.
+The outcome is Enrollment completed at the carrier(s). 
+In this case, CVS for Rx.
+The steps defined in the template would be (timeouts and compensation policies/actions removed). +
+1.	Email step: Send employee an email with link to enrollment – Pause until the employee logs in (trigger) +
+2.	User Experience Step: Employee completes and confirms elections – System updates enrollment data base record +
+3.	Integration Step(s): Carriers/Vendors notified of new elections +
+4.	Email Step: Send employee email stating coverage available and they can enroll as member with carrier +
+ 
+At this point the employee can go to CVS. From a unit of work standpoint, Step 1 is one unit of work, followed by a pause, then Steps 2 is another with a commit point and then Step 3-4 as another unit of work. 
+If something bad happens with the carriers, the business process will stay in the state of Step 2 completed and can be restarted to complete the remaining steps.
+ 
+In general, there are two types of business processes: 
+ 
+1.	*Straight Through*, where everything is done in one unit of work and it is all or nothing is there is a rollback +
+
+2.	*State Machine Based*, where there are a set of state where the process can pause and then resume. These are used when there is time lags awaiting responses from a user. 
+Event triggers are then used to restart the process +
+ 
+One of the main issues with using HTTP REST based APIs is that the API interaction is not guaranteed. The endpoint might not be available, or it might get lost in the network. 
+This is particularly an issue if bulk or batch work is done via API. 
+An HTTP REST API should complete in less than a second to avoid performance problems. 
+This causes operational issues for both sides:consumer and providers. 
+On the consumer side, this means they must remember where the flow is at and be able to restart at that point when the issue has been resolved. 
+On the provider side, the API must be idempotent

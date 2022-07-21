@@ -185,7 +185,7 @@ The event structure looks as follows:
 
 {"message" :
 	"header" : {  
-		"messageDataSchema": "com.hilco.messages/uxEvent",
+		"messageDataSchema": "com.hilcoTech.messages/uxEvent",
         "eventName" : "PageABC:clicked",
                         ...  },
 	"uxEventHeader" : { 
@@ -195,7 +195,7 @@ The event structure looks as follows:
 
 {"message" :
 	"header" : {  
-    	"messageDataSchema": "com.hilco.messages/bpEvent",
+    	"messageDataSchema": "com.hilcoTech.messages/bpEvent",
        	"eventName" : "ContributionRateChange:Completed"
                         ...  },
 	"bpEventHeader" :  { 
@@ -270,11 +270,11 @@ They also identify the type of Event Header contained in the full message.
 The dataSchema can be used as an external endpoint to provide the schema and other machine-readable information for the event type and the latest major version. 
 Used to provide message definition and validation. 
 Example Values:
-* com.hilco.messages/events/uxEvent
-* com.hilco.messages/events/businessProcessEvent
-* com.hilco.messages/events/dataChangeEvent
-* com.hilco.messages/events/goalEvent
-* com.hilco.messages/events/platformProcessingEvent
+* com.hilcoTech.messages/events/uxEvent
+* com.hilcoTech.messages/events/businessProcessEvent
+* com.hilcoTech.messages/events/dataChangeEvent
+* com.hilcoTech.messages/events/goalEvent
+* com.hilcoTech.messages/events/platformProcessingEvent
 
 messageVersion:: Conveys the version number (major.minor) of the message, and describes the structure of the overall message at hand. 
 Recommendation is to use semantic versions based on breaking changes.
