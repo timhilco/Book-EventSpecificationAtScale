@@ -83,3 +83,8 @@ An HTTP REST API should complete in less than a second to avoid performance prob
 This causes operational issues for both sides:consumer and providers. 
 On the consumer side, this means they must remember where the flow is at and be able to restart at that point when the issue has been resolved. 
 On the provider side, the API must be idempotent
+
+[appendix]
+== Business Object Anatomy ==
+
+image::./images/BigThreePicture.jpg[]

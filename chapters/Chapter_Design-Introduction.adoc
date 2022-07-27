@@ -27,7 +27,8 @@
    - CloudEvents.io Project <<cloudEvents>>
 
 === Why is Event Driven Architecture critical to tomorrow's applications? ===
-
+// Talk about API polling and the need to change over polling or under polling
+// State transitions - Time based or data-centric (data triggers)
 Today, the primary interaction model for web based architectures to communicate to other systems is REST API via HTTP.
 This interaction paradigm  is called *Synchronous Request-Reply*, where the client is _waiting_ for a response from the service.
 This is driving the overall user experience, where the user presses a button or link and then waits for a response. 
@@ -95,9 +96,12 @@ They can be as low level as a single data element changing(changing one's email 
 With the move to more domain oriented organizational structures, independent autonomous groups will be designing events.
 This will cause a prolific number of events being created by an organization. 
 Without organizational design standards and guidelines, the lack of consistency will lead to chaos losing all the benefits of an Event Driven Architecture.
+Having multiple independent team developing their own event standards will lead to more integration code for mapping models and fields between applications, which lead to more cost, longer delivery times, more brittle code and more long-term technical debt.
+This may lead to additional processing cost, which might affect performance and require additional server purchases. 
+This might be more acute in a cloud centric environment.
 
 Event design standards are critical to the success of an Event Driven Architecture as the strategy is scaled up within the organization.
-It isn't enough to commit to using events as a key integration strategy, the organization needs standards and governance in the design of events. 
+It isn't enough to commit to using events as a key integration strategy, the organization needs standards and the governance to enforce the standards in the design of events. 
 To support friction-less and over-reaching governance, the organization needs comprehensive design guidelines to support the event designers and give rubrics to the governance groups on how to judge the quality of the design.
 
 Having common event standards are key to creating programming language libraries and tooling. The creation of these artifacts will lead to faster development times, increased quality and improve interoperability across application platforms.
@@ -108,14 +112,31 @@ Having common event standards are key to creating programming language libraries
 
 .How do standards and governance support interoperability and tooling?
 
-//Doug Davis
-//Just some nits.
-//
-//However, I think it would be good to add a definition of things like "event standards" and "governance" in this context because those can mean different things to different people. 
-//For example, exactly what should be standardized when you say 'event standards'? Do you mean common attributes? Common event formats? Common ways of defining the attribute values?
-//
-//A more concrete set of examples of the pain-points would help too. 
-//What's stated about there possibly being chaos is true in general, but what specifically will it look like? 
-//And how will it impact things? What will it impact? 
-//Runtime performance? 
-//More dev work?
+First, definitions.
+
+[horizontal]
+*message specifications* :: The message specifications are designed to provide a level of design consistency and quality in the design of messages within the organization.
+The focus here is too provide a starting point and guidance for design as organizations embark on Event Driven Architecture.
+The goal of the specification is to provide a glossary of terms, suggested structure and organization of the message and a preliminary list of fields names and field data types. 
+Although the specifications suggests a JSON formats, the fields can be expressed in other formats (e.g. XML). 
+This specification does not address the available protocols and language SDK.
+
+
+*message governance* :: Message governance is the enforcement of the specifications. Specifications without governance will negate the benefits of the specifications. 
+The goal of governance is to insure quality message design, making sure the message meets the domain objectives.
+It also intended to insure that the message follows the specification.
+This insures message interoperability.
+Message governance is not intended to be a heavy handed process.
+
+In order for messages to be interoperable, all application need to follow these specification. 
+This will hopefully avoid any semantic mapping, where the same business object are modeled differently. 
+It should also avoid any field mapping withing the application.
+This should lead to simpler code and even less code.
+Standardization also leads to the creation of tooling, which should increase productivity, quality and development time. 
+Tooling can leverage the knowledge already baked into the specification.
+
+In general, standards and tooling, should make the development of code and application interoperability less complex, less brittle, less costly, more agile with higher quality.
+This should enable speed to market and lower cost of ownership in the long term.
+
+
+

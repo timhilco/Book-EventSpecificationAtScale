@@ -4,9 +4,9 @@
 :author: Timothy S. Hilgenberg 
 :email: timhilco@gmail.com
 :revdate: July, 2022
-:revnumber: 0.9.6 
+:revnumber: 0.9.7 
 // Custom Variables
-:draft-version: 0.9.6
+:draft-version: 0.9.7
 //:hardbreaks: 
 //
 :icons: font

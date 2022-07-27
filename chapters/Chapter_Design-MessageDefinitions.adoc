@@ -76,6 +76,18 @@ They could be the result of a business process (i.e.  completed enrollment) or c
 They can't be rejected, but can be ignored. 
 There is no expectation of any future action by the publisher.
 
+Events can varying in semantic granularity or scope. 
+This can be more pronounced for events that reflect the data element changes in complex business objects
+They can be as small as a single field change in a business object or a notification that some element(s) changed within the business object. 
+In this case, the body may or may not document the changes. 
+There are also levels in between. 
+For complex objects that are hierarchical in nature, the event may reflect a changes in a major sub-component of that data object. +
+For example, a data change for a "person" business object for an email address change could be: +
+
+* At the _person_ level - Indicating something changes in the entity
+* At the specific component: _home contact point_ - Indicating a change in a contact point for the person
+* At the specific field level: _email address for home_ - Indicating that the person's home email address had changed in
+
 ====
 [IMPORTANT]
 Events are immutable

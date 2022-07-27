@@ -68,7 +68,7 @@ Business Consumer/Application User::
 Runtime::
 * Platform Processing Event
 
-=== Event Message Overview ===
+=== Anatomy of an Event Message ===
 
 The standard event message is a JSON document containing one main JSON object named *message*. 
 The *message* JSON object contains 3 child JSON objects: +
@@ -83,6 +83,21 @@ This is a free form structure or JSON object (i.e. schema would vary by event) f
 The two headers contain the metadata about the event: A standard global message header and a event type standard header.
 The body contains the actual data related to the event at the time of the occupance. 
 The data schema for the body is determined by the event designer.
+
+The analogy here is to a package distribution center. 
+The message is like a package with the contents inside the package being the *body* component and the label being the header. 
+This structure allows for the packages to move correctly through the distribution center without having to look at the contents.
+Message distribution can act in the same manner, where general message delivery can move messages by only looking at the header of the message. 
+If the header follows a standard, then it makes it easier to create programs via tooling to distribute message through the network.
+
+
+.Why is the Event Type Header a first class component?
+Most messages of this type have a single header that is exposed to the outside.
+The purpose of the _Event Type Header_ is a author's hypnosis that domains have another level of standardization for their messages.
+This provides the event designer in their domain another layer of consistence and all the benefits of standardization.
+The event type fall into two categories: (1) Standardization with the domain business objects themselves and (2) Event Types that are cross cutting or common against the domains data types. 
+General data changes, state changes in business process and User Experience logging events fall into this category.
+
 
 ==== Common Message Header ====
 
