@@ -79,7 +79,7 @@ There is no expectation of any future action by the publisher.
 Events can varying in semantic granularity or scope. 
 This can be more pronounced for events that reflect the data element changes in complex business objects
 They can be as small as a single field change in a business object or a notification that some element(s) changed within the business object. 
-In this case, the body may or may not document the changes. 
+In this case, the eventData may or may not document the changes. 
 There are also levels in between. 
 For complex objects that are hierarchical in nature, the event may reflect a changes in a major sub-component of that data object. +
 For example, a data change for a "person" business object for an email address change could be: +

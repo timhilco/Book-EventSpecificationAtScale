@@ -29,6 +29,61 @@
 === Why is Event Driven Architecture critical to tomorrow's applications? ===
 // Talk about API polling and the need to change over polling or under polling
 // State transitions - Time based or data-centric (data triggers)
+
+
+
+The old, but tired and true cross company interaction of overnight batch files is being replaced by newer technology approaches.
+This data was characterized on full file populations, byte stream multi record format and daily or longer delivery schedules.
+Another way to look at this approach is it is high latency, using old formats and creates a large amount of data that might not have changed.
+However, they were operationally efficient, guaranteed delivery (no transaction  were lost) and event based.
+(These were actions that already occurred.) More modern requirements are lower latency (sometimes referred to as "near-real time"), modern formats like JSON and XML and changes only. 
+But, they still want the guaranteed delivery and operationally efficiency of batch offline processing.
+
+To meet these new requirements, organizations are turning to "API" for large group processing.
+They have had good success creating API that are short lived and manage mostly  individual business objects.
+REST APIs are well established approach for data integration for smaller units of work. 
+They are simple to consume and create.
+There is lots of tooling and technology support in this space and a large cohort of practitioners who know how to leverage the technology.
+They can delivery relatively large payloads with a very low latency and are an effective mechanism to deliver changes in state of business objects.
+This why they are so effective in e-commerce application.
+However, given that they are HTTP based, they are not 100% guaranteed delivery and they can cause resource contention and operational issues for web based infrastructure when used to simulate batch processing.
+
+Despite these concerns, there is a desire to use HTTP REST API as a substitute for batch processing. 
+The real time request-reply processing, use of JSON as a format  and ease of development are attractive in creating these solutions.
+Also, instead of a full population file, the API can deliver data that has been changed.
+However, this places a large burden on the consumer of the API to mimic the operational complexities of batch processing.
+It also requires the providers of the service to have the web based compute capacities (i.e. servers and threads) for longer running requests.
+
+_Where do events and messaging come into play?_
+
+As the service ecosystem continues to grow and more and more applications are taking advantage of them, the need for tighter integration between applications continues to become more and more important.
+Companies are looking for changes only, low latency and guaranteed delivery of changes or occurrences from systems of record.
+They are looking for events in real-time.
+There are two models for moving events between organizations. 
+
+(1) Consumers poll for events +
+(2) Systems of record publish Events
+
+In the first model, the event publisher provides an API that allows a consumer to request a collection of events based on query parameters.
+The consumers then can make REST API calls at pre-determined intervals to retrieve the events.
+This is an imperfect model because polling is an inefficient manner of integration.
+The consumer can either poll to frequently or not frequently enough causing inefficient resource utilization or data inconsistency.
+It can also can excessive resource utilization on the system of record.
+
+The second model is a publish-subscribe paradigm.
+The system of record publishes an event to a  middleware resource without any knowledge of who will consumer the message.
+The latency provided by the middleware is near instantaneous with out the need for polling.
+There are event middleware technologies like Kafka, Rabbit MQ and IBM MQ, cna provide these qualities of service.
+However, these technologies do not work well between organization.
+
+Despite the issues around polling, a "polling" approach is good enough today to provide the reduced latency and guaranteed delivery of events from a system of record.
+
+====
+[NOTE]
+_Event Driven Architectures can be used in data integration models where real-time, changes only data with guaranteed delivery needs to be exchanges between two organizations_
+====
+
+In addition to new data exchange model, events are also being used more and more in User Experience applications.
 Today, the primary interaction model for web based architectures to communicate to other systems is REST API via HTTP.
 This interaction paradigm  is called *Synchronous Request-Reply*, where the client is _waiting_ for a response from the service.
 This is driving the overall user experience, where the user presses a button or link and then waits for a response. 
@@ -49,13 +104,14 @@ It is hard in an asynchronous event driven model to simulate a synchronous respo
 It requires a very low latency interaction approach, which was hard to do with older technologies. 
 It was just easier to design a synchronous model when all the interactions were within the company computing ecosystem and there wasn't available technologies other than HTTP to provide an appropriate user response.
 
+====
+[NOTE]
 _Event Driven Architectures are key to providing a rich satisfying user experience as applications become more complicated and more and mores services are being provided by outside providers_ 
+====
 
 A synchronous model also has a major impact on the computing resources required to support the application.
 Instead of having to provision servers for maximum requests, that may sit idle, one can have fewer workers in the background continuously managing the work. An event driven architecture following an asynchronous approach is always a more efficient use of computing resources than a asynchronous approach.
 
-_Event Driven Architectures are key to a more efficient use of computer resources.
-This is even more important is a cloud based environment where the pricing is based on actual detail usage._
 
 Asynchronous technologies have been around for a very log time. 
 The IBM mainframe environment had MQ middleware that allowed inter-machine communication and intra-platform integration (primarily distributed platform). 
@@ -64,8 +120,14 @@ In prior application designs and even today, these technologies were used for in
 There were mostly used for underlying application interaction, but not used in an interface design. 
 
 ====
+[NOTE]
+_Event Driven Architectures are key to a more efficient use of computer resources.
+This is even more important is a cloud based environment where the pricing is based on actual detail usage._
+====
+
+====
 [IMPORTANT]
-_The key to designing these type of applications is establishment of a set of event design standards and governance processes within the organization, along using asynchronous messaging technologies (IBM MQ, Kafka, RabbitMQ)_ +
+_One of the keys to designing modern event-driven applications is establishment of a set of event design standards and governance processes within the organization, along using asynchronous messaging technologies (IBM MQ, Kafka, RabbitMQ)_ +
 The purpose of this document is to provide a set of event specifications that can work at the scale of a large organization.
 ====
 

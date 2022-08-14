@@ -1,0 +1,290 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "https://timhilco.com/event.schema.json",
+  "title": "Event",
+  "description": "An event",
+  "type": "object",
+  "properties": {
+    "Event": {
+      "description": "An message",
+      "type": "object",
+      "properties": {
+        "eventHeader": {
+          "$ref": "#/$defs/eventHeader"
+        },
+        "eventTypeHeader": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/bpEventHeader"
+            },
+            {
+              "$ref": "#/$defs/boEventHeader"
+            }
+          ]
+        },
+        "eventData": {
+          "$ref": "#/$defs/eventData"
+        }
+      }
+    }
+  },
+  "required": [
+    "eventHeader",
+    "eventTypeHeader",
+    "eventData"
+  ],
+  "$defs": {
+    "eventHeader": {
+      "description": "The message header",
+      "type": "object",
+      "properties": {
+        "eventId": {
+          "description": "The event global Id",
+          "type": "string",
+          "example": "c8ae150b-7363-487b-9c08-edafcc4966d2"
+        },
+        "version": {
+          "description": "The event version",
+          "type": "string",
+          "example": "1.0.0"
+        },
+        "topic": {
+          "description": "The event version",
+          "type": "string"
+        },
+        "eventTypeHeaderDataSchema": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "eventBodyDataSchema": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "eventName": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "contextTag": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "action": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "creationTimestamp": {
+          "description": "The ...",
+          "type": "string",
+          "format": "date-time"
+        },
+        "businessDomain": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "correlationId": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "correlationTIdType": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "subjectIdentifier": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "publisherId": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "publisherApplicationName": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "publisherApplicationInstanceId": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "publishingPlatformsHistory": {
+          "description": "The ...",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/publishingPlatformItem"
+          }
+        },
+        "systemOfRecord": {
+          "description": "The ...",
+          "type": "object",
+          "items": {
+            "$ref": "#/$defs/systemOfRecord"
+          }
+        },
+        "correlatedResources": {
+          "description": "The ...",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/correlatedResourcesItem"
+          }
+        }
+      }
+    },
+    "publishingPlatformItem": {
+      "description": "The Event Type Header for Business Processes",
+      "type": "object",
+      "properties": {
+        "publisherId": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "publisherApplicationName": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "publisherApplicationInstanceId": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "eventId": {
+          "description": "The event global Id",
+          "type": "string",
+          "example": "aUUID"
+        },
+        "topic": {
+          "description": "The event version",
+          "type": "string"
+        },
+        "eventName": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "creationTimestamp": {
+          "description": "The ...",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "systemOfRecord": {
+      "description": "The system of Record where the event was originated",
+      "type": "object",
+      "properties": {
+        "systemOfRecordId": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "systemOfRecordApplicationName": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "systemOfRecordApplicationInstance": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "systemOfRecordIdDatabaseSchema": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "platformInternalId": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "platformExternalId": {
+          "description": "The ...",
+          "type": "string"
+        }
+      }
+    },
+    "correlatedResourcesItem": {
+      "description": "The Event Type Header for Business Processes",
+      "type": "object",
+      "properties": {
+        "correlatedResourcesType": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "correlatedResourceId": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "correlatedResourceState": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "correlatedResourceDescription": {
+          "description": "The ...",
+          "type": "string"
+        }
+      }
+    },
+    "bpEventHeader": {
+      "description": "The Event Type Header for Business Processes",
+      "type": "object",
+      "properties": {
+        "businessProcessReferenceId": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "businessProcessId": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "businessProcessDescription": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "businessProcessStatus": {
+          "description": "The ...",
+          "type": "string"
+        },
+        "businessProcessEffectiveDate": {
+          "description": "The ...",
+          "type": "string",
+          "format": "date"
+        },
+        "businessProcessChangeTimestamp": {
+          "description": "The ...",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "boEventHeader": {
+      "description": "The Event Type Header for BusinessObjects",
+      "type": "object",
+      "properties": {
+        "businessObjectResourceType": {
+          "description": "The message Id",
+          "type": "string"
+        },
+        "businessObjectIdentifier": {
+          "description": "The message Id",
+          "type": "string"
+        },
+        "additionalBusinessObjectResource": {
+          "description": "The message Id",
+          "type": "array",
+          "items": {
+            "properties": {
+              "additionalBusinessObjectResourceType": {
+                "description": "The message Id",
+                "type": "string"
+              },
+              "additionalBusinessObjectResourceId": {
+                "description": "The message Id",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "dataChangeTimestamp":  {
+          "description": "The message Id",
+          "type": "string"
+        }
+      }
+    },
+    "eventData": {
+      "description": "An event data context as JSON string",
+      "type": "object"
+    }
+  }
+}

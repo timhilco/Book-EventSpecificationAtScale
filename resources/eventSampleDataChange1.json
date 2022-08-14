@@ -1,0 +1,62 @@
+{
+  "eventHeader": {
+    "eventId": "c8ae150b-7363-487b-9c08-edafcc4966d2",
+    "version": "1.0.0",
+    "topic": "PersonEmailAddressChanged",
+    "eventTypeHeaderDataSchema": "com.hilcoTech.messages/events/dataChangeEvent",
+    "eventBodyDataSchema": "com.hilcoTech.messages/events/emailAddressChange",
+    "eventName": "PersonEmailAddress:Changed",
+    "contextTag": "Person_0010010001_EmailAddress",
+    "action": "Changed",
+    "creationTimestamp": "2022-09-01T07:20:50.52Z",
+    "businessDomain": "HR-Payroll",
+    "correlationId": "c8ae150b-7363-487b-9c08-edafcc4966d2",
+    "correlationTIdType": "Session",
+    "subjectIdentifier": "001010001",
+    "publisherId": "HilcoTech",
+    "publisherApplicationName": "HilcoTechHR",
+    "publisherApplicationInstanceId": "System1",
+    "publishingPlatformsHistory": [
+      {
+        "publisherId": "HilcoTech",
+        "publisherApplicationName": "HilcoTechPayroll",
+        "publisherApplicationInstanceId": "System1",
+        "eventId": "c8ae150b-7363-487b-9c08-edafcc4966d23",
+        "topic": "PersonEmailAddressChanged",
+        "eventName": "PersonEmailAddress:Changed",
+        "creationTimestamp": "2022-09-01T07:20:49.52Z"
+      }
+    ],
+    "systemOfRecord": {
+      "systemOfRecordId": "HilcoTech",
+      "systemOfRecordApplicationName": "HilcoTechPayroll",
+      "systemOfRecordApplicationInstance": "EastRegion",
+      "systemOfRecordIdDatabaseSchema": "PDB01",
+      "platformInternalId": "001010001",
+      "platformExternalId": "001-01-0001"
+    },
+    "correlatedResources": [
+      {
+        "correlatedResourceType": "BusinessProcess",
+        "correlatedResourceId": "c8ae150b-7363-487b-9c08-edafcc4966d23",
+        "correlatedResourceState": "Completed",
+        "correlatedResourceDescription": "Email Change Business Process"
+      }
+    ]
+  },
+  "boEventHeader": {
+    "businessObjectResourceType": "Person",
+    "businessObjectIdentifier": "001010001",
+    "additionalBusinessObjectResource": [
+      {
+        "additionalBusinessObjectResourceType": "",
+        "additionalBusinessObjectResourceId": ""
+      }
+    ],
+    "dataChangeTimestamp": "2022-09-01T07:20:50.52Z"
+  },
+  "eventData": {
+    "priorEmailAddress": "john.sample@gmail.com",
+    "currentEmailAddress": "john.sample2@gmail.com"
+  }
+}

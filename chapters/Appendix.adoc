@@ -10,17 +10,15 @@ id -> messageId +
 source -> eventName and Namespace +
 specVersion -> messageVersion +
 dataContentType -> JSON only +
-dataSchema -> messageNamespace, eventNamespace (body) +
+dataSchema -> messageNamespace, eventNamespace (eventData) +
 subject -> Subject/Business Object +
 time -> messageTimestamp +
 
 .In CloudEvents but not Event Specification
-a
-a
+<TBD>
 
-.in Event Specification but not cloudEvents
-a
-a
+.In Event Specification but not cloudEvents
+<TBD>
 
 [appendix]
 == Business Process Definition ==
@@ -88,3 +86,18 @@ On the provider side, the API must be idempotent
 == Business Object Anatomy ==
 
 image::./images/BigThreePicture.jpg[]
+
+[appendix]
+== JSON Event Schema ==
+
+[source ]
+----
+include::../resources/eventSchema.json[]
+----
+[appendix]
+== JSON Data Change Event Examples ==
+
+[source ]
+----
+include::../resources/eventSampleDataChange1.json[]
+----

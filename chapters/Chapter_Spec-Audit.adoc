@@ -15,17 +15,17 @@ The *message* object contains 3 child JSON objects:
 
 * Common Message Header - Common across all messages, independent of Audit type and audit
 * Audit Type Header - Common header for specific Audit types 
-* Audit Message Body - Free form body for each Audit defined with the Audit type
+* Audit Message eventData - Free form eventData for each Audit defined with the Audit type
 
 
 === Internal Audit JSON Structure ===
 To keep it simple and easy to produce and consume, the audit message has a very flexible structure and is basically an unstructured document. 
-The goal is to have a schema for the header, each audit type header and every audit data (i.e body) itself. 
+The goal is to have a schema for the header, each audit type header and every audit data (i.e eventData) itself. 
 We would like to have a schema dictionary which has a JSON or AVRO schema as it values and it's keyed by some name. The hierarchy is as follows:
 
 * There is only one header schema (key name: header)
 * To determine the <auditTypeheader> name, the header.messageNamespace field contains the name of the audit type
-* To determine the body schema name, the header.auditBodyNamespace field determine the name for the body schema
+* To determine the eventData schema name, the header.auditBodyNamespace field determine the name for the eventData schema
 
 [NOTE]
 ====
@@ -34,7 +34,7 @@ The internal audit structure looks as follows:
 {"message" : +
 	"header" : {   ...  }, +
 	"_auditTypeHeader_" : { ... }, +
-	"body"  : { ... }
+	"eventData"  : { ... }
 }
 
 ====

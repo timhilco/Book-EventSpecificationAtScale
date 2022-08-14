@@ -105,8 +105,8 @@ Action Component Sample Values:
  * Canceled
 
 .Body Definition Considerations
-The body section is named *body*. 
-The *body* can be any valid JSON schema.
+The eventData section is named *eventData*. 
+The *eventData* can be any valid JSON schema.
 It should contain key information about what action or event triggered the change in state of the process. 
 In some case, a Command with be the triggering event at create this change.
 
@@ -213,8 +213,8 @@ Also includes an primary key changes and Master Data Management (MDM) document m
 
 .Body Definition Considerations
 
-* The body section is named *body*
-** *body* can be any valid JSON schema
+* The eventData section is named *eventData*
+** *eventData* can be any valid JSON schema
 * Contains one predefined element *extension*
 ** Extension is a private area that can contain its own schema
 ** The field is an map/array with:
@@ -245,7 +245,7 @@ The alternate is too only provide foreign keys, which can be used to retrieve da
 
 Delete:: 
 Only provide a delete event if the entire document is being deleted, not if one of the source systems deleted a person.
-In the body, provide the primary document key  (UniversalId or  Mongo _id ) and any IdMapping table
+In the eventData, provide the primary document key  (UniversalId or  Mongo _id ) and any IdMapping table
 If the object/person is being delete in a given platform, but the person still exists in another platform, treat as an Update.
 Only delete when no more IdMappings exist in the document
 
@@ -276,7 +276,7 @@ Ingest:: Generates a Normal Update event
 
 === User Experience Action Event ===
 
-_Ed: Ad some content around: In Ux Events, state that UX logs are really events and should be treated as them. In particulat trying ot log business action. It also works for debugging and tracing log entries._
+_Ed: Ad some content around: In Ux Events, state that UX logs are really events and should be treated as them. In particular trying ot log business action. It also works for debugging and tracing log entries._
 
 The Ux Action events are intended to capture the actual keyboard/mouse events performed by the user
  - displaying pages, clicking button or links, entering text. 
@@ -406,8 +406,8 @@ Sample Values for userAction:
 * Entered
 
 .Body Definition Considerations
-* The body section is named *body*
-** *body* can be any valid JSON schema
+* The eventData section is named *eventData*
+** *eventData* can be any valid JSON schema
 * Contains one predefined element *extension*
 ** Extension is a private area that can contain its own schema
 ** The field is an map/array with:
@@ -451,8 +451,8 @@ Action Component Sample Values :
 * Completed
 
 .Body Definition Considerations
-* The body section is named *body*
-** body  can be any valid JSON schema
+* The eventData section is named *eventData*
+** eventData  can be any valid JSON schema
 * Contains one predefined element *extension*
 ** Extension is a private area that can contain its own schema
 ** The field is an map/array with:

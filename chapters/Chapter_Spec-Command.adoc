@@ -38,7 +38,7 @@ It follow the same general pattern as the event's Common Message Header, as ther
 Some fields are added to support commands and other are removed because they relate specifically to events.
 
 === Command JSON Structure ===
-Like events, the command message has a very flexible structure and is basically an unstructured document. The goal is to have a schema for the header and every command data (i.e body) itself. We would like to have a schema dictionary which has a JSON or AVRO schema as it values and it’s keyed by some name. The hierarchy is as follows:
+Like events, the command message has a very flexible structure and is basically an unstructured document. The goal is to have a schema for the header and every command data (i.e eventData) itself. We would like to have a schema dictionary which has a JSON or AVRO schema as it values and it’s keyed by some name. The hierarchy is as follows:
 
 * There is only one header schema (key name: header)
 * To determine the body schema name, the header.commandBodyDataSchema field determine the name for the body schema
@@ -64,7 +64,7 @@ The internal command structure looks as follows:
 | Field Name | Attributes
 | messageId | String; Required
 | messageType | String; Required
-| messageDataSchema  | String; Required 
+| eventHeaderSchema  | String; Required 
 | messageVersion | String; Required 
 | messageTopic | String 
 | commandName | String 
@@ -114,8 +114,8 @@ messageType:: Describes the type of message. +
 Valid Values:
 *	Command
 
-messageDataSchema:: messageDataSchema is used to distinguish between different types of messages (events vs commands), source (internal vs external), and schema versions to avoid collision and help in processing the messages. 
-The messageDataSchema can be used as an external endpoint to provide the schema and other machine-readable information for the command type and the latest major version. Used to provide message definition and validation. +
+eventHeaderSchema:: eventHeaderSchema is used to distinguish between different types of messages (events vs commands), source (internal vs external), and schema versions to avoid collision and help in processing the messages. 
+The eventHeaderSchema can be used as an external endpoint to provide the schema and other machine-readable information for the command type and the latest major version. Used to provide message definition and validation. +
 Sample Values:
 *	com.hilcoTech.messages/commands/aCommand
 

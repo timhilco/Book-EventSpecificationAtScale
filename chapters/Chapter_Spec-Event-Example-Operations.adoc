@@ -119,8 +119,8 @@ Process Action Sample Values:
 
 .Body Definition Considerations
 
-* The body section is named 'body' 
-** 'body' can be any valid JSON schema
+* The eventData section is named 'eventData' 
+** 'eventData' can be any valid JSON schema
 * Contains one predefined element 'extension'
 ** Extension is a private area that can contain its own schema
 ** The field is an map/array with:
