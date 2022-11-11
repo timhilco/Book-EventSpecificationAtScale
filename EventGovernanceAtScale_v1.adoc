@@ -3,8 +3,8 @@
 = Event Governance At Scale: A Practical Guide To Effective Message Design 
 :author: Timothy S. Hilgenberg 
 :email: timhilco@gmail.com
-:revdate: July, 2022
-:revnumber: 0.9.8
+:revdate: October, 2022
+:revnumber: 0.9.9
 // Custom Variables
 :draft-version: 0.9.8
 //:hardbreaks: 
@@ -34,7 +34,7 @@ This is very different than the domains that produce events from real-time envir
 
 *All comments welcome*
 
-Early Working Draft Version {draft-version} --  June 2022
+Early Working Draft Version {draft-version} --  October 2022
 
 Copyright(c) 2022. All rights Reserved 
 

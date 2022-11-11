@@ -1,6 +1,6 @@
 == Chapter 4  - Domain Event Examples - Consumer Business Events ==
 
-Each domain or industry has their own event types.
+Each domain or industry has their own events with a event category.
 To help get a better understanding of the general specification, this chapter provides some real life examples. These examples are taken from the author's experience in developing HR/Benefits Administration system. 
 These examples should also apply to any consumer based application. 
 The following real life consumer related events are discussed:
@@ -9,6 +9,9 @@ The following real life consumer related events are discussed:
 * Business Domain Object Data changes
 * Consumer User Experience (Ux) Application Interactions 
 * Consumer General Activities 
+
+Add comment about a generic or general or undefined events. Undefined Event: A free form category suitable for events that are entirely custom to the producer.
+
 
 All of these event would use the Common Message HeaderHeader described in the prior chapter.
 

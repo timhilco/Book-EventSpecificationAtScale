@@ -55,10 +55,10 @@ This field allows the consumer to identify this and not take any additional acti
 .Contains metadata about the event which helps in stream processing 
 This information helps to route the request to the proper stream node and to facilitate proper processing of the event by a component within the stream topology.
 
-=== Event Types ===
-Every domains or industry have events that follow a consistent pattern. 
-In addition, there are some common data processing event types. +
-Some event types are:
+=== Event Categories ===
+Every domains or industry have events that follow a well-known and consistent pattern. _Event Categories_ provide extra information in the form of an Event Type Header, that is common to that kind of event. Within each category, there are specific event types with their own data schema.
++
+Some event categories are as follows with their own specific event types within a domains:
 
 Business Consumer/Application User::
 * Business Process (a.k.a Workflow) State Change Event 
@@ -68,6 +68,18 @@ Business Consumer/Application User::
 Runtime::
 * Platform Processing Event
 
+In the case, where none of the standard event type apply, there is a concept of a _General Category Type_. In this case, the Event Type Header will be absent and the URI would end with _/generalEvent_.
+// See other comment about undefined event category
+
+=== Event Design Guidelines ===
+
+.Standard information
+When designing an event, one  needs to consider and document the following standard information:
+* A well known event category, such as a business process state change or data change category. • The name of the event type.
+* The definition of the event target audience.
+* An owning application, and by implication, an owning team.
+* A schema defining the event body or data payload. 
+// * The compatibility mode for the type.
 === Anatomy of an Event Message ===
 
 The standard event message is a JSON document containing one parent JSON object named *Event*. 
@@ -75,7 +87,7 @@ The *Event* JSON object contains 3 child JSON objects: +
 
 [horizontal]
 eventHeader:: Common Event Header - Common across all event messages, independent of event type and event context data
-_Event Type Header_:: Common header for specific event types. 
+_Event Category Header_:: Common header for specific event categories. 
 The name is based on event type.
 eventData:: Event message data or event context data.
 Since the context of an event tends to be unique, this is a free form structure or JSON object (i.e. schema would vary by event) for each event defined within a given event type
@@ -92,9 +104,9 @@ Message distribution can act in the same manner, where general message delivery 
 If the header follows a standard, then it makes it easier to create programs via tooling to distribute message through the network.
 
 
-.Why is the Event Type Header a first class component?
-Most messages of this type have a single header that is exposed to the outside.
-The purpose of the _Event Type Header_ is a author's hypnosis that domains have another level of standardization for their messages.
+.Why is the Event Category Header a first class component?
+Most messages within a given category have a single header that can be exposed to the outside.
+The purpose of the _Event Category Header_ is a author's hypnosis that domains have another level of standardization for their messages.
 This provides the event designer in their domain another layer of consistence and all the benefits of standardization.
 The event type fall into two categories: (1) Standardization with the domain business objects themselves and (2) Event Types that are cross cutting or common against the domains data types. 
 General data changes, state changes in business process and User Experience logging events fall into this category.
@@ -138,8 +150,8 @@ The name of the JSON object is *eventHeader*.
 It contains fields that describe the message at the highest levels and it identifies the source and type of the message. These fields determine the format and names of the fields that follow in the message object. 
 Since this is JSON, routing or filtering  (e.g message brokers) can use only the header to determine routing of message or if the consumer is interested in processing the message. This provides a high degree of standardization, which leads to excellent tooling.
 
-==== Event Type Header ====
-The Event Type Header is a second level header that contains the common elements for all messages of a given event type.
+==== Event Category Header ====
+The Event Category Header is a second level header that contains the common elements for all messages of a given event category.
 ====
 [IMPORTANT]
 The name of the JSON object is based on the name of the event type.
@@ -151,7 +163,7 @@ Each event type will have its own header name and structure. Examples:
 * boEventHeader - for business object state change events
 
 
-The eventHeaderSchema field in the header will indicate which event type header is in the message.
+The eventCategoryHeaderSchema field in the header will indicate which event type header is in the message.
 There will be a structured format/schema for each event type.
 For an organization, the goal is a small bounded list of event types.
 There can be an unlimited number of event definitions within a type.
@@ -184,7 +196,7 @@ The goal is to have a schema for the header, each event type header and every ev
 The desire is to have a schema dictionary which has a JSON or AVRO schema as it values and it's keyed by some name. The hierarchy is as follows:
 
 * There is only one header schema (key name: header)
-* To determine the <eventTypeheader> schema definition name, the eventHeaderSchema field contains the name of the event type
+* To determine the <eventCategoryHeader> schema definition name, the eventCategoryHeaderSchema field contains the name of the event type
 * To determine the eventData schema definition, eventBodyDataSchema field determine the name for the eventData schema
 
 ====
@@ -193,7 +205,7 @@ The event structure looks as follows:
 
 {"message" : +
 	"eventHeader" : {   ...  }, +
-	"_eventTypeHeader_" : { ... }, +
+	"_eventCategoryHeader_" : { ... }, +
 	"eventData"  : { ... }
 }
 
@@ -201,7 +213,7 @@ The event structure looks as follows:
 
 {"message" :
 	"eventHeader" : {  
-		"eventHeaderSchema": "com.hilcoTech.messages/uxEvent",
+		"eventCategoryHeaderSchema": "com.hilcoTech.messages/uxEvent",
         "eventName" : "PageABC:clicked",
                         ...  },
 	"uxEventHeader" : { 
@@ -211,7 +223,7 @@ The event structure looks as follows:
 
 {"message" :
 	"eventHeader" : {  
-    	"eventHeaderSchema": "com.hilcoTech.messages/bpEvent",
+    	"eventCategoryHeaderSchema": "com.hilcoTech.messages/bpEvent",
        	"eventName" : "ContributionRateChange:Completed"
                         ...  },
 	"bpEventHeader" :  { 
@@ -229,8 +241,8 @@ _Ed: Need to align these names with the CloudEvent name. Need to consider shorti
 |================================
 | Field Name | Attributes
 | eventId | String; Required
-| eventHeaderSchema  | URI (String); Required 
-| eventBodyDataSchema | URI (String); Required if eventData platformProcessingEvent
+| eventCategoryHeaderSchema  | URI (String); Required 
+| eventBodyDataSchema | URI (String); Required 
 | version | String; Required 
 | topic | String ; Optional
 | eventName | String ; Optional
@@ -276,18 +288,20 @@ eventId:: Globally Unique Identifier of message.
 The messageId is expected to be unique from a global perspective, so it is recommended to use some form of a GUID or UUID for this value.
 It is not recommended that this value have any additional sematic value or meaning beyond uniqueness.
 
-eventHeaderSchema:: eventHeaderSchema is used to distinguish between the different types of messages (events or commands), source (internal vs external), and schema versions to avoid collision and help in processing the messages. 
-They also identify the type of Event Header contained in the full message.
+eventCategoryHeaderSchema:: eventCategoryHeaderSchema is used to distinguish between the different categories of messages (events or commands), source (internal vs external), and schema versions to avoid collision and help in processing the messages. 
+They also identify the type of Event Category Header contained in the full message.
 The dataSchema can be used as an external endpoint to provide the schema and other machine-readable information for the event type and the latest major version. 
 Used to provide message definition and validation. 
 Example Values:
+* com.hilcoTech.messages/events/generalEvent
 * com.hilcoTech.messages/events/uxEvent
 * com.hilcoTech.messages/events/businessProcessEvent
 * com.hilcoTech.messages/events/dataChangeEvent
 * com.hilcoTech.messages/events/goalEvent
 * com.hilcoTech.messages/events/platformProcessingEvent
 
-eventBodyDataSchema:: Describes the specific schema and version of the *eventData* field in the message. 
+eventBodyDataSchema:: Describes the specific schema for a specific type of event within the category It describes the structure/definition and version of the *eventData* field in the message. 
+This type of information can be placed in a repository and used in the validation of a message. 
 The eventData structure and metadata details are understood based on this name. 
 This field is optional and only be set if there is a structure or schema for the eventData. 
 If there is no eventData, then this field should not be sent.

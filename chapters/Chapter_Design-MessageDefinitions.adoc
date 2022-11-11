@@ -2,22 +2,22 @@
 
 === Overview ===
 
-This chapter provides the key definitions of messages that could be supported within the organization's messaging ecosystem. 
-It will :
+This chapter provides the definitions of the types of the messages that could be supported within the organization's messaging ecosystem. 
+The goal of the chapter is to:
 
 * define the types of messages and some of the guiding principles used to identify and name them. 
 * describe the potential fields definitions and formats for each of the message types. 
 
-
 === Message Types ===
-A message is a general-purpose data structure with no special intent. 
-In the integration world, these are typically just streamed between the systems for logging, searching, and for other operational and regulatory reasons.
-As a component of the event architecture, there are 3 types of asynchronous messages:
+A *message* is domain packet of information (fact or request) that is typically processed in an asynchronous disconnected manner. 
+It can be used to communicate between two parties or can be information shared in a publish/subscribe manner.
+A message  is a general-purpose data structure with no special intent. 
+As a component of the Event Driven Architecture, there are 3 types of asynchronous messages:
 
 .Events
-An *Event* is a message which informs various listeners about something which has happened in the past. 
+An *Event* is a message which informs various interested parties or listeners about something which has happened in the past. 
 It is sent by a producer which doesn't know and doesn't care about the consumers of the event. 
-There can be multiple consumers of the event, each having their own interest in the event.
+There can be multiple consumers of the event, each having their own interest in the data contained in the event.
 This type of messages promotes highly decoupled systems using pub/sub architectures.  
 
 ====
@@ -39,13 +39,13 @@ The difference in thinking between an event and a command is an event-X has occu
 ====
 
 .Audit
-An Audit message is an adhoc publishing of a domain business objects state. 
+An Audit message is an adhoc publishing of a domain business object's state. 
 There is no true triggering action, either from a business process or straight data change. 
-It would typically be triggered in batch fashion with a query predicate. 
+It would typically be triggered in a batch fashion with a query predicate. 
 As part of normal processing, there  will be situations where there are failures in the pipeline, which might lead to data inconsistencies between a systems of record and systems relying on this data. 
 In situations where the business objects are very stable and don't change often, the audit message is used to get to eventual data consistency between systems. 
 A full business object for a bounded context can be published on a periodic basis and then any consumer caches can be updated. 
-Thus, can also be used to seed new consumers with domain data.
+This, can also be used to seed new consumers with domain data.
 
 <<<
 === Event ===
@@ -55,7 +55,7 @@ Thus, can also be used to seed new consumers with domain data.
 *Something of interest that has happened in the past*
 ====
 
-An *Event* represents something that has happened, along the data context at a defined point in time.
+An *Event* represents something that has happened, along the data context, at a defined point in time.
 
 .Definitions:
 * Result of some outcome
@@ -65,8 +65,8 @@ An *Event* represents something that has happened, along the data context at a d
 ** An event includes context and data about an occurrence. Each occurrence is uniquely identified by the data of the event.
 ** Events represent facts and therefore do not include a destination, whereas messages convey intent, transporting data from a source to a given destination.
 
-Event names should indicate a past tense action - a past-participle verb and should be action oriented.
-Events are both a historical fact and a notification to other interested parties:
+Event names should indicate a past tense action, a past-participle verb, and should be action oriented.
+Events are both a historical fact and a notification of an occurrence or happening to other interested parties:
 
 * Notification - a call for action, this is considered a stateless event 
 * A state transfer - pushing data wherever it is needed, known as an Event-Carried State Transfer
@@ -79,7 +79,7 @@ There is no expectation of any future action by the publisher.
 Events can varying in semantic granularity or scope. 
 This can be more pronounced for events that reflect the data element changes in complex business objects
 They can be as small as a single field change in a business object or a notification that some element(s) changed within the business object. 
-In this case, the eventData may or may not document the changes. 
+In this case, the event data within the message may or may not document the changes. 
 There are also levels in between. 
 For complex objects that are hierarchical in nature, the event may reflect a changes in a major sub-component of that data object. +
 For example, a data change for a "person" business object for an email address change could be: +

@@ -12,7 +12,7 @@
         "eventHeader": {
           "$ref": "#/$defs/eventHeader"
         },
-        "eventTypeHeader": {
+        "eventCategoryHeader": {
           "oneOf": [
             {
               "$ref": "#/$defs/bpEventHeader"
@@ -30,7 +30,7 @@
   },
   "required": [
     "eventHeader",
-    "eventTypeHeader",
+    "eventCategoryHeader",
     "eventData"
   ],
   "$defs": {
@@ -52,7 +52,7 @@
           "description": "The event version",
           "type": "string"
         },
-        "eventTypeHeaderDataSchema": {
+        "eventCategoryHeaderDataSchema": {
           "description": "The ...",
           "type": "string"
         },

@@ -1,5 +1,5 @@
 hilco:
-  version: '0.9.8'
+  version: '0.9.9'
 extends: default
 page:
   layout: portrait

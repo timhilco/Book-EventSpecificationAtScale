@@ -1,25 +1,26 @@
 [preface]
 == Preface ==
 
-This book defines a standard for asynchronous messaging for any company's Event Driven Architecture. 
+This book describes a practical approach for defining standards for asynchronous messaging for a large complex company who is committed to implementing an Event Driven Architecture. 
 The goals of the book are: 
 
-* Provide a solid definition for all the messages types to assist designers in creating high quality: Events and Commands
-* Provide a specification for these event types that can up to the complex scale of large organization 
+* Provide a solid framework for the definition of messages types to assist designers in creating high quality messages: Events and Commands
+* Provide a specification for these event types that can provide standardization within the complex scale of large organizations 
 * Provide a event governance process that can be used to ensure message design consistency and quality design.
 
 It is a language agnostic interface description for asynchronous message processing. 
-The specification is also intended to be message platform agnostic and does not specify how events can be delivered through various industry standard protocols (e.g. HTTP, AMQP, MQTT, SMTP), open-source protocols (e.g. Kafka, NATS), or platform/vendor specific protocols.
-CloudEvents.io discusses these aspects of event processing in much better detail.
+The specification is also intended to be message platform agnostic and does not specify how events could be delivered through various industry standard protocols (e.g. HTTP, AMQP, MQTT, SMTP), open-source protocols (e.g. Kafka, NATS), or platform/vendor specific protocols.
+CloudEvents.io discusses these aspects of event processing in much greater detail.
 Although there are other serialization formats (binary, XML), the specification focuses on using JSON as it's primary format.
-The goal within an organization is to have all messages published by any internal producer conform to these standards. 
+It should be an easy exercise to convert these specification into the other serialization formats.
+The goal within an organization should is theseo have all messages published by any internal producer conform to these standards. 
 The specification also provides consumer of the messages with the detailed information they need to properly understand, consume and process these messages.
-It is also agnostic to the "cloud", the focus is on quality event design, which should be able to run in any commuting environment.
+It is also agnostic to the "cloud", the focus being on quality event design, which should be able to run in any commuting environment.
 
 === CloudEvents.io Compatibility ===
-In general, this specification has the same philosophy as the CloudEvents specification.
-It can be considered a supplement to the CloudEvents specification, extending it to support large enterprise organization Event Driven Architectures.
-As stated above, it does not address the various protocols to deliver and process the message, but extending the semantics to support scale. (i.e number of event definitions within an organization)
+In general, this specification has the same philosophy as the CloudEvents.io specification.
+It can be considered a supplement to the CloudEvents specification, extending it to support a large enterprise organization's Event Driven Architectures.
+As stated above, it does not address the various protocols to deliver and process the message, but extending the semantics to support scale. (i.e number and complexity of event definitions within an organization)
 Most of these attributes would be considered _extensions_ in the CloudEvents specification and placed in that category.
 _(Ed. This statement needs to be validated by the group)_
 
@@ -35,7 +36,7 @@ Chapter 1 - Why is Event Driven Architecture critical to tomorrow's applications
 Chapter 2 - What are the types of messages in Event Driven Architecture?
 
 ==== Part 2 - Message Specification ====
-Chapter 3 - What are the Event Message Specification?
+Chapter 3 - What is the Event Message Specification?
 
 Chapter 4 - Domain Event Type Examples - Consumer Business Events
 
@@ -43,11 +44,11 @@ Note: The following chapters are still in an outline state.
 
 Chapter 5 - System Event Type Examples - Runtime Operations Events 
 
-Chapter 6 - What are the Command Message Specification?
+Chapter 6 - What is the Command Message Specification?
 
 Chapter 7 - Domain Command Type Examples 
 
-Chapter 8 - What are the Audit Message Specification?
+Chapter 8 - What is the Audit Message Specification?
 
 Chapter 9 - Domain Audit Type Examples 
 

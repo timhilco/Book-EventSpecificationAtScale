@@ -3,7 +3,7 @@
     "eventId": "c8ae150b-7363-487b-9c08-edafcc4966d2",
     "version": "1.0.0",
     "topic": "PersonEmailAddressChanged",
-    "eventTypeHeaderDataSchema": "com.hilcoTech.messages/events/dataChangeEvent",
+    "eventCategoryHeaderDataSchema": "com.hilcoTech.messages/events/dataChangeEvent",
     "eventBodyDataSchema": "com.hilcoTech.messages/events/emailAddressChange",
     "eventName": "PersonEmailAddress:Changed",
     "contextTag": "Person_0010010001_EmailAddress",
