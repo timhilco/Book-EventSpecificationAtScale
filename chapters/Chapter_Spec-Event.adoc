@@ -1,49 +1,52 @@
 == Chapter 3 - Event Message Specifications ==
 
 === Overview ===
-The purpose of this chapter is to define an overall design specifications for Events. 
-It forms the foundation for a set of design guidelines for the design of organization's events. 
-The chapter will provide suggestions for various components of the event - event types, an event header and event context data.
-Tan inventory of suggested fields, their attributes and their definitions will be defined for each of the components.
+The purpose of this chapter is to define an overall design specifications for *Events*. 
+It forms the foundation for a set of design guidelines and standards for the design of an organization's events. 
+The chapter will provide suggestions for various components of the event - event common header, an event category header and event type context data.
+For each component, an inventory of suggested fields, their attributes and their definitions will be defined.
 
 The key features of the Event Message Specification are:
 
 .Provides a Unique and Global Message Identifier
-Each message needs to have a unique and global identifier. 
-A tenant of the organization's overall event architecture is there are no duplicate messages in the event ecosystem.
-In addition, the design of the   important auditing data: date, time, as to when the message was created.
-This is important for any storage of the message in a data base and for logging and auditing purposes. 
+Each message needs to have a unique global identifier. 
+A tenant of the organization's overall event architecture is there should be no duplicate messages in the event ecosystem and each message should have a global identifier.
+
+
+.Provides key auditing information
+Each message should provide important auditing data - date, time, publisher -  when the message was created.
+Along with the message identifier, this is important for any storage of the message in a data base and for logging, debugging and auditing purposes. 
 
 .Provides provenance or "chain of processing" for the message, which includes a history of where the logical message has been processed
-It answers the questions:
+This answers the questions:
 
 * Where and When did the event happen?
-* Who were the source/publishers, both system of record and and any publishing platform in the stream?
+* Who was the original source of the event, along with any publishers who processed and augmented the message? This includes, both systems of record and any publishing platform in the stream.
 * Who or What was the caused of the event?
 
-.Strives to be as independent, stand alone and self-contained 
+.Strives to be independent, stand alone and self-contained 
 The message should try to contain all the information a consumer might need to process the event.
 The goal being to avoid complex and time consuming look ups for any consumer requiring additional context to process the message.
 
-.Provides simple headers and metadata to facilitate routing and filtering of the event as it works it's way within the event processing network
+.Provides simple standard headers and metadata to facilitate routing and filtering of the event as it works it's way within the event processing network
 In any complex environment, there will be a need to route the message to one or more message brokers and consumers. 
-The goal of the main header is to provide a set of standard fields to facilitate the creation of libraries and tooling.
-This will lead to easier creation of message brokers leading to more efficient processing within use of the networking infrastructure.
+The goal of the standard headers is to provide a set of standard fields to facilitate the creation of libraries and tooling.
+This will lead to easier creation of message brokers leading to more efficient processing within the networking infrastructure.
 
 .Supports schema version control and message validation
 Event are not stagnant.
-They will continually evolve, which means version control should be a first class element within the message.
-Events in general are immutable, so changing them is basically impossible.
+They will continually evolve, which means version control should be a first class design element within the message.
+Events, in general, are immutable, so changing them is basically impossible.
 This makes version identification extremely important in publishing and consumer processing.
-The use of dataSchemas for event type headers and eventData allow for the validation of a message.
-This allows for the easy storage of the specifications in a dictionary or directory.
+The use of _dataSchemas_ data elements for event category headers and event type context data allow for the validation of a message.
+This allows for the easy storage of the specifications in a dictionary or directory in order to validate a message.
 
-.Provides the ability to store and find the key of the key business object or subject in a system of record
-In general, every event should be associated with a key independent domain business entity 
-(For HR/Payroll, this would be a person).
+.Provides the ability to store and find the key of the business object or subject in a system of record associated with the event
+In general, every event should be associated with a key independent domain business entity. 
+(For example in HR/Payroll, this would be a _person_).
 The message should store the primary key, name and type of the business object.
 This would facilitate the retrieval of the domain object if needed.
-In addition to the primary business object, there can also be related business objects that were part of the context when the event was published. 
+In addition to the primary business object, there can also be related business objects that were part of the overall context when the event was published. 
 The specifications allows for this information to be part of the event. 
 It too, can be used to retrieve the data about this business entity.
 If helpful, it can provided correlation for cross event processing.
@@ -53,12 +56,16 @@ Sometimes during testing, it is helpful not to perform the action the consumer w
 This field allows the consumer to identify this and not take any additional action, like calling a update API or updating a data base.
 
 .Contains metadata about the event which helps in stream processing 
-This information helps to route the request to the proper stream node and to facilitate proper processing of the event by a component within the stream topology.
+This information helps to route the request to the proper stream processing nodes within the topology and to facilitate proper processing of the event by a component within the stream topology.
 
 === Event Categories ===
-Every domains or industry have events that follow a well-known and consistent pattern. _Event Categories_ provide extra information in the form of an Event Type Header, that is common to that kind of event. Within each category, there are specific event types with their own data schema.
-+
-Some event categories are as follows with their own specific event types within a domains:
+Every domain or industry has their own unique set of events. However, all domains share a set of cross-cutting information that is common across all types of events.
+These cross cutting concerns share a well-known and consistent pattern.
+This commonality allows the creation of  _Event Categories_.
+Event Categories provide consistent information in the form of an Event Category Header, that is common to that category of event. 
+Within each category for a given domain, there are specific _Event Types_ with their own data schema.
+
+Some examples of _Event Categories_ with their own specific event header data are:
 
 Business Consumer/Application User::
 * Business Process (a.k.a Workflow) State Change Event 
@@ -68,69 +75,84 @@ Business Consumer/Application User::
 Runtime::
 * Platform Processing Event
 
-In the case, where none of the standard event type apply, there is a concept of a _General Category Type_. In this case, the Event Type Header will be absent and the URI would end with _/generalEvent_.
+In the case, where none of the standard event type apply, there is a concept of a _General Category Type_. In this case, the Event Category Header will be absent and the URI would end with _/generalEvent_.
 // See other comment about undefined event category
 
 === Event Design Guidelines ===
 
 .Standard information
-When designing an event, one  needs to consider and document the following standard information:
-* A well known event category, such as a business process state change or data change category. • The name of the event type.
+When designing an event, one  needs to consider and document the following standard metadata information:
+
+* A well known event category, such as a business process state change or data change category. 
+* The name of the event type.
 * The definition of the event target audience.
 * An owning application, and by implication, an owning team.
 * A schema defining the event body or data payload. 
 // * The compatibility mode for the type.
-=== Anatomy of an Event Message ===
 
-The standard event message is a JSON document containing one parent JSON object named *Event*. 
-The *Event* JSON object contains 3 child JSON objects: +
+=== Anatomy of an Event Message ===
+The event message is a JSON document containing one parent JSON object named *event*. 
+The *event* JSON object contains 3 child JSON objects: +
 
 [horizontal]
-eventHeader:: Common Event Header - Common across all event messages, independent of event type and event context data
-_Event Category Header_:: Common header for specific event categories. 
-The name is based on event type.
-eventData:: Event message data or event context data.
-Since the context of an event tends to be unique, this is a free form structure or JSON object (i.e. schema would vary by event) for each event defined within a given event type
+eventHeader:: Common Event Header - Common data structure across all event messages, independent of event category, event type and event context data
+_Event Category Header_:: Common header for a specific event category. 
+The name is based on event category.
+eventData:: Event message data or key event contextual data at the time of message creation.
+Since the context of a given event type tends to be unique, this is a free form structure or JSON object (i.e. schema would vary by event) for each event defined within a given event type.
 
-The two headers contain the metadata about the event: A standard global message header and a event type standard header.
-The eventData contains the actual data related to the event at the time of the occupance.
-This provides a context for the event.
+The two event headers (Common and Event Category) contain the metadata about the event: A standard global message header and a event category standard header.
+The eventData contains the actual data related to the event at the time of the occurrence.
+This provides the context for the event.
 The data schema for the eventData is determined by the event designer.
 
-The analogy here is to a package distribution center. 
-The message is like a package with the contents inside the package being the *eventData* component and the label being the header. 
-This structure allows for the packages to move correctly through the distribution center without having to look at the contents.
-Message distribution can act in the same manner, where general message delivery can move messages by only looking at the header of the message. 
+The analogy here is a package distribution center. 
+The message is like a package with the contents inside the package being the *eventData* component and the label being the combination of the two headers. 
+The package label standard structure allows for the packages to move correctly through the distribution center without having to look at the contents inside the package.
+Event message distribution can act in the same manner, where general message delivery programs can move and direct messages by only looking at the header of the message.  
 If the header follows a standard, then it makes it easier to create programs via tooling to distribute message through the network.
 
-
 .Why is the Event Category Header a first class component?
-Most messages within a given category have a single header that can be exposed to the outside.
-The purpose of the _Event Category Header_ is a author's hypnosis that domains have another level of standardization for their messages.
-This provides the event designer in their domain another layer of consistence and all the benefits of standardization.
-The event type fall into two categories: (1) Standardization with the domain business objects themselves and (2) Event Types that are cross cutting or common against the domains data types. 
+Most messages within a given category have a single header that can be consistent to consumers interested in that type of message.
+The purpose of the _Event Category Header_ is the author's hypnosis that domains have another level of standardization for their messages.
+This is another layer of standardization in addition to the common message attributes.
+This provides the event designer in their domain another layer of consistency and all the benefits of standardization.
+
+The event categories fall into two styles: 
+
+(1) Standardization with the domain business objects and processes themselves and,
+
+(2) Event Types that are cross cutting or common against the domains data types. 
 General data changes, state changes in business process and User Experience logging events fall into this category.
 
 
 ==== Common Message Header ====
 
-The Common Message Header provides the following key features:
+The *Common Message Header* provides the following key features:
 
 .Global Message Metadata
-The Global Message Metadata contains key information about the message, a unique, global message identifier, the type of message, creation timestamp, original publisher and history of consumer processors.
+The Global Message Metadata contains key information about the message:
+
+* a unique, global message identifier, 
+* the category of message, 
+* the type of message
+* creation timestamp, 
+* original publisher and 
+* history  of consumer processors
+
 Any message defined within the ecosystem MUST contain these fields.
 This information is common to all events and commands.
 
 .Event Type MetaData 
 The Event Type Metadata contains key information about the event type. 
-The event type is a attempt to create more standardization by observing that events can fall into certain categories or types.
-Adding this level only increases the ability to take advantage of standard and has the same impact as the Global Metadata.
+The event type is a attempt to create more standardization by observing that events can fall into certain categories.
+Adding this level only increases the ability to take advantage of standards and has the same impact as the Global Metadata.
 This includes the type of event and the DataSchema of the type to support automated access to the schema definition of the event type and eventData of the event.
 
 .Event Context
-The event context are the key fields in the context when the event was published.
+The event context data is the key fields and their values at the point when the event was published.
 It includes a context label or tag, along with the action (past tense) that occurred at the time of the event. 
-This supports any routing of the event to other consumers and is a key analytics processing.
+This supports any routing of the event to other consumers and is key in analytics processing.
 In general, events are processed against business domain objects.
 The event context provides the fields for the retrieval of the main subject business entities and any additional related resources involved at the time of publication.
 
@@ -154,19 +176,19 @@ Since this is JSON, routing or filtering  (e.g message brokers) can use only the
 The Event Category Header is a second level header that contains the common elements for all messages of a given event category.
 ====
 [IMPORTANT]
-The name of the JSON object is based on the name of the event type.
+The name of the JSON object is based on the name of the event category.
 ====
-Each event type will have its own header name and structure. Examples:
+Each event category will have its own header name and structure. Examples:
 
 * uxEventHeader - for Ux action events
 * bpEventHeader - for business process state change events
 * boEventHeader - for business object state change events
 
 
-The eventCategoryHeaderSchema field in the header will indicate which event type header is in the message.
-There will be a structured format/schema for each event type.
-For an organization, the goal is a small bounded list of event types.
-There can be an unlimited number of event definitions within a type.
+The _eventCategoryHeaderSchema_ field in the header will indicate which event category header is in the message.
+There will be a structured format/schema for each event category.
+For an organization, the goal is a small bounded list of event categories.
+There can be an unlimited number of event definitions (i.e types) within a category.
 The goal is to have as much standardization in the headers as possible.
 The variations are meant for the *eventData* JSON object.
 
@@ -178,26 +200,26 @@ This is the context at the time of creation.
 [IMPORTANT]
 The name of the JSON object is *eventData*.
 ====
-These are fields that are specific to a given event definition within an event type.
-The goal is to make the event as self-describing as possible. 
-Trying to avoid additional data retrievals to process the message.
+These are fields that are specific to an event type and form the overall definition of the event.
+The goal is to make the event as self-describing as possible, trying to avoid additional data retrievals to process the message.
 Since most applications have a large unbounded set of events, the eventData represents the specific fields for a given event. 
 The above headers are intended to be standard, but the eventData is where the specific fields for that event are stored.
-Each eventData should have it's own schema that can be placed in a schema repository and retrieved by the bodyDataSchema field.
+Each eventData should have it's own schema that can be placed in a schema repository and retrieved by the _bodyDataSchema_ field.
 The schema can then be used for validation and code generation.
 The eventBodyDataSchema in the Event Type Header will describe the schema for the fields in the eventData.
-There are situations where a consumer might be interested in a change within a business object. 
+
+For example, there are situations where a consumer might be interested in a change within a business object. 
 In this case, the eventData can contain both a before and after image or a list of changes fields with the old and new values.
 This information can only be observed at the time of the event.
 
 === Event JSON Structure ===
 In order to keep the processing of a message simple and easy to produce and consume, the event message has a very flexible structure and is basically an unstructured document. 
-The goal is to have a schema for the header, each event type header and every event data (i.e eventData) itself. 
+The goal is to have a schema for the header, each event category header and every event data (i.e eventData) itself. 
 The desire is to have a schema dictionary which has a JSON or AVRO schema as it values and it's keyed by some name. The hierarchy is as follows:
 
-* There is only one header schema (key name: header)
-* To determine the <eventCategoryHeader> schema definition name, the eventCategoryHeaderSchema field contains the name of the event type
-* To determine the eventData schema definition, eventBodyDataSchema field determine the name for the eventData schema
+* There is only one header schema (key name: eventHeader)
+* To determine the _<eventCategoryHeader>_ schema definition name, the eventCategoryHeaderSchema field contains the name of the event category
+* To determine the eventData schema definition, _eventBodyDataSchema_ field determine the name for the eventData schema
 
 ====
 [NOTE]
@@ -285,12 +307,12 @@ _Ed: Need to align these names with the CloudEvent name. Need to consider shorti
 .Schema Field Definitions
 [horizontal]
 eventId:: Globally Unique Identifier of message. 
-The messageId is expected to be unique from a global perspective, so it is recommended to use some form of a GUID or UUID for this value.
+The eventId is expected to be unique from a global perspective, so it is recommended to use some form of a GUID or UUID for this value.
 It is not recommended that this value have any additional sematic value or meaning beyond uniqueness.
 
-eventCategoryHeaderSchema:: eventCategoryHeaderSchema is used to distinguish between the different categories of messages (events or commands), source (internal vs external), and schema versions to avoid collision and help in processing the messages. 
+eventCategoryHeaderSchema:: eventCategoryHeaderSchema is used to distinguish between the different categories of events, source (internal vs external), and schema versions to avoid collision and help in processing the messages. 
 They also identify the type of Event Category Header contained in the full message.
-The dataSchema can be used as an external endpoint to provide the schema and other machine-readable information for the event type and the latest major version. 
+The dataSchema can be used as an external endpoint to provide the schema and other machine-readable information for the event category and the latest major version. 
 Used to provide message definition and validation. 
 Example Values:
 * com.hilcoTech.messages/events/generalEvent
@@ -300,7 +322,7 @@ Example Values:
 * com.hilcoTech.messages/events/goalEvent
 * com.hilcoTech.messages/events/platformProcessingEvent
 
-eventBodyDataSchema:: Describes the specific schema for a specific type of event within the category It describes the structure/definition and version of the *eventData* field in the message. 
+eventBodyDataSchema:: Describes the schema for a specific type of event within the category It describes the structure/definition and version of the *eventData* field in the message. 
 This type of information can be placed in a repository and used in the validation of a message. 
 The eventData structure and metadata details are understood based on this name. 
 This field is optional and only be set if there is a structure or schema for the eventData. 
@@ -320,28 +342,28 @@ Sample Valid Values:
 * PlatformProcess
 
 eventName:: Provides a standard name of the actual event that occurred in the publishing system. 
-It will be treated as a label/code and used for filtering, routing, general analytics and simple processing of events in the ecosystem. 
+It can be treated as a label/code and used for filtering, routing, general analytics and simple processing of events in the ecosystem. 
 It should be a combination of the business object or process name and action taken on that entity. 
 There are specific naming conventions used to determine the value of the field. 
 It is a field that will require governance approval.
 
 
 contextTag:: Machine readable generic label for the event type. 
-The purpose of the contextTag is to provide a label that encoded some additional context for the event. 
+The purpose of the contextTag is to provide a label that encodes some additional context for the event. 
 It is highly structured, follows a specific format and provides valid values to allow programs and applications, like analytics, to easily consume the values. 
-See event type for more details on the values. 
+See event category for more details on the values. 
 To reduce the complexity in trying to capture all the levels and details of components that produced the event, the recommendation is to encode all contextual or hierarchical information into a single label or tag. 
 This tag along with the *action* field should reduce the complexity of the event structure and make it easier for the consuming tools to do their work without having to get into the details of the eventData structure.
-To make it more human readable, there will be an encoding standard in place to mke it easier to read and make it easier to parse the tag if necessary.
+To make it more human readable, there will be an encoding standard in place to make it more human-readable and make it easier to parse the tag if necessary.
 
 action:: Represents the actual logical action or happening based on the event type. 
-See event type for more details on the valid values. 
+See event category for more details on the valid values. 
 For events,the action should be described in the past tense and the name should be initial caps.
 For commands, the action should be present tense with initial cap.
 The organization should have a bounded set of actions and try to minimize the number.
 
-creationTimestamp:: Describes the date and time at which the actual event was generated by publishing systems. 
-To be provided by producer component and should not be derived by message publishing framework(s) or component(s). 
+creationTimestamp:: Describes the date and time at which the actual event was generated by the publisher. 
+To be provided by the producer component and should not be derived by message publishing framework(s) or component(s). 
 The timestamp must be in the RFC 3339/ISO 8601 date format standard. 
 
 businessDomain:: Describes the business domain under which the event/command was generated. +
@@ -366,9 +388,8 @@ Suggested Values:
 * BatchId - for batch processing jobs. This is the actual instance id of a job type.
 * PublisherCorrelationId - for publisher specific correction type (Typically used if the above two does not apply)
 
-//globalBusinessObjectIdentifier:: Describes the global identity of the business object being acted upon. In the //HR/Benefits domain, an example would be the person.
-// Collaborate with CloudEvents
-subjectIdentifier:: Describes the global identity of the business subject being acted upon. The 'subject' is typically a key business domain object.
+subjectIdentifier:: Describes the global identity of the business subject being acted upon. 
+The 'subject' is typically a key business domain object.
 In the HR/Benefits domain, an example would be the person.
 
 publisherId:: Identifies the name or id of the publishing company who created the message.
@@ -377,7 +398,7 @@ publisherApplicationName:: Describes the name of the publisher application platf
 
 publisherApplicationInstanceId:: Describes the specific instance of the publisher application or service.
 
-publishingPlatformsHistory:: This is the historic details and providence of the message- _the audit trail for the message_.
+publishingPlatformsHistory:: This is the historic details and providence of the message: _the audit trail for the message_.
 It is an array, describing the internal platforms that have been processing a given logical message from the edge platforms to any internal consumer applications. 
 If the consumed message is being augmented (i.e new information is being added) is is important that the consumer/publisher or program add its own auditing information to the history. It has similar fields to the overall message (see above).
 
