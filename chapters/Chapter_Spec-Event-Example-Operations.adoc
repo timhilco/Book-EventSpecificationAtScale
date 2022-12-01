@@ -1,34 +1,44 @@
 == Chapter 5 - System Event Example - Runtime Operations Events ==
 
-Runtime Operation Events are events that are occurring during the running of the application on a specific platform or system resource (server, data base, etc). 
-They are focused mostly on system resource issues. 
-Debug events would also fall into this category
+Runtime Operation Events are "occurrences" that are happening during the running of application on a specific platform or system resource (server, data base, broker, etc). 
+For system resources, they are focused mostly on management of the resource. 
+For application programs, the events are related to debugging and application logic tracing.
 
 === Platform Processing Event  ===
-These are events related to the action of completing a discreet process or unit of work and providing the resource computation of that unit of work. 
+These events related to the action of completing a discreet process or unit of work and providing the resource computation of that unit of work. 
 
 These events reflect the fact that: 
 
-* the application process occurred, which is used for counting instances of the process 
+* the application process occurred, which is used for counting instances of the process, 
 
-* the time stamps of when it occurred, which is used for elapse time and windows of time, 
+* the time stamps of when it occurred, which is used for elapse time and windows of time calculations, 
 
-* the timestamp of the additional resource usage, which is used for more detailed resource consumption analytics and 
+* the timestamp of the additional resource usage, which is used for more detailed resource consumption analytics, and 
 
-* any additional status and metadata related to the process of the unit of work. The event can be used for both operational and application events where counting, and resource utilization reporting is of interest to the business.
+* any additional status and metadata related to the process of the unit of work. 
+
+The event can be used for both operational and application events where counting, and resource utilization reporting is of interest to the business.
 
 Platform processing units of work being metered include:  
 
-* Docker Containers  -> Service API calls
-* Enterprise CI/CD Build pipeline -> API Service builds
+* API Gateways and Docker Containers  -> Service API calls
+* Enterprise CI/CD Build pipeline -> API Service builds and deployments
 
 === System Resource Manager Event ===
 
 *Under consideration*
 
-These are events related to the actions of managing a system resource manager.  This includes the overall operations of the resource manager and the system administrator actions to administer the resource manager.
+These events are related to the actions of managing a system resource manager.  This includes the overall operations of the resource manager and the system administrator actions to administer the resource manager.
 
-A resource manager has the following characteristics: (Examples of a resource manager: a server(Hardware with OS), JVM, Web Server, Docker container, data base manager and queue manager/message broker)
+Examples of a resource manager: 
+* Server(Hardware with OS), 
+* JVM
+* Web Server 
+* Docker container 
+* Data base manager 
+* Queue manager/message broker
+
+A resource manager has the following characteristics: 
 
 * The platform contains important application data  
 * The resource is shared by multiple applications

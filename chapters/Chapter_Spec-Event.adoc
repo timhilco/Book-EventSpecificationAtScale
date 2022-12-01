@@ -398,9 +398,12 @@ publisherApplicationName:: Describes the name of the publisher application platf
 
 publisherApplicationInstanceId:: Describes the specific instance of the publisher application or service.
 
-publishingPlatformsHistory:: This is the historic details and providence of the message: _the audit trail for the message_.
-It is an array, describing the internal platforms that have been processing a given logical message from the edge platforms to any internal consumer applications. 
-If the consumed message is being augmented (i.e new information is being added) is is important that the consumer/publisher or program add its own auditing information to the history. It has similar fields to the overall message (see above).
+publishingPlatformsHistory:: This is the historic details and providence of the message.
+It is an array documenting all the applications that have processed a logical message from the edge to this consumer. 
+If the consumed message is being augmented, it is important that the consumer add its own auditing information to the history. 
+The publisher should only append to the array if the array is provided as input from a message.
+Otherwise, the array can be created.
+It has similar fields to the overall message (see above).
 
 publisherId:::: Identifies the publishing company entity of the message. 
 
@@ -408,17 +411,17 @@ publisherApplicationName:::: Describes the name of the publisher application pla
 
 publisherApplicationInstanceId:::: Describes the specific instance of the publisher application or service.
 
-messageId:::: Describes the messageId for the given prior message instance. See above for field details
+eventId:::: See above for field details
 
-messageTopic:::: Describes the messageTopic for the given prior message instance. See above for field details
+messageTopic:::: See above for field details
 	
-eventName:::: Describes the eventName for the given prior message instance. See above for field details
+eventName:::: See above for field details
 	
-messageTimestamp:::: Describes the messageTimestamp for the given prior message instance. See above for field details
+messageTimestamp:::: See above for field details
 
 sequenceNumber:::: The sequence should be from earliest to latest in chronological order. 
-The publisher should only append to the array If the array is provided as input from a message, then the new publisher should increase the sequence number and append the consumed/input header data to the array. 
-If this is the originating or edge processor, then the sequence number should be set to one (1), not zero
+If the history is input, then the sequence number is increased.
+Otherwise, the sequence number should be set to one (1), not zero
 
 subjectSystemOfRecord:: System of Record containing details related to finding the related subject or domain business object. 
 
@@ -445,7 +448,7 @@ correlatedResourceState:::: Identifies the state or status of related resource a
 
 correlatedResourceDescription:::: Description of related resource at the time the event occurred.
 
-isSyntheticEvent::: Is this a synthetic or fake event? If true, assumes this is an event that should be processed under special circumstance, meaning don't change state or issue commands. Used for testing/monitoring in production by sending in fake events
+isSyntheticEvent:: Is this a synthetic or fake event? If true, assumes this is an event that should be processed under special circumstance, meaning don't change state or issue commands. Used for testing/monitoring in production by sending in fake events
 
 .Potential Extensions
 [horizontal]
