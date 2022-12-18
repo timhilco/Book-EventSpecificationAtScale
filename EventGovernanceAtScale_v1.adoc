@@ -3,10 +3,10 @@
 = Event Governance At Scale: A Practical Guide To Effective Message Design 
 :author: Timothy S. Hilgenberg 
 :email: timhilco@gmail.com
-:revdate: October, 2022
-:revnumber: 0.9.9
+:revdate: October 2022
+:revnumber: 0.9.10
 // Custom Variables
-:draft-version: 0.9.8
+:draft-version: 0.9.10
 //:hardbreaks: 
 //
 :icons: font
@@ -23,20 +23,20 @@ This book is a very early draft of this manuscript
 This book is being written in AsciiDoc using Visual Studio Code.  
 I'm just learning this tool, so I apologize in advance for any bad formatting issues with early versions of the book.
 
-Special thanks to the CloudEvent working group for their review and comments for this book. I would especially like Doug Davis for his support and feedback.
+Special thanks to the CloudEvent working group for their review and comments on this book. I would especially like Doug Davis for his support and feedback.
 
 In the examples, HilcoTech is a mythical company.
 
-The author's experience has been in working with large Enterprise Application, such as Human Resources (HR), Benefits Administration, Payroll, Customer Relationship Management and ERP.
+The author's experience has been in working with large Enterprise Applications, such as Human Resources (HR), Benefits Administration, Payroll, Customer Relationship Management, and ERP.
 These applications tend to have major independent business objects with deeply nested data graphs, along with a high degree of business processes that manage the data objects.
-This book should helps architects and event designers coming from these domains.
+This book should help architects and event designers coming from these domains.
 This is very different than the domains that produce events from real-time environments like cars or sensors.
 
 *All comments welcome*
 
 Early Working Draft Version {draft-version} --  October 2022
 
-Copyright(c) 2022. All rights Reserved 
+Copyright(c) 2022. All Rights Reserved 
 
 include::./chapters/Preface.adoc[]
 
@@ -44,11 +44,11 @@ include::./chapters/Preface.adoc[]
 // Question -> Why is Event Driven Architecture critical to tomorrow's application?
 include::./chapters/Chapter_Design-Introduction.adoc[]
 
-// Question -> What are the types of message in Event Driven Architecture?
+// Question -> What are the types of messages in Event Driven Architecture?
 include::./chapters/Chapter_Design-MessageDefinitions.adoc[]
 
 //Part 2 - Message Specification
-// Question -> What are the Event Message Specification?
+// Question -> What is the Event Message Specification?
 include::./chapters/Chapter_Spec-Event.adoc[]
 
 // Question -> Domain Event Example - Consumer Business Process Events
@@ -57,13 +57,13 @@ include::./chapters/Chapter_Spec-Event-Example.adoc[]
 // Question -> System Event Example - Runtime Operations Events 
 include::./chapters/Chapter_Spec-Event-Example-Operations.adoc[]
 
-// Question -> What are the Command Message Specification?
+// Question -> What is the Command Message Specification?
 include::./chapters/Chapter_Spec-Command.adoc[]
 
 // Question -> Domain Command Example - XXX Command
 include::./chapters/Chapter_Spec-Command-Example.adoc[]
 
-// Question -> What are the Audit Message Specification?
+// Question -> What is the Audit Message Specification?
 include::./chapters/Chapter_Spec-Audit.adoc[]
 
 // Question -> Domain Command Example - XXX Command

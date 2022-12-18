@@ -2,23 +2,23 @@
 
 === Overview ===
 
-This chapter provides the definitions of the types of the messages that could be supported within the organization's messaging ecosystem. 
+This chapter provides the definitions of the types of messages that could be supported within the organization's messaging ecosystem. 
 The goal of the chapter is to:
 
 * define the types of messages and some of the guiding principles used to identify and name them. 
-* describe the potential fields definitions and formats for each of the message types. 
+* describe the potential field definitions and formats for each of the message types. 
 
 === Message Types ===
-A *message* is domain packet of information (fact or request) that is typically processed in an asynchronous disconnected manner. 
+A *message* is a domain packet of information (fact or request) that is typically processed in an asynchronous disconnected manner. 
 It can be used to communicate between two parties or can be information shared in a publish/subscribe manner.
-A message  is a general-purpose data structure with no special intent. 
+A message is a general-purpose data structure with no special intent. 
 As a component of the Event Driven Architecture, there are 3 types of asynchronous messages:
 
 .Events
 An *Event* is a message which informs various interested parties or listeners about something which has happened in the past. 
 It is sent by a producer which doesn't know and doesn't care about the consumers of the event. 
-There can be multiple consumers of the event, each having their own interest in the data contained in the event.
-This type of messages promotes highly decoupled systems using pub/sub architectures.  
+There can be multiple consumers of the event, each having an interest in the data contained in the event.
+This type of message promotes highly decoupled systems using pub/sub-architectures.  
 
 ====
 [IMPORTANT]
@@ -26,10 +26,10 @@ This type of messages promotes highly decoupled systems using pub/sub architectu
 ====
 
 .Commands
-*Commands* trigger some action which should happen in the near future. 
+*Commands* trigger some action that should happen in the near future. 
 It's typically a one-to-one connection between a producer (who sends the command) and a consumer (who takes and executes the command) and, in a few cases, the order of commands is also of utmost importance. 
 Commands are usually performed by actors outside the current system. 
-However, commands can also be rejected, requiring new error handling patterns.
+However, commands can also be rejected, requiring new error-handling patterns.
 
 The difference in thinking between an event and a command is an event-X has occurred, rather than command-Y which should be executed as part of a conversation or interaction.
 
@@ -39,13 +39,13 @@ The difference in thinking between an event and a command is an event-X has occu
 ====
 
 .Audit
-An Audit message is an adhoc publishing of a domain business object's state. 
+An Audit message is an ad-hoc publishing of a domain business object's state. 
 There is no true triggering action, either from a business process or straight data change. 
 It would typically be triggered in a batch fashion with a query predicate. 
-As part of normal processing, there  will be situations where there are failures in the pipeline, which might lead to data inconsistencies between a systems of record and systems relying on this data. 
+As part of normal processing, there will be situations where there are failures in the pipeline, which might lead to data inconsistencies between a system of record and systems relying on this data. 
 In situations where the business objects are very stable and don't change often, the audit message is used to get to eventual data consistency between systems. 
-A full business object for a bounded context can be published on a periodic basis and then any consumer caches can be updated. 
-This, can also be used to seed new consumers with domain data.
+A full business object for a bounded context can be published periodically and then any consumer caches can be updated. 
+This can also be used to seed new consumers with domain data.
 
 <<<
 === Event ===
@@ -65,23 +65,23 @@ An *Event* represents something that has happened, along the data context, at a 
 ** An event includes context and data about an occurrence. Each occurrence is uniquely identified by the data of the event.
 ** Events represent facts and therefore do not include a destination, whereas messages convey intent, transporting data from a source to a given destination.
 
-Event names should indicate a past tense action, a past-participle verb, and should be action oriented.
+Event names should indicate a past tense action, and a past-participle verb, and should be action-oriented.
 Events are both a historical fact and a notification of an occurrence or happening to other interested parties:
 
 * Notification - a call for action, this is considered a stateless event 
 * A state transfer - pushing data wherever it is needed, known as an Event-Carried State Transfer
 
 Events never produce a response object when published.
-They could be the result of a business process (i.e.  completed enrollment) or command (i.e. Change medical plan election).
-They can't be rejected, but can be ignored. 
+They could be the result of a business process (i.e. completed enrollment) or command (i.e. Change medical plan election).
+They can't be rejected but can be ignored. 
 There is no expectation of any future action by the publisher.
 
-Events can varying in semantic granularity or scope. 
+Events can vary in semantic granularity or scope. 
 This can be more pronounced for events that reflect the data element changes in complex business objects
 They can be as small as a single field change in a business object or a notification that some element(s) changed within the business object. 
 In this case, the event data within the message may or may not document the changes. 
 There are also levels in between. 
-For complex objects that are hierarchical in nature, the event may reflect a changes in a major sub-component of that data object. +
+For complex hierarchical objects, the event may reflect changes in a major sub-component of that data object. +
 For example, a data change for a "person" business object for an email address change could be: +
 
 * At the _person_ level - Indicating something changes in the entity
@@ -95,11 +95,11 @@ Events are immutable
 
 Applications are like islands. 
 Inter application processing is becoming more and more important.
-As applications become more specialized, business process will involve multiple services,requiring more integration to provide some specific aspect of the overall process experience.
-Although it is not common practice, every application should consider publishing events as part of it's overall design and implementation. 
+As applications become more specialized, the business process will involve multiple services, requiring more integration to provide some specific aspect of the overall process experience.
+Although it is not common practice, every application should consider publishing events as part of its overall design and implementation. 
 Today, it is a bit of an afterthought.
-Events and Commands should be first class elements of the application.
-Even if there is no requirement for this in the present for an application, it will be at some point in the future. 
+Events and Commands should be first-class elements of the application.
+Even if there is no requirement for the initial version of an application, it will be at some point in the future. 
 Every quality application domain engine should provide API for request-reply processing and publish events for any downstream application.
 A good event design will anticipate what events might be of interest and publish them.
 
@@ -120,19 +120,19 @@ The requested action of the command has not yet happened
 (e.g. Change medical plan election). As opposed to events, where some action has already occurred.
 The commands should be named with an imperative verb.
 It has an explicit expectation that something (a state change or side effect) will happen in the future.
-Commands can be rejected, but it these cases it is important for any consumer to response with some form of message.
+Commands can be rejected, but in these cases, any consumer needs to respond with some form of message.
 Typically, this is part of a Ux conversation or program-to-program interaction. 
-However, there can one-way requests or fire-forgot messages with no response.
+However, there can be one-way requests or fire-forgot messages with no response.
 
 Commands can be used in situations where an async request/reply is desired.
 However, this is not to be confused with a synchronous Request/reply like REST API.
-The message can provide a call back information, which can be used in an asynchronous conversation with another consumer.
+The message can provide call back information, which can be used in an asynchronous conversation with another consumer.
 
 
 <<<
 === Audit ===
 
-Represents the current state of a business object - Published on specific schedule 
+Represents the current state of a business object - Published on a specific schedule 
 
 ====
 [NOTE]

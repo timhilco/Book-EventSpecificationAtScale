@@ -1,11 +1,11 @@
 == Chapter 5 - System Event Example - Runtime Operations Events ==
 
-Runtime Operation Events are "occurrences" that are happening during the running of application on a specific platform or system resource (server, data base, broker, etc). 
-For system resources, they are focused mostly on management of the resource. 
+Runtime Operation Events are "occurrences" that are happening during the running of an application on a specific platform or system resource (server, database, broker, etc). 
+For system resources, they are focused mostly on the management of the resource. 
 For application programs, the events are related to debugging and application logic tracing.
 
 === Platform Processing Event  ===
-These events related to the action of completing a discreet process or unit of work and providing the resource computation of that unit of work. 
+These events are related to the action of completing a discreet process or unit of work and providing the resource computation of that unit of work. 
 
 These events reflect the fact that: 
 
@@ -17,7 +17,7 @@ These events reflect the fact that:
 
 * any additional status and metadata related to the process of the unit of work. 
 
-The event can be used for both operational and application events where counting, and resource utilization reporting is of interest to the business.
+The event can be used for both operational and application events where counting and resource utilization reporting are of interest to the business.
 
 Platform processing units of work being metered include:  
 
@@ -28,21 +28,21 @@ Platform processing units of work being metered include:
 
 *Under consideration*
 
-These events are related to the actions of managing a system resource manager.  This includes the overall operations of the resource manager and the system administrator actions to administer the resource manager.
+These events are related to the actions of managing a system resource manager.  This includes the overall operations of the resource manager and the system administrator's actions to administer the resource manager.
 
 Examples of a resource manager: 
 * Server(Hardware with OS), 
 * JVM
 * Web Server 
 * Docker container 
-* Data base manager 
+* Database manager 
 * Queue manager/message broker
 
 A resource manager has the following characteristics: 
 
 * The platform contains important application data  
 * The resource is shared by multiple applications
-* The resource is managed centrally by an system operations staff, who is responsible for the installation, upgrade and overall operations of the resource
+* The resource is managed centrally by a system operations staff, who is responsible for the installation, upgrade, and overall operations of the resource
 * Privileged access authority is required to perform system administration functions
 
 Resource manager operational event actions include:  
@@ -63,7 +63,7 @@ System Administrator event actions include:
 * Runtime System Error Events - Runtime Events because of hardware or software issues
 * Code Deployment Events - DevOps Events because of program/business logic development. Include both code and configuration
 * Client Deployment Events - Events related to the deployment of client assets, in particular provision migrations.
-Might also include client level processing runtime errors
+Might also include client-level processing runtime errors
 
 === Operations Platform Process Event ===
 
@@ -101,7 +101,7 @@ Sample Values:
 .Potential Platform Process Header Fields
 * API/Program call Request and Response size
 * Memory size at event publication
-** Heap sizes , etc
+** Heap sizes, etc
 * CPU utilization for process
 * Thread count at event publication
 
@@ -132,8 +132,8 @@ Process Action Sample Values:
 * The eventData section is named 'eventData' 
 ** 'eventData' can be any valid JSON schema
 * Contains one predefined element 'extension'
-** Extension is a private area that can contain its own schema
-** The field is an map/array with:
+** Extension is a private area that can contain its schema
+** The field is a map/array with:
 *** Namespace as a key and,
 *** Any valid JSON schema as its value
  This can be any significant data or data of interest for reporting at the time of the process state change.

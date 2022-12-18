@@ -3,9 +3,9 @@
 ## Author: Timothy Hilgenberg
 **Email: timhilco@gmail.com**
 
-**Early Working Draft V0.9.9 Octobers 2022**
+**Early Working Draft V0.9.10 October 2022**
 
-Copyright(c) 2022. All rights Reserved 
+Copyright(c) 2022. All Rights Reserved 
 
 *Comments are welcome - Chapters 1-5 are ready for feedback*
 
