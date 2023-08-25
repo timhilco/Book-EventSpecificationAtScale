@@ -1,26 +1,26 @@
 [preface]
 == Preface ==
 
-This book describes a practical approach to defining standards for asynchronous messaging for a large complex company that is committed to implementing an Event Driven Architecture. 
+This book describes a practical approach to defining standards for asynchronous message design for a large complex enterprise that is committed to implementing an Event Driven Architecture. 
 The goals of the book are: 
 
 * Provide a solid framework for the definition of messages types to assist designers in creating high-quality messages: Events and Commands
-* Provide a specification for these event types that can provide standardization within the complex scale of large organizations 
+* Provide a specification for these event types that can promote design standardization within the complex scale of large organizations 
 * Provide an event governance process that can be used to ensure message design consistency and quality design.
 
-It is a language-agnostic interface description for asynchronous message processing. 
+The specification is a language-agnostic interface description for asynchronous message processing. 
 The specification is also intended to be message platform agnostic and does not specify how events could be delivered through various industry standard protocols (e.g. HTTP, AMQP, MQTT, SMTP), open-source protocols (e.g. Kafka, NATS), or platform/vendor-specific protocols.
 CloudEvents.io discusses these aspects of event processing in much greater detail.
 Although there are other serialization formats (binary, XML), the specification focuses on using JSON as its primary format.
 It should be an easy exercise to convert this specification into the other serialization formats.
-The goal within an organization should have all messages published by any internal producer conform to these standards. 
-The specification also provides consumers of the messages with the detailed information they need to properly understand, consume and process these messages.
-It is also agnostic to the "cloud", the focus being on quality event design, which should be able to run in any computing environment.
+The goal within an organization should be that all messages published by any internal producer conform to these standards. 
+The specification also provides consumers of the messages with the detailed information they need to properly understand, consume, and process these messages.
+It is also agnostic to the "cloud", the focus being on quality event design, which can be applied in any computing environment.
 
 === CloudEvents.io Compatibility ===
 In general, this specification has the same philosophy as the CloudEvents.io specification.
 It can be considered a supplement to the CloudEvents specification, extending it to support a large enterprise organization's Event Driven Architecture.
-As stated above, it does not address the various protocols to deliver and process the message but extends the semantics to support scale. (i.e number and complexity of event definitions within an organization)
+As stated above, it does not address the various protocols to deliver and process the message but extends the semantics to support scale. (i.e. number and complexity of event definitions within an organization)
 Most of these attributes would be considered _extensions_ in the CloudEvents specification and placed in that category.
 _(Ed. This statement needs to be validated by the group)_
 

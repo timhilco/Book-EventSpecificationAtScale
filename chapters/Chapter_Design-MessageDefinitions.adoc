@@ -55,6 +55,7 @@ This can also be used to seed new consumers with domain data.
 *Something of interest that has happened in the past*
 ====
 
+
 An *Event* represents something that has happened, along the data context, at a defined point in time.
 
 .Definitions:
@@ -64,6 +65,9 @@ An *Event* represents something that has happened, along the data context, at a 
 * CloudEvent Concepts
 ** An event includes context and data about an occurrence. Each occurrence is uniquely identified by the data of the event.
 ** Events represent facts and therefore do not include a destination, whereas messages convey intent, transporting data from a source to a given destination.
+* Confluent
+** In Apache Kafka, an event is an indication that something has happened. It states what happened, when it happened, and who or what was involved. In other words, an event is a combination of notification and state.
+** In order to be complete, an event should have a timestamp stating when the event happened, and optionally some state that describes what has happened and who was involved.
 
 Event names should indicate a past tense action, and a past-participle verb, and should be action-oriented.
 Events are both a historical fact and a notification of an occurrence or happening to other interested parties:

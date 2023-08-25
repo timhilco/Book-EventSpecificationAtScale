@@ -1,6 +1,6 @@
 == Chapter 4  - Domain Event Examples - Consumer Business Events ==
 
-Each domain or industry has its own events within an event category.
+Each domain or industry has its events within an event category.
 To help get a better understanding of the general specification, this chapter provides some real-life examples. These examples are taken from the author's experience in developing HR/Benefits Administration systems. 
 These examples should also apply to any consumer-based application. 
 The following real-life consumer-related events are discussed:
@@ -100,7 +100,7 @@ Format:
 * No formal specification is defined
 
 .Action Definition
-The action represents the types of actions that result from the change in state of the business process during the processing of the consumer's business process.
+The action represents the types of actions that result from the change in the state of the business process during the processing of the consumer's business process.
 
 Action Component Sample Values:
 
@@ -206,7 +206,7 @@ The action defines the type of data maintenance (CRUD) action taken on the busin
 
 * Action Component Sample Values
 
-dataAction:: Describes the data change or CRUD action performed on business object.- Create, Update, Delete. 
+dataAction:: Describes the data change or CRUD action performed on the business object.- Create, Update, Delete. 
 Also includes any primary key changes and Master Data Management (MDM) document merging. 
 ** Create
 ** Update
@@ -258,11 +258,11 @@ In the eventData, provide the primary key.
 The Ux Action events are intended to capture the actual keyboard/mouse events performed by the user
  - displaying pages, clicking buttons or links, entering text. 
 These are events related to the behavioral actions taken by the user in online or digital channels. 
-Channel includes web, mobile, IVA/chat, and other future user devices like Voice Assistants.
+Channels include web, mobile, IVA/chat, and other future user devices like Voice Assistants.
 These events are not the result of any business process or data change events. 
 
 All Ux applications generate log records to help debug and provide data for analytics.  
-These UX logs are really events and should be treated as such.
+These UX logs are events and should be treated as such.
 There is no need to have both a log record and events. 
 Events can handle both needs.
 
@@ -281,7 +281,7 @@ Actions may include, but are not limited to:
 
 The intention is to capture the actual true or syntactic Ux actions along with a navigation/breadcrumb label. 
 The goal is not to add any business semantics to these events. 
-This allows the Ux developer to focus on the ux component and action, not trying to connect it to the business semantics.
+This allows the UX developer to focus on the UX component and action, not trying to connect it to the business semantics.
 There should be enough context in the label for another offline process (e.g. analytics process) to create another event with the business semantics of the user's action. 
 
 In most systems, these are considered logging or debugging actions.
@@ -318,7 +318,7 @@ deviceTimestamp:: Represents the time stamp on the device (May be different from
 The timestamp must be in the RFC 3339/ISO 8601 date format standard. 
 See Appendix for details.
 
-sessionId:: Represents the unique session of end user on the channel.
+sessionId:: Represents the unique session of the end-user on the channel.
 
 sessionStartTimestamp:: Session creation or start time. 
 The timestamp must be in the RFC 3339/ISO 8601 date format standard. +
@@ -335,8 +335,8 @@ For the eventName, the standard will be the following fields separated by a colo
 * UserAction
 
 .Tag Definition
-In the Ux channels, there are an unbounded set of device actions a user can take: pressing buttons, displaying pages, and starting process flow. 
-In addition, there are an unbounded set of specific widgets/controls (buttons, etc) throughout the interface. 
+In the Ux channels, there is an unbounded set of device actions a user can take: pressing buttons, displaying pages, and starting process flow. 
+In addition, there is an unbounded set of specific widgets/controls (buttons, etc.) throughout the interface. 
 For reporting and other activities, there is a need to capture that a specific control has been acted upon -  pressing a specific button within a specific group of controls within a page within a business conversation flow. 
 
 To reduce the complexity in trying to capture all the levels and types of components, the recommendation is to encode all hierarchical information (i.e. breadcrumbs) into a single label or tag using a structured format.
@@ -392,7 +392,7 @@ Sample Values for userAction:
 * The eventData section is named *eventData*
 ** *eventData* can be any valid JSON schema
 * Contains one predefined element *extension*
-** Extension is a private area that can contain its own schema
+** Extension is a private area that can contain its schema
 ** The field is a map/array with:
 *** Namespace as a key and,
 *** Any valid JSON schema as its value
@@ -440,7 +440,7 @@ Action Component Sample Values :
 * The eventData section is named *eventData*
 ** eventData  can be any valid JSON schema
 * Contains one predefined element *extension*
-** Extension is a private area that can contain its own schema
+** Extension is a private area that can contain its schema
 ** The field is a map/array with:
 ** Namespace as a key and,
 ** Any valid JSON schema as its value

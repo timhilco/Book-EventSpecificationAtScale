@@ -3,10 +3,10 @@
 = Event Governance At Scale: A Practical Guide To Effective Message Design 
 :author: Timothy S. Hilgenberg 
 :email: timhilco@gmail.com
-:revdate: October 2022
-:revnumber: 0.9.10
+:revdate: August 2023
+:revnumber: 0.9.11
 // Custom Variables
-:draft-version: 0.9.10
+:draft-version: 0.9.11
 //:hardbreaks: 
 //
 :icons: font
@@ -30,13 +30,13 @@ In the examples, HilcoTech is a mythical company.
 The author's experience has been in working with large Enterprise Applications, such as Human Resources (HR), Benefits Administration, Payroll, Customer Relationship Management, and ERP.
 These applications tend to have major independent business objects with deeply nested data graphs, along with a high degree of business processes that manage the data objects.
 This book should help architects and event designers coming from these domains.
-This is very different than the domains that produce events from real-time environments like cars or sensors.
+This is very different from the domains that produce events from real-time environments like cars or sensors.
 
 *All comments welcome*
 
-Early Working Draft Version {draft-version} --  October 2022
+Early Working Draft Version - Raw and unedited {draft-version} --  {revdate}
 
-Copyright(c) 2022. All Rights Reserved 
+Copyright(c) 2023. All Rights Reserved 
 
 include::./chapters/Preface.adoc[]
 

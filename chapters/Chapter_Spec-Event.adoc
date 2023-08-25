@@ -25,7 +25,7 @@ This answers the questions:
 * Who or What was the cause of the event?
 
 .Strives to be independent, stand-alone, and self-contained 
-The message should try to contain all the information a consumer might need to process the event.
+The message should contain all the information a consumer might need to process the event.
 The goal is to avoid complex and time-consuming lookups for any consumer requiring additional context to process the message.
 
 .Provides simple standard headers and metadata to facilitate routing and filtering of the event as it works its way within the event processing network
@@ -65,7 +65,7 @@ This commonality allows the creation of  _Event Categories_.
 Event Categories provide consistent information in the form of an Event Category Header, that is common to that category of the event. 
 Within each category for a given domain, there are specific _Event Types_ with their own data schema.
 
-Some examples of _Event Categories_ with their own specific event header data are:
+Some examples of _Event Categories_ with their specific event header data are:
 
 Business Consumer/Application User::
 * Business Process (a.k.a Workflow) State Change Event 
@@ -75,7 +75,7 @@ Business Consumer/Application User::
 Runtime::
 * Platform Processing Event
 
-In the case, where none of the standard event types apply, there is a concept of a _General Category Type_. In this case, the Event Category Header will be absent and the URI would end with _/generalEvent_.
+In the case, where none of the standard event types apply, there is a concept of a _General Category Type_. In this case, the Event Category Header will be absent and the URI will end with _/generalEvent_.
 // See another comment about the undefined event category
 
 === Event Design Guidelines ===
@@ -138,7 +138,7 @@ The Global Message Metadata contains key information about the message:
 * the type of message
 * creation timestamp, 
 * original publisher and 
-* a history of consumer processors
+* history of consumer processors
 
 Any message defined within the ecosystem MUST contain these fields.
 This information is common to all events and commands.
@@ -170,7 +170,7 @@ The name of the JSON object is *eventHeader*.
 ====
 
 It contains fields that describe the message at the highest levels and it identifies the source and type of the message. These fields determine the format and names of the fields that follow in the message object. 
-Since this is JSON, routing or filtering  (e.g message brokers) can use only the header to determine the routing of the message or if the consumer is interested in processing the message. This provides a high degree of standardization, which leads to excellent tooling.
+Since this is JSON, routing or filtering  (e.g. message brokers) can use only the header to determine the routing of the message or if the consumer is interested in processing the message. This provides a high degree of standardization, which leads to excellent tooling.
 
 ==== Event Category Header ====
 The Event Category Header is a second-level header that contains the common elements for all messages of a given event category.
@@ -188,7 +188,7 @@ Each event category will have its header name and structure. Examples:
 The _eventCategoryHeaderSchema_ field in the header will indicate which event category header is in the message.
 There will be a structured format/schema for each event category.
 For an organization, the goal is a small bounded list of event categories.
-There can be an unlimited number of event definitions (i.e types) within a category.
+There can be an unlimited number of event definitions (i.e. types) within a category.
 The goal is to have as much standardization in the headers as possible.
 The variations are meant for the *eventData* JSON object.
 
@@ -214,7 +214,7 @@ This information can only be observed at the time of the event.
 
 === Event JSON Structure ===
 To keep the processing of a message simple and easy to produce and consume, the event message has a very flexible structure and is an unstructured document. 
-The goal is to have a schema for the header, each event category header, and every event data (i.e eventData) itself. 
+The goal is to have a schema for the header, each event category header, and every event data (i.e. eventData) itself. 
 The desire is to have a schema dictionary that has a JSON or AVRO schema as its values and it's keyed by some name. The hierarchy is as follows:
 
 * There is only one header schema (key name: eventHeader)
@@ -333,7 +333,7 @@ The recommendation is to use semantic versions based on breaking changes.
 Valid values managed by governance 
 * Example: 1.1
 
-topic:: Logical name to describe the type of event. Note: this is not the physical topic name (i.e Kafka topic) of the messaging system.
+topic:: Logical name to describe the type of event. Note: this is not the physical topic name (i.e. Kafka topic) of the messaging system.
 Sample Valid Values:
 * BusinessProcess
 * DomainDataChange
@@ -359,7 +359,7 @@ To make it more human-readable, there will be an encoding standard in place to m
 action:: Represents the actual logical action or happening based on the event type. 
 See the event category for more details on the valid values. 
 For events, the action should be described in the past tense and the name should be initial caps.
-For commands, the action should be present tense with initial cap.
+For commands, the action should be present tense with an initial cap.
 The organization should have a bounded set of actions and try to minimize the number.
 
 creationTimestamp:: Describes the date and time at which the actual event was generated by the publisher. 
@@ -398,7 +398,7 @@ publisherApplicationName:: Describes the name of the publisher application platf
 
 publisherApplicationInstanceId:: Describes the specific instance of the publisher application or service.
 
-publishingPlatformsHistory:: This is the historic details and providence of the message.
+publishingPlatformsHistory:: This is the historical details and providence of the message.
 It is an array documenting all the applications that have processed a logical message from the edge to this consumer. 
 If the consumed message is being augmented, the consumer must add its auditing information to the history. 
 The publisher should only append to the array if the array is provided as input from a message.
@@ -433,7 +433,7 @@ systemOfRecordApplicationInstanceId::::  Describes the specific instance of the 
 
 systemOfRecordDatabaseSchema:::: Describes the database schema instance of the system of record containing the business object
 
-platformInternalId:::: Describes the internal identity of the business object  within the platform. Only provided if the publishing platform is a source system of record and not a pure publisher application
+platformInternalId:::: Describes the internal identity of the business object within the platform. Only provided if the publishing platform is a source system of record and not a pure publisher application
 
 platformExternalId:::: Describes the external identity of the business object within the platform. Only provided if the publishing platform is a source system of record and not a pure publisher application
 

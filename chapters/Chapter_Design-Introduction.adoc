@@ -32,20 +32,20 @@
 
 
 
-The old, but tired and true, intra-company interaction model of overnight batch files is being replaced by newer, faster approaches.
-The flow of data was characterized by full file populations, byte stream multi-record format, and daily or longer delivery schedules.
+The old, but tired and true, intra-company interaction model of overnight batch files is being replaced by newer and real-time event approaches.
+The data interaction between organizations was characterized by full file populations, byte stream multi-record formats, and daily or longer delivery schedules.
 Another way to look at this approach is the model is (1) high latency, (2) uses old binary formats, and (3) sends a large amount of data that might not have changed.
 However, they were operationally efficient, guaranteed delivery (no transactions were lost), and event-based.
-(These were actions that already occurred.) More modern applications are requiring lower latency (sometimes referred to as "near real-time"), modern formats like JSON and XML, and changes only. 
-But, they still want the guaranteed delivery and operational efficiency of batch offline processing.
+(These were actions that already occurred.) More modern applications require lower latency (sometimes referred to as "near real-time"), modern formats like JSON and XML, and changes only. 
+However, they still want the guaranteed delivery and operational efficiency of batch offline processing.
 
-To meet these new requirements, organizations are turning to "API" for large group or batch processing.
-They have had success creating web-based user APIs that are short-lived and managed by the user themselves. 
+To meet these new requirements, organizations are turning to "APIs" for large group or batch processing.
+They have had success creating web-based user APIs that are short-lived and managed by the users themselves. 
 The user can manage any of the issues or errors presented by the application.
 REST APIs are a well-established approach for data integration of smaller units of work. 
 They are simple to consume by clients and easy to build and publish.
 There is lots of tooling and technology support in this space and a large cohort of practitioners who know how to leverage "API" technology.
-They can deliver relatively large payloads with very low latency and are an effective mechanism to deliver changes in the state of business objects.
+They can deliver relatively large payloads with very low latency and are an effective mechanism for delivering changes in the state of business objects.
 This is why they are so effective in e-commerce applications.
 However, given that they are HTTP based and because of that, they are not 100% guaranteed.
 When used to simulate batch processing, they can cause resource contention and operational issues for web-based infrastructure. 
@@ -60,24 +60,24 @@ This is also open to more network issues and the ability to get the entire workl
 
 _Where do events and messaging come into play?_
 
-As the service ecosystem continues to grow and more and more applications are taking advantage of them, the need for tighter integration between applications continues to become more and more important.
-To handle more complex and integrated business processes, companies are looking for changes only, low latency, and guaranteed delivery of changes or occurrences from systems of record.
-They are looking for events in real time.
+As the service ecosystem continues to grow and become more specialized, the need for tighter integration between applications continues to become more and more important to handle more complex business processes.
+To handle this, companies are looking for changes only, low latency, and guaranteed delivery of changes or occurrences from systems of record.
+They are looking for events in real-time.
 There are two models for moving events between organizations. 
 
-(1) Consumers poll for events +
-(2) Systems of record publish Events
+(1) Pull Model - Consumers poll for events +
+(2) Push Model - Systems of record publish Events
 
-In the first model, the event publisher provides an API that allows a consumer to request a collection of events based on query parameters.
+In the Pull Model, the event publisher provides an API that allows a consumer to request a collection of events based on query parameters.
 Essentially, simulating an SQL Query.
 The consumer then can make REST API calls at pre-determined intervals to retrieve the events.
 This is an imperfect model because polling is an inefficient manner of integration.
 The consumer can either poll too frequently or not frequently enough causing inefficient resource utilization or data inconsistency.
 Data can be missed or the same data provided multiple times.
 Clients need to be idempotent when processing the data.
-It can also can excessive resource utilization on the system of record.
+It can also cause excessive resource utilization on the system of record.
 
-The second model is a publish-subscribe paradigm.
+The Push Model is a publish-subscribe paradigm.
 The system of record publishes an event to a middleware resource (i.e. queue, log) without any knowledge of who will consume the message.
 The latency provided by the middleware is near instantaneous without the need for polling.
 There are event middleware technologies like Kafka, Rabbit MQ, and IBM MQ, that can provide these qualities of service in a production environment.
@@ -98,7 +98,7 @@ As more mobile applications are calling multiple backend services in a single re
 Ux Designers feel strongly that a synchronous response is the best user interaction model.
 
 However, there are many application interaction models in practice today that do not fit this model. 
-People may not think of it in this way, but email and text are disconnected (asynchronous) interaction models. 
+People may not think of it in this way, but email and text messaging are disconnected (asynchronous) interaction models. 
 The person submits a communication message and then can perform other actions, while they wait for a notification that a response is available for review (e.g. waiting for an email response).
 If the asynchronous request is fast enough, the user does not know the difference. 
 So there is precedence for user interface design using an asynchronous model. 
@@ -117,13 +117,13 @@ _Event Driven Architectures are key to providing a rich satisfying user experien
 ====
 
 A synchronous model also has a major impact on the computing resources required to support the application.
-Instead of having to provision servers for maximum requests, one can have fewer workers in the background continuously managing the work. An event-driven architecture following an asynchronous approach is always a more efficient use of computing resources than an asynchronous approach.
+Instead of having to provision servers for maximum requests, one can have fewer workers in the background continuously managing the work. An event-driven architecture following an asynchronous approach is always a more efficient use of computing resources than a synchronous approach.
 
 Asynchronous technologies have been around for a very long time. 
 The IBM mainframe environment had MQ middleware that allowed inter-machine communication and intra-platform integration (primarily distributed platform). 
 There are even more modern technologies, like Kafka and RabbitMQ. 
 In prior application designs and even today, these technologies were used for inter-platform communication and more balanced resource allocation and management. 
-There were mostly used for underlying application interaction, but not used in an interface design. 
+They were mostly used for underlying application interaction, but not used in an interface design. 
 
 ====
 [NOTE]
@@ -145,7 +145,7 @@ This leads to more interactions and increases user experience wait time as the s
 * There are more modern messaging technologies are available to application architects to lower time latency. 
 There is also more practical real-life experience in Event Driven Architecture for architects and designers to leverage
 
-* Users are becoming more comfortable with a disconnected interaction model, where they submit a request, work on a different task and then act on the response they get after the fact. Techniques, like deep linking from the response, to the specific page within the application are becoming more prevalent. 
+* Users are becoming more comfortable with a disconnected interaction model, where they submit a request, work on a different task, and then act on the response they get after the fact. Techniques, like deep linking from the response to the specific page within the application, are becoming more prevalent. 
 
 * Real-time analytics being processed by AI and Machine Learning are becoming valuable tools for decision-making within an organization. Events are an important technique in making it successful.
 
@@ -155,12 +155,12 @@ _As with any other scaled integration strategy, the key to success is standards 
 
 As an organization's application portfolio continues to grow, so do its integration requirements between these applications.
 In some cases, it is very difficult to create tightly integrated solutions.
-In addition, users are expecting their outcomes to move faster and have their entire process completed in a single session. 
+In addition, users expect their process outcomes to move faster and have their entire process completed in a single session. 
 Multiple applications are interested in the same events leading to increased complexity when using point-to-point approaches. Publish-subscribe approaches with events help reduce this complexity.
-Requirements for more integrations, faster deployment, reduced complexity, and low latency integration is leading to more and more use of events and event-driven architecture.
+Requirements for more integrations, faster deployment, reduced complexity, and low latency integration are leading to more and more use of messages and event-driven architecture.
 
 The design of *events* can come in all shapes and sizes. 
-They can be as low level as a single data element changing(changing one's email address), to an entire business process completing (completing a transfer in a bank account).
+They can be as low level as a single data element changing (changing one's email address), to an entire business process completing (completing a transfer in a bank account).
 With the move to more domain-oriented organizational structures, independent autonomous groups will be designing events.
 This will cause a prolific number of events to be created by an organization. 
 Without organizational design standards and guidelines, the lack of consistency will lead to chaos losing all the benefits of an Event Driven Architecture.
@@ -169,10 +169,10 @@ This may lead to additional processing costs, which might affect performance and
 This might be more acute in a cloud-centric environment.
 
 Event design standards are critical to the success of an Event Driven Architecture as the strategy is scaled up within the organization.
-It isn't enough to commit to using events as a key integration strategy, the organization needs standards and governance to enforce the standards in the design of events. 
-To support frictionless and overreaching governance, the organization needs comprehensive design guidelines to support the event designers and give rubrics to the governance groups on how to judge the quality of the design.
+It isn't enough to commit to using events as a key integration strategy, an organization needs standards and governance to create high-quality event designs. 
+To support frictionless and overreaching governance, an organization needs comprehensive design guidelines to support the event designers and give rubrics to the governance groups on how to judge the quality of the event design.
 
-Having common event standards is key to creating programming language libraries and tooling. The creation of these artifacts will lead to faster development times, increased quality, and improved interoperability across application platforms.
+Having common event standards is also important for creating programming language libraries and tooling. The creation of these artifacts will lead to faster development times, increased quality, and improved interoperability across application platforms.
 
 === Why do standards and governance matter? ===
 
@@ -191,16 +191,16 @@ This specification does not address the available protocols and language SDK.
 
 
 *message governance*:: Message governance is the enforcement of the specifications. Specifications without governance will negate the benefits of the specifications. 
-The goal of governance is to insure quality message design, making sure the message meets the domain objectives.
-It is also intended to insure that the message follows the specification.
-This insures message interoperability.
+The goal of governance is to ensure quality message design, making sure the message meets the domain objectives.
+It is also intended to ensure that the message follows the specification.
+This ensures message interoperability.
 Message governance is not intended to be a heavy-handed process.
 
-For messages to be interoperable, all applications need to follow this specification. 
+For messages to be interoperable, all applications within the organization should follow this specification. 
 This will hopefully avoid any semantic mapping, where the same business object is modeled differently. 
 It should also avoid any field mapping within the application.
 This should lead to simpler code and even less code.
-Standardization also leads to the creation of tooling, which should increase productivity, quality, and development time. 
+Standardization can also lead to the creation of tooling, which should increase productivity, quality, and development time. 
 Tooling can leverage the knowledge already baked into the specification.
 
 In general, standards and tooling should make the development of code and application interoperability less complex, less brittle, less costly, and more agile with higher quality.

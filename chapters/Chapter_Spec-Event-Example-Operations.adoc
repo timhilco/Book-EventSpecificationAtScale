@@ -1,6 +1,6 @@
 == Chapter 5 - System Event Example - Runtime Operations Events ==
 
-Runtime Operation Events are "occurrences" that are happening during the running of an application on a specific platform or system resource (server, database, broker, etc). 
+Runtime Operation Events are "occurrences" that happen during the running of an application on a specific platform or system resource (server, database, broker, etc.). 
 For system resources, they are focused mostly on the management of the resource. 
 For application programs, the events are related to debugging and application logic tracing.
 
@@ -9,11 +9,11 @@ These events are related to the action of completing a discreet process or unit 
 
 These events reflect the fact that: 
 
-* the application process occurred, which is used for counting instances of the process, 
+* The application process occurred, which is used for counting instances of the process, 
 
-* the time stamps of when it occurred, which is used for elapse time and windows of time calculations, 
+* the time stamps of when it occurred, which are used for elapsed time and windows of time calculations, 
 
-* the timestamp of the additional resource usage, which is used for more detailed resource consumption analytics, and 
+* The timestamp of the additional resource usage, which is used for more detailed resource consumption analytics, and 
 
 * any additional status and metadata related to the process of the unit of work. 
 

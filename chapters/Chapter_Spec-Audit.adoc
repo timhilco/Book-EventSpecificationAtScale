@@ -1,11 +1,32 @@
 == Chapter 8 Audit Message Specifications ==
 
 === Overview ===
-Key features of Audit Message Specification are:
+The Audit message is unique in the sense that there is no external trigger to create the message. 
+One could view time as the trigger for the message.
+This type of message is a recognition that there can be errors in the processing of events and commands.
+The main concern is that consuming systems might not have gotten the messages or might have processed them incorrectly due to data or coding errors.
+This could lead to key business objects getting out of sync with the systems of record.
 
+The main purpose of this message is to publish a key business object at periodic intervals.
+This allows any system that is dependent on these business objects to compare the data they have with the data contained in the system of record.
+If the systems are out of sync, the consuming system can update its records and take any appropriate actions.
+The schedule of publication can be determined by the criticality of the data and resource availability.
+
+Key features of Audit Message Specification are: 
+
+.Provide a mechanism to ensure business objects that correct
+dddd
+
+.Provide a notification that a key piece of data has changed
+dddd
+
+.Can be published on any schedule
+any batch size and run at night - higher latency
+
+.They can represent any key business object
 
 === Audit Types ===
-The follow sections provide the specification for the types of Audits support by the architecture. (Note: Some Audit types are in the prototype stage)  +
+The following sections provide the specifications for the types of Audits supported by the architecture. (Note: Some Audit types are in the prototype stage)  +
 The Audit types are:
 
 === Audit Message Overview ===
@@ -17,24 +38,38 @@ The *message* object contains 3 child JSON objects:
 * Audit Type Header - Common header for specific Audit types 
 * Audit Message eventData - Free form eventData for each Audit defined with the Audit type
 
+Note: At this point, there doesn't seem to be a need for an Audit Type Header.
+The data schema in the header can just be a "generalAuditHeader" or null.
 
 === Internal Audit JSON Structure ===
-To keep it simple and easy to produce and consume, the audit message has a very flexible structure and is basically an unstructured document. 
-The goal is to have a schema for the header, each audit type header and every audit data (i.e eventData) itself. 
-We would like to have a schema dictionary which has a JSON or AVRO schema as it values and it's keyed by some name. The hierarchy is as follows:
+To keep it simple and easy to produce and consume, the audit message has a very flexible structure and is an unstructured document. 
+The goal is to have a schema for the header, each audit type header, and every audit data (i.e. eventData) itself. 
+We would like to have a schema dictionary that has a JSON or AVRO schema as its values and it's keyed by some name. The hierarchy is as follows:
 
 * There is only one header schema (key name: header)
 * To determine the <auditTypeheader> name, the header.messageNamespace field contains the name of the audit type
-* To determine the eventData schema name, the header.auditBodyNamespace field determine the name for the eventData schema
+* To determine the eventData schema name, the header.auditBodyNamespace field determines the name for the eventData schema
 
 [NOTE]
 ====
 The internal audit structure looks as follows:
 
-{"message" : +
+{"message": +
 	"header" : {   ...  }, +
 	"_auditTypeHeader_" : { ... }, +
-	"eventData"  : { ... }
+	"eventData": { ... }
 }
 
 ====
+=== Questions to answer ===
+*Should event data be self-contained and usable independently of context attributes?*
+Say I have a purchase event that represents the occurrence of a purchase, consumers of that purchase event would want to know when the purchase occurred. There are a couple of options here:
+
+The time of the purchase occurrence can be populated in the time context attribute.
+The time of the purchase occurrence can be populated in event data.
+Both 1 and 2 can be done.
+This somewhat raises the question, should the event data be self-contained and usable independently of context attributes?
+
+If event data should be usable independently of the context attributes, then the right option seems to be 2 or 3. I would say 3 is best.
+If event data does not have to be used independently of the context attributes, then the right option seems to be 1.
+As far as I can tell, the spec does not make a clear pronouncement on this. I would say event data does not have to be self-contained, and that context attributes are inseparable from the event data and consumers should get the time of the occurrence from there, but I can see arguments for the other side as well.
